@@ -783,6 +783,7 @@ function normalizeDB(db){
   (db.services||[]).forEach(sv=>{
     if(!sv.seo) sv.seo = {title:"",description:"",keywords:[],image:""};
     if(Array.isArray(sv.priceList)) sv.priceList = sv.priceList.map(p=> Array.isArray(p) ? {label:p[0],price:p[1]} : p);
+    if(sv.price) sv.price = sv.price.replace(/^(From\s*)+/i,"").trim();
     if(Array.isArray(sv.faqs)) sv.faqs = sv.faqs.map(f=> Array.isArray(f) ? {q:f[0],a:f[1]} : f);
   });
   (db.news||[]).forEach(n=>{ if(!n.seo) n.seo = {title:"",description:"",keywords:[],image:""}; });
@@ -1425,7 +1426,7 @@ function serviceCard(sv,i,ed){
     <div class="ico"><img src="${sv.img}" alt=""></div>
     <h3 ${ed?`data-bind="services.${i}.name" contenteditable="true"`:''}>${esc(sv.name)}</h3>
     <p ${ed?`data-bind="services.${i}.short" contenteditable="true"`:''}>${esc(sv.short)}</p>
-    <span class="price-tag" ${ed?`data-bind="services.${i}.price" contenteditable="true"`:''}>From ${esc(sv.price)}</span>
+    <span class="price-tag">From <span ${ed?`data-bind="services.${i}.price" contenteditable="true"`:''}>${esc(sv.price)}</span></span>
     <a href="#/service/${sv.id}" class="link-more">Learn More →</a>
     ${ed?`<div class="admin-row-tools"><button class="admin-mini-btn" data-action="edit-img" data-path="services.${i}.img">Change Image</button><button class="admin-mini-btn seo-btn" data-action="open-seo" data-kind="service" data-id="${sv.id}">${icon('search')} SEO</button><button class="admin-mini-btn danger" data-action="del-service" data-idx="${i}">Remove</button></div>`:''}
   </div>`;
