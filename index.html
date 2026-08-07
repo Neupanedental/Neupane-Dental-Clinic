@@ -821,6 +821,7 @@ let authReady = false; // true once Firebase has resolved the initial auth state
 let ROUTE = "#/";
 let editMode = false;
 let toastTimer = null;
+let __pdbToastShown = false; /* ADDED: prevents a caller's generic fallback toast from instantly overwriting persistDB()'s specific diagnosis */
 
 /* ===================== BOOTSTRAP ===================== */
 async function boot(){
@@ -912,15 +913,31 @@ function normalizeDB(db){
   if(!db.siteInfo.imageAnims || typeof db.siteInfo.imageAnims!=="object") db.siteInfo.imageAnims = {};
   return db;
 }
-function persistDB(){
+async function persistDB(){
   try{
     const approxBytes = new Blob([JSON.stringify(DB)]).size;
     if(approxBytes > 900000){
-      showToast("Could not save — your total photos are too large for one save. Try replacing a large photo with a smaller one, or remove one, then try again.", true);
-      return Promise.resolve(false);
+      showToast("Could not save — your total photos are too large for one save (data is over ~900KB). Replace or remove a large photo, then try again.", true);
+      __pdbToastShown = true;
+      return false;
     }
   }catch(e){ /* size check itself failing shouldn't block the save attempt */ }
-  return saveJSON("sitedata", true, DB);
+  try{
+    await setDoc(doc(fsdb, "sitedata", "sitedata"), {value: DB});
+    return true;
+  }catch(e){
+    console.error("persistDB failed:", e);
+    const code = e && e.code;
+    const msgText = String((e && e.message) || "");
+    let msg = "Could not save — check your connection, admin sign-in, or try a smaller/fewer photo.";
+    if(code==="permission-denied") msg = "Could not save — you're not signed in as admin, or your session expired. Please sign in again.";
+    else if(code==="unavailable" || code==="deadline-exceeded") msg = "Could not save — network connection issue. Check your internet and try again.";
+    else if(code==="resource-exhausted") msg = "Could not save — Firebase usage limit reached. Please try again shortly.";
+    else if(code==="invalid-argument" || /longer than|exceeds|too large|maximum/i.test(msgText)) msg = "Could not save — your content is too large (likely a photo). Replace or remove a large photo, then try again.";
+    showToast(msg, true);
+    __pdbToastShown = true;
+    return false;
+  }
 }
 async function persistOwnProfile(uid, profile){
   try{ await setDoc(doc(fsdb,"users",uid), profile); return true; }
@@ -1079,6 +1096,7 @@ function initials(name){ return (name||"?").split(" ").map(w=>w[0]).slice(0,2).j
 function fmtDate(d){ try{ return new Date(d).toLocaleDateString("en-US",{year:"numeric",month:"short",day:"numeric"}); }catch(e){ return d; } }
 function slugFind(arr,id){ return arr.find(x=>x.id===id); }
 function showToast(msg, isErr){
+  if(__pdbToastShown){ __pdbToastShown = false; return; }
   let t = document.getElementById("toastEl");
   if(!t){ t = document.createElement("div"); t.id="toastEl"; t.className="toast"; document.body.appendChild(t); }
   t.className = "toast" + (isErr?" err":"");
