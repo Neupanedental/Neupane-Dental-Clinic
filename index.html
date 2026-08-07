@@ -187,7 +187,7 @@ nav.mainnav a:hover,nav.mainnav a.active{background:var(--teal);color:#fff;}
 @media(max-width:900px){.hero-grid{grid-template-columns:1fr;}}
 .hero h1{font-size:clamp(2.3rem,4.6vw,3.6rem);line-height:1.08;margin:16px 0 20px;}
 .hero h1 em{font-style:italic;color:var(--gold-deep);}
-.hero p.lead{font-size:1.08rem;color:var(--charcoal-soft);max-width:520px;line-height:1.7;margin-bottom:30px;}
+.hero .lead{font-size:1.08rem;color:var(--charcoal-soft);max-width:520px;line-height:1.7;margin-bottom:30px;}
 .hero-ctas{display:flex;gap:14px;flex-wrap:wrap;}
 .hero-stats{display:flex;gap:34px;margin-top:44px;flex-wrap:wrap;}
 .hero-stats div b{display:block;font-family:'Cormorant Garamond',serif;font-size:1.9rem;color:var(--teal);}
@@ -517,6 +517,8 @@ section.cb-section{padding:78px 0;}
 .rte-toolbar input[type=color]{width:26px;height:26px;padding:0;border:none;border-radius:6px;background:none;cursor:pointer;}
 [data-bind][data-rich]{outline:1.5px dashed var(--gold);outline-offset:6px;border-radius:6px;}
 [data-bind][data-rich] a{text-decoration:underline;text-decoration-color:var(--gold-deep);}
+[data-rich] > p,[data-rich] > div{margin:0 0 12px;}
+[data-rich] > p:last-child,[data-rich] > div:last-child{margin-bottom:0;}
 
 /* ================= ADDED: image editor (crop + entrance animation picker) ================= */
 .img-editor-stage{position:relative;max-width:100%;margin:0 auto 16px;background:#111;border-radius:12px;overflow:hidden;touch-action:none;user-select:none;line-height:0;}
@@ -1479,7 +1481,7 @@ function heroSectionHTML(ed, s){
           <span ${ed?'data-bind="siteInfo.heroTitle" data-rich="1" contenteditable="true"':''}>${richOut(s.heroTitle)}</span><br>
           <em ${ed?'data-bind="siteInfo.heroTitle2" data-rich="1" contenteditable="true"':''}>${richOut(s.heroTitle2)}</em>
         </h1>
-        <p class="lead reveal" ${ed?'data-bind="siteInfo.heroLead" data-rich="1" contenteditable="true"':''}>${richOut(s.heroLead)}</p>
+        <div class="lead reveal" ${ed?'data-bind="siteInfo.heroLead" data-rich="1" contenteditable="true"':''}>${richOut(s.heroLead)}</div>
         <div class="hero-ctas reveal">
           <a href="#/book" class="gold-btn">Book Your Appointment</a>
           <a href="#/services" class="ghost-btn">Explore Services</a>
@@ -1634,7 +1636,7 @@ function renderCustomBlock(block, idx, ed){
     <section class="${cls}">
       <div class="wrap" style="text-align:center;max-width:760px;">
         <h2 class="${revealClassFor(block.anim)}" style="margin-bottom:14px;" ${ed?`data-bind="${base}.title" data-rich="1" contenteditable="true"`:''}>${richOut(block.title)}</h2>
-        <p class="${revealClassFor(block.anim)}" style="margin-bottom:26px;" ${ed?`data-bind="${base}.body" data-rich="1" contenteditable="true"`:''}>${richOut(block.body)}</p>
+        <div class="${revealClassFor(block.anim)}" style="margin-bottom:26px;" ${ed?`data-bind="${base}.body" data-rich="1" contenteditable="true"`:''}>${richOut(block.body)}</div>
         <div class="${revealClassFor(block.anim)}">
           <a ${btnHref} class="gold-btn">${btnInner}</a>
           ${ed?`<div style="margin-top:12px;"><button type="button" class="admin-mini-btn" data-action="edit-link" data-key="${base}.href">Set Button Link</button></div>`:''}
@@ -1669,7 +1671,7 @@ function renderCustomBlock(block, idx, ed){
       <div class="wrap" style="max-width:760px;text-align:center;">
         <div class="${revealClassFor(block.anim)}">
           <div style="font-family:'Cormorant Garamond',serif;font-size:2.4rem;color:var(--gold);line-height:1;margin-bottom:10px;">&ldquo;</div>
-          <p style="font-size:1.25rem;font-style:italic;line-height:1.7;margin-bottom:18px;" ${ed?`data-bind="${base}.text" data-rich="1" contenteditable="true"`:''}>${richOut(block.text)}</p>
+          <div style="font-size:1.25rem;font-style:italic;line-height:1.7;margin-bottom:18px;" ${ed?`data-bind="${base}.text" data-rich="1" contenteditable="true"`:''}>${richOut(block.text)}</div>
           <b style="display:block;" ${ed?`data-bind="${base}.author" contenteditable="true"`:''}>${esc(block.author)}</b>
           <span style="font-size:.82rem;color:var(--charcoal-soft);" ${ed?`data-bind="${base}.role" contenteditable="true"`:''}>${esc(block.role)}</span>
         </div>
@@ -1867,7 +1869,7 @@ function pageServiceDetail(id){
     <div class="wrap">
       <div class="detail-cover"><img src="${sv.img}" ${ed?`data-action="edit-img" data-path="services.${idx}.img" style="cursor:pointer;"`:''}></div>
       <div class="content-block reveal">
-        <p ${ed?`data-bind="services.${idx}.long" data-rich="1" contenteditable="true"`:''}>${richOut(sv.long)}</p>
+        <div ${ed?`data-bind="services.${idx}.long" data-rich="1" contenteditable="true"`:''}>${richOut(sv.long)}</div>
         <div class="card-panel" style="margin:30px 0;">
           <h3 style="margin-bottom:14px;">Pricing</h3>
           <ul style="list-style:none;padding:0;margin:0;">
@@ -1935,7 +1937,7 @@ function pageAbout(){
       <div class="section-head" style="margin:0;text-align:left;max-width:720px;">
         <span class="eyebrow">Neupane Dental Clinic</span>
         <h2>About Us</h2>
-        <p ${ed?'data-bind="siteInfo.aboutIntro" data-rich="1" contenteditable="true"':''}>${richOut(s.aboutIntro)}</p>
+        <div ${ed?'data-bind="siteInfo.aboutIntro" data-rich="1" contenteditable="true"':''}>${richOut(s.aboutIntro)}</div>
       </div>
     </div>
   </section>
@@ -1944,7 +1946,7 @@ function pageAbout(){
       <div class="grid cols-2" style="align-items:center;gap:50px;">
         <div class="reveal">
           <span class="eyebrow">Who We Are</span>
-          <p class="content-block" style="margin-top:14px;" ${ed?'data-bind="siteInfo.aboutWhoWeAre" data-rich="1" contenteditable="true"':''}>${richOut(s.aboutWhoWeAre)}</p>
+          <div class="content-block" style="margin-top:14px;margin-bottom:16px;" ${ed?'data-bind="siteInfo.aboutWhoWeAre" data-rich="1" contenteditable="true"':''}>${richOut(s.aboutWhoWeAre)}</div>
           <a href="#/book" class="gold-btn">Book Your Appointment</a>
         </div>
         <div class="reveal grid cols-2">
@@ -2062,7 +2064,7 @@ function pageNewsDetail(id){
     <div class="wrap">
       <div class="detail-cover"><img src="${n.img}" ${ed?`data-action="edit-img" data-path="news.${idx}.img" style="cursor:pointer;"`:''}></div>
       <div class="content-block reveal">
-        <p ${ed?`data-bind="news.${idx}.content" data-rich="1" contenteditable="true"`:''}>${richOut(n.content)}</p>
+        <div ${ed?`data-bind="news.${idx}.content" data-rich="1" contenteditable="true"`:''}>${richOut(n.content)}</div>
       </div>
       ${ed?`<div class="admin-row-tools" style="max-width:800px;margin:0 auto 30px;"><button class="admin-mini-btn seo-btn" data-action="open-seo" data-kind="news" data-id="${n.id}">${icon('search')} SEO Settings for this Post</button><button class="admin-mini-btn" data-action="del-news" data-id="${n.id}" style="color:#b93b26;border-color:rgba(185,59,38,.45);">${icon('trash')} Delete Post</button></div>`:''}
       <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px;max-width:800px;margin:26px auto;">
