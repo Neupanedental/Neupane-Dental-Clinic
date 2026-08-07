@@ -457,13 +457,123 @@ footer a:hover{opacity:1;color:var(--gold-light);}
 .settings-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
 @media(max-width:640px){.settings-grid{grid-template-columns:1fr;}}
 .hidden-file-input{position:fixed;top:-9999px;left:-9999px;}
+
+/* ================= ADDED: intro splash (logo + luxury reveal) ================= */
+#introSplash{position:fixed;inset:0;z-index:6000;background:radial-gradient(circle at 50% 38%,var(--teal-light) 0%,var(--charcoal) 72%);display:flex;align-items:center;justify-content:center;flex-direction:column;gap:16px;transition:opacity .8s var(--ease),visibility .8s var(--ease);}
+#introSplash.hide{opacity:0;visibility:hidden;pointer-events:none;}
+#introSplash .splash-logo-wrap{position:relative;width:118px;height:118px;display:flex;align-items:center;justify-content:center;}
+#introSplash .splash-ring{position:absolute;inset:0;border-radius:50%;border:1.5px solid rgba(222,188,133,.35);animation:splashRing 2.3s var(--ease) infinite;}
+#introSplash .splash-ring.r2{animation-delay:.55s;}
+#introSplash .splash-logo{width:82px;height:82px;object-fit:contain;opacity:0;transform:scale(.7);animation:splashLogoIn 1.1s var(--ease) .2s forwards;filter:drop-shadow(0 8px 22px rgba(180,135,74,.5));border-radius:50%;background:#fff;padding:10px;}
+#introSplash .splash-name{font-family:'Cormorant Garamond',serif;color:var(--gold-light);font-size:1.5rem;letter-spacing:.05em;opacity:0;transform:translateY(10px);animation:splashTextIn .9s var(--ease) .9s forwards;text-align:center;}
+#introSplash .splash-tag{font-size:.6rem;letter-spacing:.34em;text-transform:uppercase;color:rgba(236,226,205,.55);opacity:0;transform:translateY(8px);animation:splashTextIn .9s var(--ease) 1.15s forwards;text-align:center;}
+#introSplash .splash-sweep{position:absolute;inset:0;overflow:hidden;pointer-events:none;}
+#introSplash .splash-sweep::after{content:"";position:absolute;top:0;bottom:0;width:40%;left:-50%;background:linear-gradient(100deg,transparent,rgba(222,188,133,.13),transparent);animation:splashSweepMove 2.4s ease-in-out infinite;}
+@keyframes splashRing{0%{transform:scale(.85);opacity:.9;}100%{transform:scale(1.85);opacity:0;}}
+@keyframes splashLogoIn{0%{opacity:0;transform:scale(.7);}100%{opacity:1;transform:scale(1);}}
+@keyframes splashTextIn{to{opacity:1;transform:translateY(0);}}
+@keyframes splashSweepMove{0%{left:-50%;}100%{left:120%;}}
+@media(prefers-reduced-motion:reduce){
+  #introSplash .splash-ring,#introSplash .splash-sweep::after{animation:none;}
+  #introSplash .splash-logo,#introSplash .splash-name,#introSplash .splash-tag{animation:none;opacity:1;transform:none;}
+}
+
+/* ================= ADDED: draggable / reorderable sections (admin edit mode only) ================= */
+.admin-section{display:contents;}
+body.admin-edit-mode .admin-section{display:block;position:relative;}
+body.admin-edit-mode .admin-section.dragging{opacity:.35;}
+body.admin-edit-mode .admin-section.drag-over-top{box-shadow:inset 0 4px 0 0 var(--gold);}
+body.admin-edit-mode .admin-section.drag-over-bottom{box-shadow:inset 0 -4px 0 0 var(--gold);}
+.sec-toolbar{position:sticky;top:6px;z-index:80;display:flex;gap:8px;align-items:center;justify-content:center;width:max-content;margin:0 auto;background:rgba(26,22,17,.92);padding:6px 8px 6px 4px;border-radius:999px;backdrop-filter:blur(6px);box-shadow:0 8px 22px -10px rgba(0,0,0,.55);}
+.sec-toolbar .admin-mini-btn{background:#fff;}
+.sec-drag{cursor:grab;color:var(--gold-light);font-size:1.05rem;line-height:1;padding:3px 8px;user-select:none;}
+.sec-drag:active{cursor:grabbing;}
+.add-section-bar{display:flex;justify-content:center;padding:34px 0;}
+.add-section-bar .admin-mini-btn{padding:10px 20px;font-size:.8rem;border-radius:999px;}
+
+/* ================= ADDED: entrance-animation modifiers (reuse existing .reveal engine) ================= */
+.reveal.anim-zoom{transform:scale(.84);}
+.reveal.anim-zoom.in{transform:scale(1);}
+.reveal.anim-left{transform:translateX(-56px);}
+.reveal.anim-left.in{transform:translateX(0);}
+.reveal.anim-right{transform:translateX(56px);}
+.reveal.anim-right.in{transform:translateX(0);}
+
+/* ================= ADDED: background theme options for sections / custom blocks ================= */
+section.cb-theme-cream{background:var(--cream);color:var(--charcoal);}
+section.cb-theme-ivory{background:var(--ivory);color:var(--charcoal);}
+section.cb-theme-gold{background:linear-gradient(160deg,rgba(222,188,133,.25),rgba(180,135,74,.08));color:var(--charcoal);}
+section.cb-theme-dark{background:linear-gradient(160deg,var(--teal),#0b0906);color:#f4efe1;}
+section.cb-theme-dark h2,section.cb-theme-dark h3,section.cb-theme-dark h4{color:#fff;}
+section.cb-section{padding:78px 0;}
+
+/* ================= ADDED: rich-text floating toolbar ================= */
+.rte-toolbar{position:fixed;z-index:4500;display:none;gap:2px;background:#1c1712;border-radius:10px;padding:5px;box-shadow:0 14px 34px -10px rgba(0,0,0,.55);align-items:center;flex-wrap:nowrap;max-width:95vw;overflow-x:auto;}
+.rte-toolbar.show{display:flex;}
+.rte-toolbar button{background:transparent;border:1px solid transparent;color:#ECE2CD;border-radius:6px;font-size:.78rem;padding:6px 9px;white-space:nowrap;font-weight:700;}
+.rte-toolbar button:hover,.rte-toolbar button.active{background:rgba(222,188,133,.2);border-color:rgba(222,188,133,.4);color:#DEBC85;}
+.rte-toolbar select{background:#2a231a;color:#ECE2CD;border:1px solid rgba(222,188,133,.3);border-radius:6px;font-size:.76rem;padding:5px 6px;max-width:118px;}
+.rte-toolbar .rte-sep{width:1px;align-self:stretch;background:rgba(255,255,255,.15);margin:0 3px;}
+.rte-toolbar input[type=color]{width:26px;height:26px;padding:0;border:none;border-radius:6px;background:none;cursor:pointer;}
+[data-bind][data-rich]{outline:1.5px dashed var(--gold);outline-offset:6px;border-radius:6px;}
+[data-bind][data-rich] a{text-decoration:underline;text-decoration-color:var(--gold-deep);}
+
+/* ================= ADDED: image editor (crop + entrance animation picker) ================= */
+.img-editor-stage{position:relative;max-width:100%;margin:0 auto 16px;background:#111;border-radius:12px;overflow:hidden;touch-action:none;user-select:none;line-height:0;}
+.img-editor-stage img{display:block;max-width:100%;max-height:50vh;margin:0 auto;pointer-events:none;}
+.crop-box{position:absolute;border:2px solid var(--gold-light);box-shadow:0 0 0 1500px rgba(0,0,0,.5);cursor:move;}
+.crop-handle{position:absolute;width:15px;height:15px;background:var(--gold-light);border:2px solid #1a1611;border-radius:50%;}
+.crop-handle.nw{top:-8px;left:-8px;cursor:nwse-resize;}
+.crop-handle.ne{top:-8px;right:-8px;cursor:nesw-resize;}
+.crop-handle.sw{bottom:-8px;left:-8px;cursor:nesw-resize;}
+.crop-handle.se{bottom:-8px;right:-8px;cursor:nwse-resize;}
+.img-editor-row{display:flex;gap:10px;align-items:center;justify-content:center;flex-wrap:wrap;margin-bottom:14px;}
+.img-editor-row label{font-size:.78rem;font-weight:600;color:var(--charcoal-soft);}
+.img-editor-row select{border:1px solid rgba(180,135,74,.4);border-radius:8px;padding:8px 10px;font-family:inherit;font-size:.85rem;background:#fff;}
+
+/* ================= ADDED: add-section block library ================= */
+.block-lib-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-top:6px;}
+.block-lib-card{border:1.5px solid rgba(180,135,74,.35);border-radius:14px;padding:16px 12px;text-align:center;background:#fff;transition:transform .25s,box-shadow .25s;cursor:pointer;}
+.block-lib-card:hover{transform:translateY(-4px);box-shadow:0 14px 30px -14px rgba(122,90,44,.5);border-color:var(--gold);}
+.block-lib-card .bl-ico{font-size:1.6rem;margin-bottom:8px;}
+.block-lib-card b{display:block;font-size:.88rem;margin-bottom:4px;color:var(--teal);}
+.block-lib-card span{font-size:.72rem;color:var(--charcoal-soft);line-height:1.4;display:block;}
 </style>
 </head>
 <body>
+<div id="introSplash" aria-hidden="true">
+  <div class="splash-sweep"></div>
+  <div class="splash-logo-wrap">
+    <div class="splash-ring"></div>
+    <div class="splash-ring r2"></div>
+    <img id="splashLogoImg" class="splash-logo" alt="Neupane Dental Clinic" />
+  </div>
+  <div class="splash-name">Neupane Dental Clinic</div>
+  <div class="splash-tag">Modern &middot; Gentle &middot; Trusted</div>
+</div>
 <div id="app"></div>
 <script>
 const LOGO = "data:image/webp;base64,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";
 window.LOGO = LOGO;
+(function(){
+  var simg = document.getElementById("splashLogoImg");
+  if(simg) simg.src = LOGO;
+  var start = Date.now();
+  function dismiss(){
+    var el = document.getElementById("introSplash");
+    if(!el || el.__dismissed) return;
+    el.__dismissed = true;
+    var elapsed = Date.now() - start;
+    var wait = Math.max(0, 1500 - elapsed);
+    setTimeout(function(){
+      el.classList.add("hide");
+      setTimeout(function(){ if(el && el.parentNode) el.parentNode.removeChild(el); }, 900);
+    }, wait);
+  }
+  if(document.readyState === "complete"){ dismiss(); }
+  else { window.addEventListener("load", dismiss); }
+  setTimeout(dismiss, 4500);
+})();
 </script>
 <script type="module">
 /* ===================== FIREBASE SETUP ===================== */
@@ -555,7 +665,10 @@ const DEFAULT_DB = {
       defaultDescription:"Neupane Dental Clinic offers modern, affordable dental care in Tilottama-03, Divertole, Rupandehi, Nepal — scaling, root canal, braces, pediatric dentistry, X-ray and more.",
       keywords:"dental clinic nepal, dentist rupandehi, dental clinic tilottama, dentist butwal, root canal nepal, braces nepal, pediatric dentist nepal, teeth cleaning nepal",
       ogImage:""
-    }
+    },
+    homeSectionOrder:["hero","whyus","mission","team","services","reviews","branches","book","faq"],
+    sectionSettings:{},
+    imageAnims:{}
   },
   seoPages:{
     home:{title:"",description:"",keywords:[],image:""},
@@ -567,6 +680,7 @@ const DEFAULT_DB = {
     privacy:{title:"",description:"",keywords:[],image:""},
     terms:{title:"",description:"",keywords:[],image:""}
   },
+  customBlocks:[],
   team:[
     {id:"t1",name:"Dr. Aakash Karmacharya",role:"BDS, MDS · Endodontist",img:"https://www.neupanedental.com.np/web/image/1040-8f779b6c/Dr.%20aakash.webp"},
     {id:"t2",name:"Dr. Nagendra Shris",role:"BDS, MDS · Oral & Maxillofacial Surgeon",img:"https://www.neupanedental.com.np/web/image/995-cf2c5ee3/FB_IMG_1748942218943.webp"},
@@ -788,6 +902,12 @@ function normalizeDB(db){
   });
   (db.news||[]).forEach(n=>{ if(!n.seo) n.seo = {title:"",description:"",keywords:[],image:""}; });
   Object.keys(DEFAULT_DB.seoPages).forEach(pk=>{ if(!db.seoPages[pk]) db.seoPages[pk] = {title:"",description:"",keywords:[],image:""}; else { db.seoPages[pk].keywords = db.seoPages[pk].keywords||[]; db.seoPages[pk].image = db.seoPages[pk].image||""; } });
+  if(!Array.isArray(db.customBlocks)) db.customBlocks = [];
+  if(!Array.isArray(db.siteInfo.homeSectionOrder) || !db.siteInfo.homeSectionOrder.length) db.siteInfo.homeSectionOrder = DEFAULT_DB.siteInfo.homeSectionOrder.slice();
+  DEFAULT_DB.siteInfo.homeSectionOrder.forEach(id=>{ if(!db.siteInfo.homeSectionOrder.includes(id)) db.siteInfo.homeSectionOrder.push(id); });
+  db.customBlocks.forEach(b=>{ const key="custom:"+b.id; if(!db.siteInfo.homeSectionOrder.includes(key)) db.siteInfo.homeSectionOrder.push(key); });
+  if(!db.siteInfo.sectionSettings || typeof db.siteInfo.sectionSettings!=="object") db.siteInfo.sectionSettings = {};
+  if(!db.siteInfo.imageAnims || typeof db.siteInfo.imageAnims!=="object") db.siteInfo.imageAnims = {};
   return db;
 }
 function persistDB(){ return saveJSON("sitedata", true, DB); }
@@ -909,6 +1029,41 @@ async function ensureGuestSession(){
 
 /* ===================== UTIL ===================== */
 function esc(s){ return (s==null?"":String(s)).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c])); }
+/* ===================== ADDED: rich-text sanitizer (used for admin-formatted paragraphs) ===================== */
+const RICH_ALLOWED_TAGS = new Set(["B","STRONG","I","EM","U","S","STRIKE","SPAN","BR","P","DIV","A","MARK","UL","OL","LI"]);
+const RICH_ALLOWED_ATTRS = {A:["href","target","rel"], SPAN:["style"], P:["style"], DIV:["style"], MARK:["style"]};
+function sanitizeRichHTML(html){
+  const tmp = document.createElement("div");
+  tmp.innerHTML = html==null ? "" : String(html);
+  (function walk(node){
+    Array.from(node.childNodes).forEach(child=>{
+      if(child.nodeType===1){
+        const tag = child.tagName;
+        if(!RICH_ALLOWED_TAGS.has(tag)){
+          while(child.firstChild) node.insertBefore(child.firstChild, child);
+          node.removeChild(child);
+          return;
+        }
+        const allowed = RICH_ALLOWED_ATTRS[tag]||[];
+        Array.from(child.attributes).forEach(attr=>{ if(!allowed.includes(attr.name)) child.removeAttribute(attr.name); });
+        if(tag==="A"){
+          let href = child.getAttribute("href")||"";
+          if(!/^https?:\/\//i.test(href) && !href.startsWith("#") && !href.startsWith("/")) href = "#";
+          child.setAttribute("href", href);
+          child.setAttribute("rel","noopener");
+        }
+        if(tag==="SPAN"||tag==="P"||tag==="DIV"||tag==="MARK"){
+          const style = child.getAttribute("style")||"";
+          const safe = style.split(";").map(x=>x.trim()).filter(x=>/^(color|background-color|font-family|font-size|text-align|font-weight|font-style|text-decoration)\s*:/i.test(x)).join(";");
+          if(safe) child.setAttribute("style", safe); else child.removeAttribute("style");
+        }
+        walk(child);
+      } else if(child.nodeType===8){ node.removeChild(child); }
+    });
+  })(tmp);
+  return tmp.innerHTML;
+}
+function richOut(v){ return sanitizeRichHTML(v==null?"":String(v)); }
 function initials(name){ return (name||"?").split(" ").map(w=>w[0]).slice(0,2).join("").toUpperCase(); }
 function fmtDate(d){ try{ return new Date(d).toLocaleDateString("en-US",{year:"numeric",month:"short",day:"numeric"}); }catch(e){ return d; } }
 function slugFind(arr,id){ return arr.find(x=>x.id===id); }
@@ -1245,19 +1400,77 @@ function faqBlock(list, editable, basePath){
 }
 
 /* ===================== PAGES ===================== */
+/* ===================== ADDED: home-page section registry (drag-reorder + add-section blocks) ===================== */
+const SECTION_THEME_OK = new Set(["whyus","mission","team","services","book","faq"]);
+function themeClassFor(id){
+  if(!SECTION_THEME_OK.has(id)) return "";
+  const t = (DB.siteInfo.sectionSettings && DB.siteInfo.sectionSettings[id] && DB.siteInfo.sectionSettings[id].theme) || "";
+  return t ? " cb-theme-"+t : "";
+}
+function revealClassFor(animVal){
+  if(animVal==="none") return "";
+  if(animVal==="zoom") return "reveal anim-zoom";
+  if(animVal==="left") return "reveal anim-left";
+  if(animVal==="right") return "reveal anim-right";
+  return "reveal";
+}
+function wrapSection(id, ed, inner){
+  if(!ed) return `<div class="admin-section" data-sec-id="${esc(id)}">${inner}</div>`;
+  const isCustom = id.indexOf("custom:")===0;
+  const canStyle = isCustom || SECTION_THEME_OK.has(id);
+  return `<div class="admin-section" data-sec-id="${esc(id)}">
+    <div class="sec-toolbar">
+      <span class="sec-drag" draggable="true" title="Drag to reorder">⠿</span>
+      ${canStyle?`<button type="button" class="admin-mini-btn" data-action="open-sec-settings" data-sec="${esc(id)}">⚙ Style</button>`:''}
+      ${isCustom?`<button type="button" class="admin-mini-btn danger" data-action="del-custom-block" data-sec="${esc(id)}">✕ Remove</button>`:''}
+    </div>
+    ${inner}
+  </div>`;
+}
+function addSectionBarHTML(afterId){
+  return `<div class="add-section-bar"><button type="button" class="admin-mini-btn" data-action="open-block-library" data-after="${esc(afterId||'')}">+ Add Section</button></div>`;
+}
 function pageHome(){
   const ed = isAdmin() && editMode;
   const s = DB.siteInfo;
+  const SECTION_RENDERERS = {
+    hero: ()=> heroSectionHTML(ed,s),
+    whyus: ()=> whyUsSectionHTML(),
+    mission: ()=> missionSectionHTML(ed,s),
+    team: ()=> teamSectionHTML(ed),
+    services: ()=> servicesSectionHTML(ed),
+    reviews: ()=> reviewsSectionHTML(),
+    book: ()=> bookSectionHTML(),
+    faq: ()=> faqSectionHTML(ed)
+  };
+  const order = (s.homeSectionOrder && s.homeSectionOrder.length) ? s.homeSectionOrder : DEFAULT_DB.siteInfo.homeSectionOrder;
+  let out = ed ? addSectionBarHTML("") : "";
+  order.forEach(id=>{
+    let inner = "";
+    if(id==="branches"){ inner = renderBranches(ed); }
+    else if(id.indexOf("custom:")===0){
+      const bid = id.slice(7);
+      const idx = DB.customBlocks.findIndex(b=>b.id===bid);
+      if(idx<0) return;
+      inner = renderCustomBlock(DB.customBlocks[idx], idx, ed);
+    } else if(SECTION_RENDERERS[id]){ inner = SECTION_RENDERERS[id](); }
+    else { return; }
+    out += wrapSection(id, ed, inner);
+    if(ed) out += addSectionBarHTML(id);
+  });
+  return out;
+}
+function heroSectionHTML(ed, s){
   return `
   <section class="hero">
     <div class="wrap hero-grid">
       <div>
         <span class="eyebrow reveal" ${ed?'data-bind="siteInfo.heroLocation" contenteditable="true"':''}>${esc(s.heroLocation||"Tilottama · Rupandehi · Nepal")}</span>
         <h1 class="reveal">
-          <span ${ed?'data-bind="siteInfo.heroTitle" contenteditable="true"':''}>${esc(s.heroTitle)}</span><br>
-          <em ${ed?'data-bind="siteInfo.heroTitle2" contenteditable="true"':''}>${esc(s.heroTitle2)}</em>
+          <span ${ed?'data-bind="siteInfo.heroTitle" data-rich="1" contenteditable="true"':''}>${richOut(s.heroTitle)}</span><br>
+          <em ${ed?'data-bind="siteInfo.heroTitle2" data-rich="1" contenteditable="true"':''}>${richOut(s.heroTitle2)}</em>
         </h1>
-        <p class="lead reveal" ${ed?'data-bind="siteInfo.heroLead" contenteditable="true"':''}>${esc(s.heroLead)}</p>
+        <p class="lead reveal" ${ed?'data-bind="siteInfo.heroLead" data-rich="1" contenteditable="true"':''}>${richOut(s.heroLead)}</p>
         <div class="hero-ctas reveal">
           <a href="#/book" class="gold-btn">Book Your Appointment</a>
           <a href="#/services" class="ghost-btn">Explore Services</a>
@@ -1276,9 +1489,11 @@ function pageHome(){
         </div>
       </div>
     </div>
-  </section>
-
-  <section class="alt-bg">
+  </section>`;
+}
+function whyUsSectionHTML(){
+  return `
+  <section class="alt-bg${themeClassFor('whyus')}">
     <div class="wrap">
       <div class="section-head reveal">
         <span class="eyebrow">Why Neupane Dental</span>
@@ -1291,9 +1506,12 @@ function pageHome(){
         <div class="service-card"><div class="ico">${icon('heart')}</div><h3>Healthy Smiles</h3><p>From cleanings to cosmetic procedures, we take care of all your dental needs.</p></div>
       </div>
     </div>
-  </section>
-
-  <section>
+  </section>`;
+}
+function missionSectionHTML(ed, s){
+  const cls = themeClassFor('mission');
+  return `
+  <section${cls?` class="${cls.trim()}"`:''}>
     <div class="wrap">
       <div class="grid cols-2" style="align-items:center;gap:50px;">
         <div class="reveal" style="border-radius:26px;overflow:hidden;box-shadow:var(--shadow);position:relative;">
@@ -1304,7 +1522,7 @@ function pageHome(){
         </div>
         <div class="reveal">
           <span class="eyebrow">Our Mission</span>
-          <h2 style="margin:12px 0 18px;" ${ed?'data-bind="siteInfo.missionTitle" contenteditable="true"':''}>${esc(s.missionTitle)}</h2>
+          <h2 style="margin:12px 0 18px;" ${ed?'data-bind="siteInfo.missionTitle" data-rich="1" contenteditable="true"':''}>${richOut(s.missionTitle)}</h2>
           <a href="#/book" class="gold-btn">Contact Us Today</a>
         </div>
       </div>
@@ -1320,9 +1538,12 @@ function pageHome(){
         ${ed?`<button class="mission-add-tile" data-action="add-mission-img" style="border:2px dashed rgba(180,135,74,.5);cursor:pointer;">${icon('upload')}&nbsp; Add Photo</button>`:''}
       </div>
     </div>
-  </section>
-
-  <section class="alt-bg" id="team">
+  </section>`;
+}
+function teamSectionHTML(ed){
+  const cls = themeClassFor('team');
+  return `
+  <section class="alt-bg${cls}" id="team">
     <div class="wrap">
       <div class="section-head reveal">
         <span class="eyebrow">Our People</span>
@@ -1334,9 +1555,12 @@ function pageHome(){
       </div>
       ${ed?`<div class="admin-row-tools"><button class="admin-mini-btn" data-action="add-team">+ Add Team Member</button></div>`:''}
     </div>
-  </section>
-
-  <section id="services">
+  </section>`;
+}
+function servicesSectionHTML(ed){
+  const cls = themeClassFor('services');
+  return `
+  <section${cls?` class="${cls.trim()}"`:''} id="services">
     <div class="wrap">
       <div class="section-head reveal">
         <span class="eyebrow">What We Offer</span>
@@ -1348,8 +1572,10 @@ function pageHome(){
       </div>
       <div style="text-align:center;margin-top:34px;" class="reveal"><a href="#/services" class="ghost-btn">View All Services →</a></div>
     </div>
-  </section>
-
+  </section>`;
+}
+function reviewsSectionHTML(){
+  return `
   <section class="dark-bg">
     <div class="wrap">
       <div class="section-head reveal">
@@ -1364,11 +1590,12 @@ function pageHome(){
       </div>
       <div style="text-align:center;margin-top:30px;"><a href="${DB.siteInfo.mapsUrl}" target="_blank" class="ghost-btn light">See all Google Reviews →</a></div>
     </div>
-  </section>
-
-  ${renderBranches(ed)}
-
-  <section>
+  </section>`;
+}
+function bookSectionHTML(){
+  const cls = themeClassFor('book');
+  return `
+  <section${cls?` class="${cls.trim()}"`:''}>
     <div class="wrap">
       <div class="card-panel reveal" id="bookHome">
         <div class="section-head" style="margin-bottom:26px;">
@@ -1378,12 +1605,164 @@ function pageHome(){
         ${appointmentForm()}
       </div>
     </div>
-  </section>
-
-  <section class="alt-bg">
+  </section>`;
+}
+function faqSectionHTML(ed){
+  const cls = themeClassFor('faq');
+  return `
+  <section class="alt-bg${cls}">
     <div class="wrap">${faqBlock(DB.faqsGlobal, ed, "faqsGlobal")}</div>
-  </section>
-  `;
+  </section>`;
+}
+/* ===================== ADDED: custom block templates (Add Section library) ===================== */
+function renderCustomBlock(block, idx, ed){
+  const base = `customBlocks.${idx}`;
+  const cls = "cb-section" + (block.theme ? " cb-theme-"+block.theme : "");
+  if(block.type==="cta"){
+    const btnInner = ed ? `<span data-bind="${base}.btnText" contenteditable="true">${esc(block.btnText)}</span>` : esc(block.btnText);
+    const btnHref = ed ? 'href="javascript:void(0)"' : `href="${esc(block.href||'#')}"`;
+    return `
+    <section class="${cls}">
+      <div class="wrap" style="text-align:center;max-width:760px;">
+        <h2 class="${revealClassFor(block.anim)}" style="margin-bottom:14px;" ${ed?`data-bind="${base}.title" data-rich="1" contenteditable="true"`:''}>${richOut(block.title)}</h2>
+        <p class="${revealClassFor(block.anim)}" style="margin-bottom:26px;" ${ed?`data-bind="${base}.body" data-rich="1" contenteditable="true"`:''}>${richOut(block.body)}</p>
+        <div class="${revealClassFor(block.anim)}">
+          <a ${btnHref} class="gold-btn">${btnInner}</a>
+          ${ed?`<div style="margin-top:12px;"><button type="button" class="admin-mini-btn" data-action="edit-link" data-key="${base}.href">Set Button Link</button></div>`:''}
+        </div>
+      </div>
+    </section>`;
+  }
+  if(block.type==="text-image"){
+    const imgHTML = `<div class="${revealClassFor(block.imgAnim)}" style="position:relative;border-radius:22px;overflow:hidden;box-shadow:var(--shadow);">
+        <img src="${esc(block.img)}" style="width:100%;height:340px;object-fit:cover;display:block;">
+        ${ed?`<div class="mission-tools" style="opacity:1;background:linear-gradient(0deg,rgba(15,12,8,.55),transparent 60%);align-items:flex-end;justify-content:flex-end;padding:14px;">
+          <button class="admin-mini-btn" data-action="edit-img" data-path="${base}.img">${icon('upload')} Replace Photo</button>
+        </div>`:''}
+      </div>`;
+    const textHTML = `<div class="${revealClassFor(block.anim)}">
+        <h2 style="margin-bottom:14px;" ${ed?`data-bind="${base}.title" data-rich="1" contenteditable="true"`:''}>${richOut(block.title)}</h2>
+        <div ${ed?`data-bind="${base}.body" data-rich="1" contenteditable="true"`:''}>${richOut(block.body)}</div>
+        ${ed?`<div style="margin-top:14px;"><button type="button" class="admin-mini-btn" data-action="toggle-imgpos" data-sec="${base}">⇄ Swap Photo Side</button></div>`:''}
+      </div>`;
+    return `
+    <section class="${cls}">
+      <div class="wrap">
+        <div class="grid cols-2" style="align-items:center;gap:50px;">
+          ${block.imgPos==='left' ? imgHTML+textHTML : textHTML+imgHTML}
+        </div>
+      </div>
+    </section>`;
+  }
+  if(block.type==="quote"){
+    return `
+    <section class="${cls}">
+      <div class="wrap" style="max-width:760px;text-align:center;">
+        <div class="${revealClassFor(block.anim)}">
+          <div style="font-family:'Cormorant Garamond',serif;font-size:2.4rem;color:var(--gold);line-height:1;margin-bottom:10px;">&ldquo;</div>
+          <p style="font-size:1.25rem;font-style:italic;line-height:1.7;margin-bottom:18px;" ${ed?`data-bind="${base}.text" data-rich="1" contenteditable="true"`:''}>${richOut(block.text)}</p>
+          <b style="display:block;" ${ed?`data-bind="${base}.author" contenteditable="true"`:''}>${esc(block.author)}</b>
+          <span style="font-size:.82rem;color:var(--charcoal-soft);" ${ed?`data-bind="${base}.role" contenteditable="true"`:''}>${esc(block.role)}</span>
+        </div>
+      </div>
+    </section>`;
+  }
+  if(block.type==="gallery-row"){
+    const imgs = block.images||[];
+    return `
+    <section class="${cls}">
+      <div class="wrap">
+        <div class="grid cols-3" style="gap:18px;">
+          ${imgs.map((im,i)=>{
+            const rc = revealClassFor((block.imagesAnim&&block.imagesAnim[i])||'up');
+            return `<div class="${rc}" style="position:relative;border-radius:18px;overflow:hidden;box-shadow:var(--shadow);">
+              <img src="${esc(im)}" style="width:100%;height:220px;object-fit:cover;display:block;">
+              ${ed?`<div class="mission-tools">
+                <button class="admin-mini-btn" data-action="edit-img" data-path="${base}.images.${i}" title="Replace">${icon('upload')}</button>
+                <button class="admin-mini-btn danger" data-action="del-block-img" data-sec="${base}" data-idx="${i}" title="Remove">✕</button>
+              </div>`:''}
+            </div>`;
+          }).join('')}
+          ${ed?`<button class="mission-add-tile" data-action="add-block-img" data-sec="${base}" style="border:2px dashed rgba(180,135,74,.5);cursor:pointer;min-height:150px;">${icon('upload')}&nbsp; Add Photo</button>`:''}
+        </div>
+      </div>
+    </section>`;
+  }
+  return '';
+}
+/* ===================== ADDED: "Add Section" block library modal ===================== */
+function openBlockLibrary(afterId){
+  let m = document.getElementById("blockLibModal");
+  if(!m){ m=document.createElement("div"); m.id="blockLibModal"; m.className="modal-backdrop"; document.body.appendChild(m); }
+  m.innerHTML = `
+  <div class="modal-box" style="max-width:640px;">
+    <h3 style="margin-bottom:6px;">Add a Section</h3>
+    <p style="margin-bottom:16px;">Choose a block — you can fully edit its text, photos and button link afterwards.</p>
+    <div class="block-lib-grid">
+      <div class="block-lib-card" data-action="add-custom-block" data-type="cta" data-after="${esc(afterId||'')}"><div class="bl-ico">📣</div><b>CTA Banner</b><span>Headline + button linking anywhere</span></div>
+      <div class="block-lib-card" data-action="add-custom-block" data-type="text-image" data-after="${esc(afterId||'')}"><div class="bl-ico">🖼️</div><b>Text + Image</b><span>Paragraph beside a photo</span></div>
+      <div class="block-lib-card" data-action="add-custom-block" data-type="quote" data-after="${esc(afterId||'')}"><div class="bl-ico">❝</div><b>Testimonial Quote</b><span>Large featured quote</span></div>
+      <div class="block-lib-card" data-action="add-custom-block" data-type="gallery-row" data-after="${esc(afterId||'')}"><div class="bl-ico">🎞️</div><b>Photo Strip</b><span>Row of photos</span></div>
+    </div>
+    <div style="display:flex;justify-content:center;margin-top:20px;"><button type="button" class="ghost-btn" data-action="close-block-library">Cancel</button></div>
+  </div>`;
+  requestAnimationFrame(()=>m.classList.add("show"));
+}
+function closeBlockLibrary(){
+  const m = document.getElementById("blockLibModal");
+  if(m) m.classList.remove("show");
+}
+/* ===================== ADDED: per-section style settings (background + entrance animation) ===================== */
+function renderSecSettingsHTML(id){
+  const isCustom = id.indexOf("custom:")===0;
+  let curTheme = "", curAnim = "up";
+  if(isCustom){
+    const bid = id.slice(7);
+    const blk = DB.customBlocks.find(b=>b.id===bid);
+    curTheme = (blk&&blk.theme)||"";
+    curAnim = (blk&&blk.anim)||"up";
+  } else {
+    curTheme = (DB.siteInfo.sectionSettings[id]||{}).theme || "";
+  }
+  const themeOpts = isCustom
+    ? [["","Default"],["cream","Light Cream"],["dark","Charcoal Dark"],["gold","Gold Tint"]]
+    : [["","Default"],["cream","Cream"],["ivory","Ivory"],["gold","Gold Tint"]];
+  const animRow = isCustom ? `
+    <div class="img-editor-row">
+      <label>Entrance animation</label>
+      <select id="secAnimSel">
+        <option value="up" ${curAnim==='up'?'selected':''}>Fade Up</option>
+        <option value="zoom" ${curAnim==='zoom'?'selected':''}>Zoom In</option>
+        <option value="left" ${curAnim==='left'?'selected':''}>Slide From Left</option>
+        <option value="right" ${curAnim==='right'?'selected':''}>Slide From Right</option>
+        <option value="none" ${curAnim==='none'?'selected':''}>None</option>
+      </select>
+    </div>` : "";
+  return `
+  <div class="modal-box" style="max-width:420px;">
+    <h3 style="margin-bottom:14px;">Section Style</h3>
+    <div class="img-editor-row">
+      <label>Background</label>
+      <select id="secThemeSel">
+        ${themeOpts.map(([v,l])=>`<option value="${v}" ${curTheme===v?'selected':''}>${l}</option>`).join('')}
+      </select>
+    </div>
+    ${animRow}
+    <div style="display:flex;gap:10px;justify-content:center;margin-top:16px;flex-wrap:wrap;">
+      <button type="button" class="ghost-btn" data-action="close-sec-settings">Cancel</button>
+      <button type="button" class="gold-btn" data-action="save-sec-settings" data-sec="${esc(id)}"><span>Save</span></button>
+    </div>
+  </div>`;
+}
+function openSecSettings(id){
+  let m = document.getElementById("secSettingsModal");
+  if(!m){ m=document.createElement("div"); m.id="secSettingsModal"; m.className="modal-backdrop"; document.body.appendChild(m); }
+  m.innerHTML = renderSecSettingsHTML(id);
+  requestAnimationFrame(()=>m.classList.add("show"));
+}
+function closeSecSettings(){
+  const m = document.getElementById("secSettingsModal");
+  if(m) m.classList.remove("show");
 }
 function renderBranches(ed){
   const branches = DB.siteInfo.branches || [];
@@ -1479,7 +1858,7 @@ function pageServiceDetail(id){
     <div class="wrap">
       <div class="detail-cover"><img src="${sv.img}" ${ed?`data-action="edit-img" data-path="services.${idx}.img" style="cursor:pointer;"`:''}></div>
       <div class="content-block reveal">
-        <p ${ed?`data-bind="services.${idx}.long" contenteditable="true"`:''}>${esc(sv.long)}</p>
+        <p ${ed?`data-bind="services.${idx}.long" data-rich="1" contenteditable="true"`:''}>${richOut(sv.long)}</p>
         <div class="card-panel" style="margin:30px 0;">
           <h3 style="margin-bottom:14px;">Pricing</h3>
           <ul style="list-style:none;padding:0;margin:0;">
@@ -1547,7 +1926,7 @@ function pageAbout(){
       <div class="section-head" style="margin:0;text-align:left;max-width:720px;">
         <span class="eyebrow">Neupane Dental Clinic</span>
         <h2>About Us</h2>
-        <p ${ed?'data-bind="siteInfo.aboutIntro" contenteditable="true"':''}>${esc(s.aboutIntro)}</p>
+        <p ${ed?'data-bind="siteInfo.aboutIntro" data-rich="1" contenteditable="true"':''}>${richOut(s.aboutIntro)}</p>
       </div>
     </div>
   </section>
@@ -1556,7 +1935,7 @@ function pageAbout(){
       <div class="grid cols-2" style="align-items:center;gap:50px;">
         <div class="reveal">
           <span class="eyebrow">Who We Are</span>
-          <p class="content-block" style="margin-top:14px;" ${ed?'data-bind="siteInfo.aboutWhoWeAre" contenteditable="true"':''}>${esc(s.aboutWhoWeAre)}</p>
+          <p class="content-block" style="margin-top:14px;" ${ed?'data-bind="siteInfo.aboutWhoWeAre" data-rich="1" contenteditable="true"':''}>${richOut(s.aboutWhoWeAre)}</p>
           <a href="#/book" class="gold-btn">Book Your Appointment</a>
         </div>
         <div class="reveal grid cols-2">
@@ -1674,7 +2053,7 @@ function pageNewsDetail(id){
     <div class="wrap">
       <div class="detail-cover"><img src="${n.img}" ${ed?`data-action="edit-img" data-path="news.${idx}.img" style="cursor:pointer;"`:''}></div>
       <div class="content-block reveal">
-        <p ${ed?`data-bind="news.${idx}.content" contenteditable="true"`:''}>${esc(n.content)}</p>
+        <p ${ed?`data-bind="news.${idx}.content" data-rich="1" contenteditable="true"`:''}>${richOut(n.content)}</p>
       </div>
       ${ed?`<div class="admin-row-tools" style="max-width:800px;margin:0 auto 30px;"><button class="admin-mini-btn seo-btn" data-action="open-seo" data-kind="news" data-id="${n.id}">${icon('search')} SEO Settings for this Post</button><button class="admin-mini-btn" data-action="del-news" data-id="${n.id}" style="color:#b93b26;border-color:rgba(185,59,38,.45);">${icon('trash')} Delete Post</button></div>`:''}
       <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px;max-width:800px;margin:26px auto;">
@@ -2043,6 +2422,8 @@ function pageContent(){
 function render(){
   const app = document.getElementById("app");
   const ed = isAdmin() && editMode;
+  document.body.classList.toggle("admin-edit-mode", ed);
+  if(!ed) hideRteToolbar();
   app.innerHTML = renderHeader() + `<main>${pageContent()||''}</main>` + renderFooter(ed) +
     (isAdmin()? `<div class="edit-toolbar"><b>Admin</b><span>${editMode?'Edit mode is ON — click any dashed text to edit, then Save.':'Edit mode is off.'}</span>
       <button class="admin-mini-btn" data-action="toggle-edit" style="background:var(--gold);border:none;">${editMode?'Exit Edit Mode':'Enter Edit Mode'}</button>
@@ -2058,6 +2439,148 @@ function render(){
 function initFaqState(){
   document.querySelectorAll(".faq-item").forEach(el=>{ /* nothing persisted, css handles open state via class */ });
 }
+/* ===================== ADDED: drag-and-drop section reordering (admin edit mode) ===================== */
+let __dragSecId = null;
+document.addEventListener("dragstart",(e)=>{
+  const handle = e.target.closest(".sec-drag");
+  const sec = handle ? handle.closest(".admin-section") : null;
+  if(!sec) return;
+  __dragSecId = sec.dataset.secId;
+  sec.classList.add("dragging");
+  e.dataTransfer.effectAllowed = "move";
+  try{ e.dataTransfer.setData("text/plain", __dragSecId); }catch(err){}
+});
+document.addEventListener("dragend",()=>{
+  document.querySelectorAll(".admin-section.dragging").forEach(n=>n.classList.remove("dragging"));
+  document.querySelectorAll(".admin-section.drag-over-top,.admin-section.drag-over-bottom").forEach(n=>n.classList.remove("drag-over-top","drag-over-bottom"));
+  __dragSecId = null;
+});
+document.addEventListener("dragover",(e)=>{
+  if(!__dragSecId) return;
+  const sec = e.target.closest(".admin-section");
+  if(!sec) return;
+  e.preventDefault();
+  const rect = sec.getBoundingClientRect();
+  const before = (e.clientY - rect.top) < rect.height/2;
+  document.querySelectorAll(".admin-section.drag-over-top,.admin-section.drag-over-bottom").forEach(n=>{ if(n!==sec) n.classList.remove("drag-over-top","drag-over-bottom"); });
+  sec.classList.toggle("drag-over-top", before);
+  sec.classList.toggle("drag-over-bottom", !before);
+});
+document.addEventListener("drop", async (e)=>{
+  if(!__dragSecId) return;
+  const sec = e.target.closest(".admin-section");
+  if(!sec) return;
+  e.preventDefault();
+  const targetId = sec.dataset.secId;
+  const before = sec.classList.contains("drag-over-top");
+  document.querySelectorAll(".admin-section.drag-over-top,.admin-section.drag-over-bottom").forEach(n=>n.classList.remove("drag-over-top","drag-over-bottom"));
+  const dragId = __dragSecId; __dragSecId = null;
+  if(targetId===dragId) return;
+  const order = (DB.siteInfo.homeSectionOrder||[]).slice();
+  const from = order.indexOf(dragId);
+  if(from<0) return;
+  order.splice(from,1);
+  let to = order.indexOf(targetId);
+  if(to<0) return;
+  if(!before) to+=1;
+  order.splice(to,0,dragId);
+  DB.siteInfo.homeSectionOrder = order;
+  const ok = await persistDB(); render();
+  showToast(ok?"Section order updated.":"Could not save — check your connection or admin sign-in.", !ok);
+});
+/* ===================== ADDED: rich-text floating toolbar (bold/italic/highlight/font/align/link/button) ===================== */
+function ensureRteToolbar(){
+  let t = document.getElementById("rteToolbar");
+  if(t) return t;
+  t = document.createElement("div");
+  t.id = "rteToolbar";
+  t.className = "rte-toolbar";
+  t.innerHTML = `
+    <button type="button" data-cmd="bold" title="Bold"><b>B</b></button>
+    <button type="button" data-cmd="italic" title="Italic"><i>I</i></button>
+    <button type="button" data-cmd="underline" title="Underline"><u>U</u></button>
+    <button type="button" data-cmd="strikeThrough" title="Strikethrough"><s>S</s></button>
+    <span class="rte-sep"></span>
+    <select id="rteFont" title="Font family">
+      <option value="">Font</option>
+      <option value="'Cormorant Garamond',serif">Cormorant</option>
+      <option value="'Manrope',sans-serif">Manrope</option>
+      <option value="Georgia,serif">Georgia</option>
+      <option value="Arial,sans-serif">Arial</option>
+      <option value="'Courier New',monospace">Courier</option>
+    </select>
+    <select id="rteSize" title="Text size">
+      <option value="">Size</option>
+      <option value="2">Small</option>
+      <option value="3">Normal</option>
+      <option value="5">Large</option>
+      <option value="6">X-Large</option>
+      <option value="7">Huge</option>
+    </select>
+    <span class="rte-sep"></span>
+    <button type="button" data-cmd="justifyLeft" title="Align left">⬅</button>
+    <button type="button" data-cmd="justifyCenter" title="Align center">⬌</button>
+    <button type="button" data-cmd="justifyRight" title="Align right">➡</button>
+    <span class="rte-sep"></span>
+    <input type="color" id="rteColor" title="Text color" value="#3a2f22">
+    <input type="color" id="rteHi" title="Highlight" value="#f5e3b3">
+    <span class="rte-sep"></span>
+    <button type="button" data-action="rte-insert-btn" title="Insert a linkable button">+ Button</button>
+    <button type="button" data-action="rte-set-link" title="Add or edit a link">🔗 Link</button>
+    <button type="button" data-cmd="removeFormat" title="Clear formatting">Clear</button>
+  `;
+  document.body.appendChild(t);
+  t.addEventListener("mousedown",(e)=>{
+    if(e.target.closest("select,input")) return;
+    e.preventDefault();
+  });
+  t.addEventListener("click",(e)=>{
+    const btn = e.target.closest("button[data-cmd]");
+    if(btn){ document.execCommand(btn.dataset.cmd, false, null); }
+  });
+  t.querySelector("#rteFont").addEventListener("change",(e)=>{ if(e.target.value) document.execCommand("fontName", false, e.target.value); });
+  t.querySelector("#rteSize").addEventListener("change",(e)=>{ if(e.target.value) document.execCommand("fontSize", false, e.target.value); });
+  t.querySelector("#rteColor").addEventListener("input",(e)=>{ document.execCommand("foreColor", false, e.target.value); });
+  t.querySelector("#rteHi").addEventListener("input",(e)=>{ document.execCommand("hiliteColor", false, e.target.value); });
+  return t;
+}
+let __rteActiveField = null;
+function positionRteToolbar(){
+  const t = document.getElementById("rteToolbar");
+  const sel = window.getSelection();
+  if(!t || !sel || sel.rangeCount===0) return;
+  const range = sel.getRangeAt(0);
+  const rect = range.getBoundingClientRect();
+  if(!rect || (rect.width===0 && rect.height===0)){
+    if(__rteActiveField){
+      const fr = __rteActiveField.getBoundingClientRect();
+      t.style.left = Math.max(8, fr.left)+"px";
+      t.style.top = Math.max(8, fr.top-46)+"px";
+    }
+    return;
+  }
+  t.style.left = Math.max(8, Math.min(rect.left, window.innerWidth-320))+"px";
+  t.style.top = Math.max(8, rect.top-46)+"px";
+}
+function hideRteToolbar(){
+  const t = document.getElementById("rteToolbar");
+  if(t) t.classList.remove("show");
+}
+document.addEventListener("selectionchange", ()=>{
+  const sel = window.getSelection();
+  if(!sel || sel.rangeCount===0) return;
+  const anchor = sel.anchorNode;
+  const anchorEl = anchor ? (anchor.nodeType===1?anchor:anchor.parentElement) : null;
+  const field = anchorEl ? anchorEl.closest('[data-bind][data-rich][contenteditable="true"]') : null;
+  if(field && !sel.isCollapsed){
+    __rteActiveField = field;
+    const t = ensureRteToolbar();
+    t.classList.add("show");
+    positionRteToolbar();
+  } else {
+    hideRteToolbar();
+  }
+});
 
 /* ===================== EVENT DELEGATION ===================== */
 document.addEventListener("click", async (e)=>{
@@ -2076,6 +2599,7 @@ document.addEventListener("click", async (e)=>{
     "del-review":{title:"Delete this review?",message:"This review will be permanently removed.",confirmText:"Yes, delete",cancelText:"Keep it",danger:true},
     "del-mission-img":{title:"Remove this photo?",message:"This photo will be permanently removed from the mission gallery.",confirmText:"Yes, remove",cancelText:"Keep it",danger:true},
     "del-gallery-img":{title:"Remove this photo?",message:"This photo will be permanently removed from the gallery.",confirmText:"Yes, remove",cancelText:"Keep it",danger:true},
+    "del-custom-block":{title:"Remove this section?",message:"This section block will be permanently removed from the homepage.",confirmText:"Yes, remove",cancelText:"Keep it",danger:true},
     "del-voice":{title:"Delete this patient voice?",message:"This testimonial will be permanently removed.",confirmText:"Yes, delete",cancelText:"Keep it",danger:true},
     "del-appt":{title:"Delete this appointment?",message:"This booking record will be permanently removed.",confirmText:"Yes, delete",cancelText:"Keep it",danger:true},
     "del-comment":{title:"Delete this comment?",message:"This comment will be permanently removed.",confirmText:"Yes, delete",cancelText:"Keep it",danger:true}
@@ -2132,7 +2656,8 @@ document.addEventListener("click", async (e)=>{
   if(action==="toggle-edit"){ editMode = !editMode; render(); return; }
   if(action==="save-edits"){
     document.querySelectorAll("[data-bind]").forEach(node=>{
-      setPath(DB, node.getAttribute("data-bind"), node.innerText.trim());
+      const val = node.hasAttribute("data-rich") ? sanitizeRichHTML(node.innerHTML) : node.innerText.trim();
+      setPath(DB, node.getAttribute("data-bind"), val);
     });
     const ok = await persistDB();
     showToast(ok?"Changes saved.":"Could not save — check your connection or that you're signed in as admin.", !ok);
@@ -2140,6 +2665,117 @@ document.addEventListener("click", async (e)=>{
     return;
   }
   if(action==="edit-img"){ pickAndSetImage(el.dataset.path); return; }
+  /* ===================== ADDED: drag-drop section builder actions ===================== */
+  if(action==="open-block-library"){ openBlockLibrary(el.dataset.after||""); return; }
+  if(action==="close-block-library"){ closeBlockLibrary(); return; }
+  if(action==="add-custom-block"){
+    const type = el.dataset.type;
+    const afterId = el.dataset.after || "";
+    const id = "cb-"+Date.now();
+    let block = {id, type, anim:"up"};
+    if(type==="cta") Object.assign(block, {title:"Ready to book your visit?", body:"Our friendly team is ready to help — reach out today.", btnText:"Book Appointment", href:"#/book", theme:"dark"});
+    if(type==="text-image") Object.assign(block, {title:"About This Section", body:"<p>Write something about your clinic here. Click the text to edit it, then use the toolbar to format it.</p>", img:"https://images.unsplash.com/photo-1629909613654-28e377c37b09?w=900&q=80", imgPos:"right", imgAnim:"up"});
+    if(type==="quote") Object.assign(block, {text:"The care I received here was outstanding — gentle, professional and thorough.", author:"A Happy Patient", role:"Patient"});
+    if(type==="gallery-row") Object.assign(block, {images:[
+      "https://images.unsplash.com/photo-1629909615184-74f495363b67?w=700&q=80",
+      "https://images.unsplash.com/photo-1588776814546-1ffcf47267a5?w=700&q=80",
+      "https://images.unsplash.com/photo-1609840114035-3c981b782dfe?w=700&q=80"
+    ], imagesAnim:["up","up","up"]});
+    DB.customBlocks.push(block);
+    const key = "custom:"+id;
+    const order = (DB.siteInfo.homeSectionOrder||[]).slice();
+    const pos = afterId ? order.indexOf(afterId) : -1;
+    if(pos>=0) order.splice(pos+1,0,key); else order.push(key);
+    DB.siteInfo.homeSectionOrder = order;
+    closeBlockLibrary();
+    const ok = await persistDB(); render();
+    showToast(ok?"Section added — scroll down to see and edit it.":"Could not save — check your connection or admin sign-in.", !ok);
+    return;
+  }
+  if(action==="del-custom-block"){
+    const key = el.dataset.sec; const bid = key.slice(7);
+    DB.customBlocks = DB.customBlocks.filter(b=>b.id!==bid);
+    DB.siteInfo.homeSectionOrder = (DB.siteInfo.homeSectionOrder||[]).filter(x=>x!==key);
+    const ok = await persistDB(); render();
+    showToast(ok?"Section removed.":"Could not save — check your connection or admin sign-in.", !ok);
+    return;
+  }
+  if(action==="open-sec-settings"){ openSecSettings(el.dataset.sec); return; }
+  if(action==="close-sec-settings"){ closeSecSettings(); return; }
+  if(action==="save-sec-settings"){
+    const id = el.dataset.sec;
+    const themeSel = document.getElementById("secThemeSel");
+    const animSel = document.getElementById("secAnimSel");
+    const theme = themeSel ? themeSel.value : "";
+    if(id.indexOf("custom:")===0){
+      const bid = id.slice(7);
+      const blk = DB.customBlocks.find(b=>b.id===bid);
+      if(blk){ blk.theme = theme; if(animSel) blk.anim = animSel.value; }
+    } else {
+      if(!DB.siteInfo.sectionSettings) DB.siteInfo.sectionSettings = {};
+      if(theme) DB.siteInfo.sectionSettings[id] = Object.assign({}, DB.siteInfo.sectionSettings[id], {theme});
+      else if(DB.siteInfo.sectionSettings[id]) delete DB.siteInfo.sectionSettings[id].theme;
+    }
+    closeSecSettings();
+    const ok = await persistDB(); render();
+    showToast(ok?"Section style updated.":"Could not save — check your connection or admin sign-in.", !ok);
+    return;
+  }
+  if(action==="toggle-imgpos"){
+    const m = (el.dataset.sec||"").match(/^customBlocks\.(\d+)$/);
+    if(m){ const blk = DB.customBlocks[+m[1]]; if(blk) blk.imgPos = blk.imgPos==='left'?'right':'left'; }
+    const ok = await persistDB(); render();
+    showToast(ok?"Layout updated.":"Could not save — check your connection or admin sign-in.", !ok);
+    return;
+  }
+  if(action==="add-block-img"){
+    const m = (el.dataset.sec||"").match(/^customBlocks\.(\d+)$/);
+    if(!m) return;
+    const idx = +m[1];
+    pickAndSetImage(null, async (dataUrl, anim)=>{
+      const blk = DB.customBlocks[idx];
+      if(!blk) return;
+      if(!Array.isArray(blk.images)) blk.images=[];
+      if(!Array.isArray(blk.imagesAnim)) blk.imagesAnim=[];
+      blk.images.push(dataUrl); blk.imagesAnim.push(anim||'up');
+      const ok = await persistDB(); render();
+      showToast(ok?"Photo added.":"Could not save — check your connection or admin sign-in.", !ok);
+    }, true);
+    return;
+  }
+  if(action==="del-block-img"){
+    const m = (el.dataset.sec||"").match(/^customBlocks\.(\d+)$/);
+    if(!m) return;
+    const blk = DB.customBlocks[+m[1]];
+    const idx = +el.dataset.idx;
+    if(!blk || !Array.isArray(blk.images)) return;
+    blk.images.splice(idx,1);
+    if(Array.isArray(blk.imagesAnim)) blk.imagesAnim.splice(idx,1);
+    const ok = await persistDB(); render();
+    showToast(ok?"Photo removed.":"Could not save — check your connection or admin sign-in.", !ok);
+    return;
+  }
+  if(action==="apply-img-editor"){ applyImgEditor(); return; }
+  if(action==="close-img-editor"){ closeImageEditor(); return; }
+  if(action==="rte-insert-btn"){
+    document.execCommand("insertHTML", false, ' <a href="#" class="gold-btn" style="display:inline-flex;">Click Here</a> ');
+    return;
+  }
+  if(action==="rte-set-link"){
+    const sel = window.getSelection();
+    let anchorEl = null;
+    if(sel && sel.anchorNode){
+      const n = sel.anchorNode.nodeType===1 ? sel.anchorNode : sel.anchorNode.parentElement;
+      anchorEl = n ? n.closest("a") : null;
+    }
+    const cur = anchorEl ? (anchorEl.getAttribute("href")||"") : "";
+    const url = prompt("Link URL (e.g. https://... or #/book):", cur||"https://");
+    if(url==null) return;
+    if(anchorEl){ anchorEl.setAttribute("href", url.trim()); }
+    else if(sel && !sel.isCollapsed){ document.execCommand("createLink", false, url.trim()); }
+    else { showToast("Select some text first, then add the link.", true); }
+    return;
+  }
   if(action==="reset-adstxt"){
     const ta = document.getElementById("adsTxtOutput");
     if(ta) ta.value = generateAdsTxtLine();
@@ -2280,7 +2916,7 @@ document.addEventListener("click", async (e)=>{
 });
 
 /* ===================== LOCAL IMAGE UPLOAD (no URLs — pick from device) ===================== */
-function pickAndSetImage(path, onDone){
+function pickAndSetImage(path, onDone, forceAllowAnim){
   let input = document.getElementById("hiddenFileInput");
   if(!input){
     input = document.createElement("input");
@@ -2288,43 +2924,156 @@ function pickAndSetImage(path, onDone){
     document.body.appendChild(input);
   }
   input.value = "";
-  input.onchange = async ()=>{
+  input.onchange = ()=>{
     const file = input.files && input.files[0];
     if(!file) return;
-    try{
-      const dataUrl = await compressImageFile(file, 900, 0.82);
-      if(path){
-        setPath(DB, path, dataUrl);
-        const ok = await persistDB(); render();
-        showToast(ok?"Photo updated.":"Could not save — check your connection or admin sign-in.", !ok);
-      }
-      else if(onDone){ onDone(dataUrl); }
-    }catch(err){ showToast("Could not read that image — please try another file.", true); }
+    const bind = imageAnimBinding(path);
+    const allowAnim = !!bind || !!forceAllowAnim;
+    openImageEditor(file, allowAnim, bind?bind.get():"up", async (dataUrl, anim)=>{
+      try{
+        if(path){
+          setPath(DB, path, dataUrl);
+          if(bind) bind.set(anim);
+          const ok = await persistDB(); render();
+          showToast(ok?"Photo updated.":"Could not save — check your connection or admin sign-in.", !ok);
+        } else if(onDone){ onDone(dataUrl, anim); }
+      }catch(err){ showToast("Could not save that photo — please try again.", true); }
+    });
   };
   input.click();
 }
-function compressImageFile(file, maxDim, quality){
-  return new Promise((resolve,reject)=>{
-    const reader = new FileReader();
-    reader.onerror = reject;
-    reader.onload = ()=>{
-      const img = new Image();
-      img.onerror = reject;
-      img.onload = ()=>{
-        let {width,height} = img;
-        if(width>maxDim || height>maxDim){
-          if(width>height){ height = Math.round(height*maxDim/width); width = maxDim; }
-          else { width = Math.round(width*maxDim/height); height = maxDim; }
-        }
-        const canvas = document.createElement("canvas");
-        canvas.width = width; canvas.height = height;
-        canvas.getContext("2d").drawImage(img,0,0,width,height);
-        resolve(canvas.toDataURL("image/jpeg", quality));
-      };
-      img.src = reader.result;
+/* ADDED: ties a stable per-image "entrance animation" choice to custom-block images (safe because
+   custom blocks are addressed by a stable id, unlike plain arrays whose indices shift on delete). */
+function imageAnimBinding(path){
+  if(!path) return null;
+  let m = path.match(/^customBlocks\.(\d+)\.img$/);
+  if(m){ const i=+m[1]; return { get:()=> (DB.customBlocks[i]&&DB.customBlocks[i].imgAnim)||"up", set:(v)=>{ if(DB.customBlocks[i]) DB.customBlocks[i].imgAnim=v; } }; }
+  m = path.match(/^customBlocks\.(\d+)\.images\.(\d+)$/);
+  if(m){ const i=+m[1], j=+m[2]; return { get:()=>{ const b=DB.customBlocks[i]; return (b&&b.imagesAnim&&b.imagesAnim[j])||"up"; }, set:(v)=>{ const b=DB.customBlocks[i]; if(b){ if(!Array.isArray(b.imagesAnim)) b.imagesAnim=[]; b.imagesAnim[j]=v; } } }; }
+  return null;
+}
+function pngLikeType(t){ return t==="image/png" || t==="image/webp" || t==="image/gif" || t==="image/svg+xml"; }
+/* ===================== ADDED: image editor — crop + entrance-animation picker ===================== */
+let __imgEd = null;
+function openImageEditor(file, allowAnim, initialAnim, onApply){
+  const reader = new FileReader();
+  reader.onerror = ()=> showToast("Could not read that image — please try another file.", true);
+  reader.onload = ()=>{
+    const img = new Image();
+    img.onerror = ()=> showToast("Could not read that image — please try another file.", true);
+    img.onload = ()=>{
+      __imgEd = { fileType:file.type, natW:img.naturalWidth, natH:img.naturalHeight, dataUrl:reader.result, onApply, allowAnim:!!allowAnim, anim: initialAnim||"up", box:null };
+      let m = document.getElementById("imgEditorModal");
+      if(!m){ m=document.createElement("div"); m.id="imgEditorModal"; m.className="modal-backdrop"; document.body.appendChild(m); }
+      m.innerHTML = renderImgEditorHTML();
+      requestAnimationFrame(()=>{ m.classList.add("show"); initCropBox(); });
     };
-    reader.readAsDataURL(file);
+    img.src = reader.result;
+  };
+  reader.readAsDataURL(file);
+}
+function closeImageEditor(){
+  const m = document.getElementById("imgEditorModal");
+  if(m) m.classList.remove("show");
+  __imgEd = null;
+}
+function renderImgEditorHTML(){
+  const opt = (v,label)=> `<option value="${v}" ${__imgEd.anim===v?"selected":""}>${label}</option>`;
+  const animSel = __imgEd.allowAnim ? `
+    <div class="img-editor-row">
+      <label>Entrance animation</label>
+      <select id="cropAnimSel">
+        ${opt("up","Fade Up (default)")}${opt("zoom","Zoom In")}${opt("left","Slide From Left")}${opt("right","Slide From Right")}${opt("none","None")}
+      </select>
+    </div>` : "";
+  return `
+  <div class="modal-box" style="max-width:560px;">
+    <h3 style="margin-bottom:6px;">Adjust Photo</h3>
+    <p>Drag the gold corners to crop the photo.${__imgEd.allowAnim?" Then pick how it should animate in.":""}</p>
+    <div class="img-editor-stage" id="cropStage">
+      <img id="cropImg" src="${__imgEd.dataUrl}" alt="">
+      <div class="crop-box" id="cropBox">
+        <div class="crop-handle nw" data-h="nw"></div><div class="crop-handle ne" data-h="ne"></div>
+        <div class="crop-handle sw" data-h="sw"></div><div class="crop-handle se" data-h="se"></div>
+      </div>
+    </div>
+    ${animSel}
+    <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;">
+      <button type="button" class="ghost-btn" data-action="close-img-editor">Cancel</button>
+      <button type="button" class="gold-btn" data-action="apply-img-editor"><span>Use This Photo</span></button>
+    </div>
+  </div>`;
+}
+function initCropBox(){
+  const stage = document.getElementById("cropStage");
+  const img = document.getElementById("cropImg");
+  const box = document.getElementById("cropBox");
+  if(!stage||!img||!box) return;
+  function place(){
+    const w = img.clientWidth, h = img.clientHeight;
+    if(!w||!h){ requestAnimationFrame(place); return; }
+    stage.style.width = w+"px"; stage.style.height = h+"px";
+    const bw = w*0.82, bh = h*0.82;
+    __imgEd.box = { x:(w-bw)/2, y:(h-bh)/2, w:bw, h:bh, stageW:w, stageH:h };
+    paintBox();
+  }
+  function paintBox(){
+    const b = __imgEd.box;
+    box.style.left=b.x+"px"; box.style.top=b.y+"px"; box.style.width=b.w+"px"; box.style.height=b.h+"px";
+  }
+  if(img.complete && img.naturalWidth) place(); else img.onload = place;
+  let mode=null, startX=0, startY=0, startBox=null;
+  function within(v,min,max){ return Math.max(min,Math.min(max,v)); }
+  box.addEventListener("pointerdown",(e)=>{
+    const h = e.target.closest(".crop-handle");
+    mode = h ? h.dataset.h : "move";
+    startX=e.clientX; startY=e.clientY; startBox=Object.assign({}, __imgEd.box);
+    box.setPointerCapture(e.pointerId);
+    e.preventDefault();
   });
+  box.addEventListener("pointermove",(e)=>{
+    if(!mode || !__imgEd) return;
+    const dx=e.clientX-startX, dy=e.clientY-startY;
+    const b=__imgEd.box, sw=b.stageW, sh=b.stageH, MIN=40;
+    if(mode==="move"){
+      b.x = within(startBox.x+dx, 0, sw-b.w);
+      b.y = within(startBox.y+dy, 0, sh-b.h);
+    } else {
+      let {x,y,w,h}=startBox;
+      if(mode.includes("e")) w = within(startBox.w+dx, MIN, sw-startBox.x);
+      if(mode.includes("s")) h = within(startBox.h+dy, MIN, sh-startBox.y);
+      if(mode.includes("w")){ const nx = within(startBox.x+dx, 0, startBox.x+startBox.w-MIN); w = startBox.w+(startBox.x-nx); x = nx; }
+      if(mode.includes("n")){ const ny = within(startBox.y+dy, 0, startBox.y+startBox.h-MIN); h = startBox.h+(startBox.y-ny); y = ny; }
+      b.x=x; b.y=y; b.w=w; b.h=h;
+    }
+    paintBox();
+  });
+  box.addEventListener("pointerup",()=>{ mode=null; });
+  box.addEventListener("pointercancel",()=>{ mode=null; });
+}
+function applyImgEditor(){
+  if(!__imgEd || !__imgEd.box) return;
+  const img = document.getElementById("cropImg");
+  const b = __imgEd.box;
+  const scaleX = __imgEd.natW / b.stageW, scaleY = __imgEd.natH / b.stageH;
+  const sx = b.x*scaleX, sy = b.y*scaleY, sw = b.w*scaleX, sh = b.h*scaleY;
+  const maxDim = 1000;
+  let outW = sw, outH = sh;
+  if(outW>maxDim || outH>maxDim){
+    if(outW>outH){ outH = Math.round(outH*maxDim/outW); outW = maxDim; }
+    else { outW = Math.round(outW*maxDim/outH); outH = maxDim; }
+  }
+  const canvas = document.createElement("canvas");
+  canvas.width = Math.max(1,Math.round(outW)); canvas.height = Math.max(1,Math.round(outH));
+  const ctx = canvas.getContext("2d");
+  ctx.drawImage(img, sx, sy, sw, sh, 0, 0, canvas.width, canvas.height);
+  const usePng = pngLikeType(__imgEd.fileType);
+  const dataUrl = usePng ? canvas.toDataURL("image/png") : canvas.toDataURL("image/jpeg", 0.85);
+  const animSel = document.getElementById("cropAnimSel");
+  const anim = __imgEd.allowAnim && animSel ? animSel.value : (__imgEd.anim||"up");
+  const cb = __imgEd.onApply;
+  closeImageEditor();
+  cb && cb(dataUrl, anim);
 }
 
 /* ===================== CONFIRM MODAL (delete / sign-out, Yes-or-No) ===================== */
