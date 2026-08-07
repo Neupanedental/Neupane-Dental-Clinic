@@ -910,7 +910,16 @@ function normalizeDB(db){
   if(!db.siteInfo.imageAnims || typeof db.siteInfo.imageAnims!=="object") db.siteInfo.imageAnims = {};
   return db;
 }
-function persistDB(){ return saveJSON("sitedata", true, DB); }
+function persistDB(){
+  try{
+    const approxBytes = new Blob([JSON.stringify(DB)]).size;
+    if(approxBytes > 900000){
+      showToast("Could not save — your total photos are too large for one save. Try replacing a large photo with a smaller one, or remove one, then try again.", true);
+      return Promise.resolve(false);
+    }
+  }catch(e){ /* size check itself failing shouldn't block the save attempt */ }
+  return saveJSON("sitedata", true, DB);
+}
 async function persistOwnProfile(uid, profile){
   try{ await setDoc(doc(fsdb,"users",uid), profile); return true; }
   catch(e){ console.error("persistOwnProfile failed", e); return false; }
@@ -2486,7 +2495,7 @@ document.addEventListener("drop", async (e)=>{
   order.splice(to,0,dragId);
   DB.siteInfo.homeSectionOrder = order;
   const ok = await persistDB(); render();
-  showToast(ok?"Section order updated.":"Could not save — check your connection or admin sign-in.", !ok);
+  showToast(ok?"Section order updated.":"Could not save — check your connection, admin sign-in, or try a smaller/fewer photo.", !ok);
 });
 /* ===================== ADDED: rich-text floating toolbar (bold/italic/highlight/font/align/link/button) ===================== */
 function ensureRteToolbar(){
@@ -2660,7 +2669,7 @@ document.addEventListener("click", async (e)=>{
       setPath(DB, node.getAttribute("data-bind"), val);
     });
     const ok = await persistDB();
-    showToast(ok?"Changes saved.":"Could not save — check your connection or that you're signed in as admin.", !ok);
+    showToast(ok?"Changes saved.":"Could not save — check your connection, admin sign-in, or try a smaller/fewer photo.", !ok);
     render();
     return;
   }
@@ -2689,7 +2698,7 @@ document.addEventListener("click", async (e)=>{
     DB.siteInfo.homeSectionOrder = order;
     closeBlockLibrary();
     const ok = await persistDB(); render();
-    showToast(ok?"Section added — scroll down to see and edit it.":"Could not save — check your connection or admin sign-in.", !ok);
+    showToast(ok?"Section added — scroll down to see and edit it.":"Could not save — check your connection, admin sign-in, or try a smaller/fewer photo.", !ok);
     return;
   }
   if(action==="del-custom-block"){
@@ -2697,7 +2706,7 @@ document.addEventListener("click", async (e)=>{
     DB.customBlocks = DB.customBlocks.filter(b=>b.id!==bid);
     DB.siteInfo.homeSectionOrder = (DB.siteInfo.homeSectionOrder||[]).filter(x=>x!==key);
     const ok = await persistDB(); render();
-    showToast(ok?"Section removed.":"Could not save — check your connection or admin sign-in.", !ok);
+    showToast(ok?"Section removed.":"Could not save — check your connection, admin sign-in, or try a smaller/fewer photo.", !ok);
     return;
   }
   if(action==="open-sec-settings"){ openSecSettings(el.dataset.sec); return; }
@@ -2718,14 +2727,14 @@ document.addEventListener("click", async (e)=>{
     }
     closeSecSettings();
     const ok = await persistDB(); render();
-    showToast(ok?"Section style updated.":"Could not save — check your connection or admin sign-in.", !ok);
+    showToast(ok?"Section style updated.":"Could not save — check your connection, admin sign-in, or try a smaller/fewer photo.", !ok);
     return;
   }
   if(action==="toggle-imgpos"){
     const m = (el.dataset.sec||"").match(/^customBlocks\.(\d+)$/);
     if(m){ const blk = DB.customBlocks[+m[1]]; if(blk) blk.imgPos = blk.imgPos==='left'?'right':'left'; }
     const ok = await persistDB(); render();
-    showToast(ok?"Layout updated.":"Could not save — check your connection or admin sign-in.", !ok);
+    showToast(ok?"Layout updated.":"Could not save — check your connection, admin sign-in, or try a smaller/fewer photo.", !ok);
     return;
   }
   if(action==="add-block-img"){
@@ -2739,7 +2748,7 @@ document.addEventListener("click", async (e)=>{
       if(!Array.isArray(blk.imagesAnim)) blk.imagesAnim=[];
       blk.images.push(dataUrl); blk.imagesAnim.push(anim||'up');
       const ok = await persistDB(); render();
-      showToast(ok?"Photo added.":"Could not save — check your connection or admin sign-in.", !ok);
+      showToast(ok?"Photo added.":"Could not save — check your connection, admin sign-in, or try a smaller/fewer photo.", !ok);
     }, true);
     return;
   }
@@ -2752,7 +2761,7 @@ document.addEventListener("click", async (e)=>{
     blk.images.splice(idx,1);
     if(Array.isArray(blk.imagesAnim)) blk.imagesAnim.splice(idx,1);
     const ok = await persistDB(); render();
-    showToast(ok?"Photo removed.":"Could not save — check your connection or admin sign-in.", !ok);
+    showToast(ok?"Photo removed.":"Could not save — check your connection, admin sign-in, or try a smaller/fewer photo.", !ok);
     return;
   }
   if(action==="apply-img-editor"){ applyImgEditor(); return; }
@@ -2797,7 +2806,7 @@ document.addEventListener("click", async (e)=>{
     if(url!=null){
       setPath(DB, key, url.trim());
       const ok = await persistDB(); render();
-      showToast(ok?"Link updated.":"Could not save — check your connection or admin sign-in.", !ok);
+      showToast(ok?"Link updated.":"Could not save — check your connection, admin sign-in, or try a smaller/fewer photo.", !ok);
     }
     return;
   }
@@ -2805,31 +2814,31 @@ document.addEventListener("click", async (e)=>{
     pickAndSetImage(null, async (dataUrl)=>{
       DB.siteInfo.missionImages.push(dataUrl);
       const ok = await persistDB(); render();
-      showToast(ok?"Photo added.":"Could not save — check your connection or admin sign-in.", !ok);
+      showToast(ok?"Photo added.":"Could not save — check your connection, admin sign-in, or try a smaller/fewer photo.", !ok);
     });
     return;
   }
-  if(action==="del-mission-img"){ DB.siteInfo.missionImages.splice(+el.dataset.idx,1); const ok = await persistDB(); render(); if(!ok) showToast("Could not save — check your connection or admin sign-in.", true); return; }
+  if(action==="del-mission-img"){ DB.siteInfo.missionImages.splice(+el.dataset.idx,1); const ok = await persistDB(); render(); if(!ok) showToast("Could not save — check your connection, admin sign-in, or try a smaller/fewer photo.", true); return; }
   if(action==="add-gallery-img"){
     pickAndSetImage(null, async (dataUrl)=>{
       DB.siteInfo.galleryImages.push(dataUrl);
       const ok = await persistDB(); render();
-      showToast(ok?"Photo added.":"Could not save — check your connection or admin sign-in.", !ok);
+      showToast(ok?"Photo added.":"Could not save — check your connection, admin sign-in, or try a smaller/fewer photo.", !ok);
     });
     return;
   }
   if(action==="del-gallery-img"){
     if(DB.siteInfo.galleryImages.length<=1){ showToast("Keep at least one photo.", true); return; }
-    DB.siteInfo.galleryImages.splice(+el.dataset.idx,1); const ok = await persistDB(); render(); if(!ok) showToast("Could not save — check your connection or admin sign-in.", true); return;
+    DB.siteInfo.galleryImages.splice(+el.dataset.idx,1); const ok = await persistDB(); render(); if(!ok) showToast("Could not save — check your connection, admin sign-in, or try a smaller/fewer photo.", true); return;
   }
   if(action==="add-service"){
     DB.services.push({id:"svc-"+Date.now(),name:"New Service",short:"Short description...",long:"Full description...",price:"Contact clinic",priceList:[{label:"Standard",price:"Contact clinic"}],img:"https://images.unsplash.com/photo-1606811841689-23dfddce3e95?w=600&q=80",faqs:[],seo:{title:"",description:"",keywords:[],image:""}});
-    const ok = await persistDB(); render(); if(!ok) showToast("Could not save — check your connection or admin sign-in.", true); return;
+    const ok = await persistDB(); render(); if(!ok) showToast("Could not save — check your connection, admin sign-in, or try a smaller/fewer photo.", true); return;
   }
-  if(action==="del-service"){ DB.services.splice(+el.dataset.idx,1); const ok = await persistDB(); render(); if(!ok) showToast("Could not save — check your connection or admin sign-in.", true); return; }
+  if(action==="del-service"){ DB.services.splice(+el.dataset.idx,1); const ok = await persistDB(); render(); if(!ok) showToast("Could not save — check your connection, admin sign-in, or try a smaller/fewer photo.", true); return; }
   if(action==="add-price"){
     const sv = DB.services[+el.dataset.svc];
-    if(sv){ sv.priceList.push({label:"New Item",price:"Contact clinic"}); const ok = await persistDB(); render(); if(!ok) showToast("Could not save — check your connection or admin sign-in.", true); }
+    if(sv){ sv.priceList.push({label:"New Item",price:"Contact clinic"}); const ok = await persistDB(); render(); if(!ok) showToast("Could not save — check your connection, admin sign-in, or try a smaller/fewer photo.", true); }
     return;
   }
   if(action==="del-price"){
@@ -2837,39 +2846,39 @@ document.addEventListener("click", async (e)=>{
     if(sv){
       if(sv.priceList.length<=1){ showToast("Keep at least one price row.", true); return; }
       sv.priceList.splice(+el.dataset.idx,1);
-      const ok = await persistDB(); render(); if(!ok) showToast("Could not save — check your connection or admin sign-in.", true);
+      const ok = await persistDB(); render(); if(!ok) showToast("Could not save — check your connection, admin sign-in, or try a smaller/fewer photo.", true);
     }
     return;
   }
   if(action==="add-branch"){
     DB.siteInfo.branches.push({id:"br-"+Date.now(),name:"New Branch",address:"Street, City, Nepal",phone:"+977 XXXXXXXXXX",mapsUrl:""});
-    const ok = await persistDB(); render(); if(!ok) showToast("Could not save — check your connection or admin sign-in.", true); return;
+    const ok = await persistDB(); render(); if(!ok) showToast("Could not save — check your connection, admin sign-in, or try a smaller/fewer photo.", true); return;
   }
   if(action==="del-branch"){
     DB.siteInfo.branches.splice(+el.dataset.idx,1);
-    const ok = await persistDB(); render(); if(!ok) showToast("Could not save — check your connection or admin sign-in.", true); return;
+    const ok = await persistDB(); render(); if(!ok) showToast("Could not save — check your connection, admin sign-in, or try a smaller/fewer photo.", true); return;
   }
-  if(action==="add-team"){ DB.team.push({id:"tm-"+Date.now(),name:"New Member",role:"Role",img:"https://images.unsplash.com/photo-1622253692010-333f2da6031d?w=400&q=80"}); const ok = await persistDB(); render(); if(!ok) showToast("Could not save — check your connection or admin sign-in.", true); return; }
-  if(action==="del-team"){ DB.team.splice(+el.dataset.idx,1); const ok = await persistDB(); render(); if(!ok) showToast("Could not save — check your connection or admin sign-in.", true); return; }
+  if(action==="add-team"){ DB.team.push({id:"tm-"+Date.now(),name:"New Member",role:"Role",img:"https://images.unsplash.com/photo-1622253692010-333f2da6031d?w=400&q=80"}); const ok = await persistDB(); render(); if(!ok) showToast("Could not save — check your connection, admin sign-in, or try a smaller/fewer photo.", true); return; }
+  if(action==="del-team"){ DB.team.splice(+el.dataset.idx,1); const ok = await persistDB(); render(); if(!ok) showToast("Could not save — check your connection, admin sign-in, or try a smaller/fewer photo.", true); return; }
   if(action==="add-news"){
     DB.news.unshift({id:"news-"+Date.now(),cat:"news",title:"New Post Title",excerpt:"Short excerpt...",content:"Full content goes here...",img:"https://images.unsplash.com/photo-1629909613654-28e377c37b09?w=900&q=80",date:new Date().toISOString().slice(0,10),likes:0,views:0,seo:{title:"",description:"",keywords:[],image:""}});
-    const ok = await persistDB(); render(); if(!ok) showToast("Could not save — check your connection or admin sign-in.", true); return;
+    const ok = await persistDB(); render(); if(!ok) showToast("Could not save — check your connection, admin sign-in, or try a smaller/fewer photo.", true); return;
   }
   if(action==="del-news"){
     const idx = DB.news.findIndex(n=>n.id===el.dataset.id);
     if(idx>-1) DB.news.splice(idx,1);
     const ok = await persistDB();
     location.hash = "#/news"; render();
-    showToast(ok?"Post deleted.":"Could not save — check your connection or admin sign-in.", !ok);
+    showToast(ok?"Post deleted.":"Could not save — check your connection, admin sign-in, or try a smaller/fewer photo.", !ok);
     return;
   }
-  if(action==="add-review"){ DB.reviews.push({id:"rv-"+Date.now(),name:"New Reviewer",rating:5,text:"Great experience!",source:"google",date:new Date().toISOString().slice(0,10),approved:true}); const ok = await persistDB(); render(); if(!ok) showToast("Could not save — check your connection or admin sign-in.", true); return; }
-  if(action==="del-review"){ DB.reviews.splice(+el.dataset.idx,1); const ok = await persistDB(); render(); if(!ok) showToast("Could not save — check your connection or admin sign-in.", true); return; }
+  if(action==="add-review"){ DB.reviews.push({id:"rv-"+Date.now(),name:"New Reviewer",rating:5,text:"Great experience!",source:"google",date:new Date().toISOString().slice(0,10),approved:true}); const ok = await persistDB(); render(); if(!ok) showToast("Could not save — check your connection, admin sign-in, or try a smaller/fewer photo.", true); return; }
+  if(action==="del-review"){ DB.reviews.splice(+el.dataset.idx,1); const ok = await persistDB(); render(); if(!ok) showToast("Could not save — check your connection, admin sign-in, or try a smaller/fewer photo.", true); return; }
   if(action==="add-faq"){ 
     const base = el.dataset.base;
     const arr = base ? getPath(DB, base) : null;
     if(arr) arr.push({q:"New question?",a:"Answer goes here."});
-    const ok = await persistDB(); render(); if(!ok) showToast("Could not save — check your connection or admin sign-in.", true); return;
+    const ok = await persistDB(); render(); if(!ok) showToast("Could not save — check your connection, admin sign-in, or try a smaller/fewer photo.", true); return;
   }
   if(action==="approve-voice"){
     try{ await updateDoc(doc(fsdb,"patientVoices",el.dataset.id), {approved:true}); showToast("Patient voice approved."); ensureAllVoicesLoaded(true); }
@@ -2935,7 +2944,7 @@ function pickAndSetImage(path, onDone, forceAllowAnim){
           setPath(DB, path, dataUrl);
           if(bind) bind.set(anim);
           const ok = await persistDB(); render();
-          showToast(ok?"Photo updated.":"Could not save — check your connection or admin sign-in.", !ok);
+          showToast(ok?"Photo updated.":"Could not save — check your connection, admin sign-in, or try a smaller/fewer photo.", !ok);
         } else if(onDone){ onDone(dataUrl, anim); }
       }catch(err){ showToast("Could not save that photo — please try again.", true); }
     });
@@ -3057,18 +3066,28 @@ function applyImgEditor(){
   const b = __imgEd.box;
   const scaleX = __imgEd.natW / b.stageW, scaleY = __imgEd.natH / b.stageH;
   const sx = b.x*scaleX, sy = b.y*scaleY, sw = b.w*scaleX, sh = b.h*scaleY;
-  const maxDim = 1000;
-  let outW = sw, outH = sh;
-  if(outW>maxDim || outH>maxDim){
-    if(outW>outH){ outH = Math.round(outH*maxDim/outW); outW = maxDim; }
-    else { outW = Math.round(outW*maxDim/outH); outH = maxDim; }
-  }
-  const canvas = document.createElement("canvas");
-  canvas.width = Math.max(1,Math.round(outW)); canvas.height = Math.max(1,Math.round(outH));
-  const ctx = canvas.getContext("2d");
-  ctx.drawImage(img, sx, sy, sw, sh, 0, 0, canvas.width, canvas.height);
   const usePng = pngLikeType(__imgEd.fileType);
-  const dataUrl = usePng ? canvas.toDataURL("image/png") : canvas.toDataURL("image/jpeg", 0.85);
+  /* ADDED: shrink adaptively so a single photo can't balloon the (single-document) site data past
+     Firestore's 1MB limit — PNG has no quality slider, so it shrinks by resolution instead. */
+  const TARGET_BYTES = 260000;
+  let maxDim = 1000, dataUrl = "", quality = 0.85, tries = 0;
+  while(tries < 7){
+    let outW = sw, outH = sh;
+    if(outW>maxDim || outH>maxDim){
+      if(outW>outH){ outH = Math.round(outH*maxDim/outW); outW = maxDim; }
+      else { outW = Math.round(outW*maxDim/outH); outH = maxDim; }
+    }
+    const canvas = document.createElement("canvas");
+    canvas.width = Math.max(1,Math.round(outW)); canvas.height = Math.max(1,Math.round(outH));
+    const ctx = canvas.getContext("2d");
+    ctx.drawImage(img, sx, sy, sw, sh, 0, 0, canvas.width, canvas.height);
+    dataUrl = usePng ? canvas.toDataURL("image/png") : canvas.toDataURL("image/jpeg", quality);
+    if(dataUrl.length <= TARGET_BYTES || maxDim<=280) break;
+    if(usePng){ maxDim = Math.round(maxDim*0.75); }
+    else if(quality > 0.4){ quality -= 0.15; }
+    else { maxDim = Math.round(maxDim*0.75); }
+    tries++;
+  }
   const animSel = document.getElementById("cropAnimSel");
   const anim = __imgEd.allowAnim && animSel ? animSel.value : (__imgEd.anim||"up");
   const cb = __imgEd.onApply;
@@ -3295,7 +3314,7 @@ document.addEventListener("click", async (e)=>{
     target.keywords = seoDraft.keywords.slice(); target.image = seoDraft.image;
     const ok = await persistDB();
     if(ok) closeSeoModal();
-    showToast(ok ? "SEO settings saved." : "Could not save — check your connection or that you're signed in as admin.", !ok);
+    showToast(ok ? "SEO settings saved." : "Could not save — check your connection, admin sign-in, or try a smaller/fewer photo.", !ok);
     return;
   }
 });
@@ -3375,7 +3394,7 @@ document.addEventListener("submit", async (e)=>{
     };
     const ok = await persistDB();
     if(ok && DB.siteInfo.emailjs.publicKey && window.emailjs){ try{ emailjs.init({publicKey:DB.siteInfo.emailjs.publicKey}); }catch(e){} }
-    showToast(ok ? "Email settings saved." : "Could not save — check your connection or that you're signed in as admin.", !ok);
+    showToast(ok ? "Email settings saved." : "Could not save — check your connection, admin sign-in, or try a smaller/fewer photo.", !ok);
     render();
     return;
   }
@@ -3386,7 +3405,7 @@ document.addEventListener("submit", async (e)=>{
       keywords:(fd.get("keywords")||"").trim()
     });
     const ok = await persistDB();
-    showToast(ok?"Default SEO settings saved.":"Could not save — check your connection or admin sign-in.", !ok);
+    showToast(ok?"Default SEO settings saved.":"Could not save — check your connection, admin sign-in, or try a smaller/fewer photo.", !ok);
     render();
     return;
   }
@@ -3397,7 +3416,7 @@ document.addEventListener("submit", async (e)=>{
     });
     const ok = await persistDB();
     if(ok) applyAdsense();
-    showToast(ok ? "AdSense settings saved." : "Could not save — check your connection or that you're signed in as admin.", !ok);
+    showToast(ok ? "AdSense settings saved." : "Could not save — check your connection, admin sign-in, or try a smaller/fewer photo.", !ok);
     render();
     return;
   }
@@ -3406,7 +3425,7 @@ document.addEventListener("submit", async (e)=>{
       adsTxtContent:(fd.get("adsTxtContent")||"").trim()
     });
     const ok = await persistDB();
-    showToast(ok ? "ads.txt content saved. Remember to also upload it as a file on your hosting." : "Could not save — check your connection or that you're signed in as admin.", !ok);
+    showToast(ok ? "ads.txt content saved. Remember to also upload it as a file on your hosting." : "Could not save — check your connection, admin sign-in, or try a smaller/fewer photo.", !ok);
     render();
     return;
   }
