@@ -825,9 +825,16 @@ let __pdbToastShown = false; /* ADDED: prevents a caller's generic fallback toas
 
 /* ===================== BOOTSTRAP ===================== */
 async function boot(){
-  const db = await loadJSON("sitedata", true, null);
-  DB = normalizeDB(db);
-  if(!db) await saveJSON("sitedata", true, DB);
+  let merged = await loadSplitDB();
+  const needsMigrationWrite = !merged;
+  if(!merged){
+    // New split documents don't exist yet — fall back to the old single "sitedata/sitedata"
+    // document (pre-migration real data), or null if this is a genuinely brand-new site.
+    const oldSnap = await getDoc(doc(fsdb,"sitedata","sitedata")).catch(()=>null);
+    merged = (oldSnap && oldSnap.exists()) ? oldSnap.data().value : null;
+  }
+  DB = normalizeDB(merged);
+  if(needsMigrationWrite) await persistDB(); // one-time: write into the new split-document structure (old doc is left untouched as a backup)
   if(DB.siteInfo.emailjs && DB.siteInfo.emailjs.publicKey && window.emailjs){
     try{ emailjs.init({publicKey:DB.siteInfo.emailjs.publicKey}); }catch(e){}
   }
@@ -913,31 +920,71 @@ function normalizeDB(db){
   if(!db.siteInfo.imageAnims || typeof db.siteInfo.imageAnims!=="object") db.siteInfo.imageAnims = {};
   return db;
 }
+/* ===================== ADDED: site data split across several Firestore documents =====================
+   Previously ALL site content (team, services, news, photos, everything) lived in ONE Firestore
+   document, so every save re-sent everything and shared a single 1MB ceiling — meaning one bulky
+   section (e.g. many service photos) could block an unrelated, tiny text edit elsewhere from ever
+   saving. Splitting into several documents gives each section its OWN independent 1MB budget, and
+   each is now written independently, so one oversized section can never block the others. */
+const DB_SPLIT_IDS = ["core","coreImages","team","services","news","customBlocks"];
+const DB_SPLIT_LABELS = {core:"site text & settings", coreImages:"homepage photos", team:"team", services:"services", news:"news / blog", customBlocks:"custom sections"};
+function splitDBForSave(){
+  const { missionImages, galleryImages, ...restSiteInfo } = DB.siteInfo;
+  return {
+    core: { siteInfo: restSiteInfo, seoPages: DB.seoPages, reviews: DB.reviews, faqsGlobal: DB.faqsGlobal },
+    coreImages: { missionImages: missionImages||[], galleryImages: galleryImages||[] },
+    team: DB.team, services: DB.services, news: DB.news, customBlocks: DB.customBlocks
+  };
+}
+async function loadSplitDB(){
+  const snaps = await Promise.all(DB_SPLIT_IDS.map(id=> getDoc(doc(fsdb,"sitedata",id)).catch(()=>null)));
+  const parts = {};
+  DB_SPLIT_IDS.forEach((id,i)=>{ parts[id] = (snaps[i] && snaps[i].exists()) ? snaps[i].data().value : null; });
+  if(!parts.core) return null; // new split structure not written yet — caller falls back to the old single doc
+  return {
+    siteInfo: Object.assign({}, parts.core.siteInfo, {
+      missionImages: (parts.coreImages&&parts.coreImages.missionImages)||[],
+      galleryImages: (parts.coreImages&&parts.coreImages.galleryImages)||[]
+    }),
+    seoPages: parts.core.seoPages, reviews: parts.core.reviews, faqsGlobal: parts.core.faqsGlobal,
+    team: parts.team||[], services: parts.services||[], news: parts.news||[], customBlocks: parts.customBlocks||[]
+  };
+}
 async function persistDB(){
-  try{
-    const approxBytes = new Blob([JSON.stringify(DB)]).size;
-    if(approxBytes > 900000){
-      showToast("Could not save — your total photos are too large for one save (data is over ~900KB). Replace or remove a large photo, then try again.", true);
-      __pdbToastShown = true;
-      return false;
+  const parts = splitDBForSave();
+  let allOk = true, firstErrorMsg = "";
+  for(const id of DB_SPLIT_IDS){
+    const value = parts[id];
+    const label = DB_SPLIT_LABELS[id]||id;
+    try{
+      const approxBytes = new Blob([JSON.stringify(value)]).size;
+      if(approxBytes > 900000){
+        allOk = false;
+        if(!firstErrorMsg) firstErrorMsg = `Could not save the "${label}" section — its content is too large (over ~900KB). Replace or remove a photo there, then try again.`;
+        continue;
+      }
+    }catch(e){ /* size check itself failing shouldn't block the save attempt */ }
+    try{
+      await setDoc(doc(fsdb, "sitedata", id), {value});
+    }catch(e){
+      console.error("persistDB failed for section", id, e);
+      allOk = false;
+      if(!firstErrorMsg){
+        const code = e && e.code;
+        const msgText = String((e && e.message) || "");
+        if(code==="permission-denied") firstErrorMsg = "Could not save — you're not signed in as admin, or your session expired. Please sign in again.";
+        else if(code==="unavailable" || code==="deadline-exceeded") firstErrorMsg = "Could not save — network connection issue. Check your internet and try again.";
+        else if(code==="resource-exhausted") firstErrorMsg = "Could not save — Firebase usage limit reached. Please try again shortly.";
+        else if(code==="invalid-argument" || /longer than|exceeds|too large|maximum/i.test(msgText)) firstErrorMsg = `Could not save the "${label}" section — its content is too large (likely a photo). Replace or remove a photo there, then try again.`;
+        else firstErrorMsg = `Could not save the "${label}" section — check your connection or admin sign-in.`;
+      }
     }
-  }catch(e){ /* size check itself failing shouldn't block the save attempt */ }
-  try{
-    await setDoc(doc(fsdb, "sitedata", "sitedata"), {value: DB});
-    return true;
-  }catch(e){
-    console.error("persistDB failed:", e);
-    const code = e && e.code;
-    const msgText = String((e && e.message) || "");
-    let msg = "Could not save — check your connection, admin sign-in, or try a smaller/fewer photo.";
-    if(code==="permission-denied") msg = "Could not save — you're not signed in as admin, or your session expired. Please sign in again.";
-    else if(code==="unavailable" || code==="deadline-exceeded") msg = "Could not save — network connection issue. Check your internet and try again.";
-    else if(code==="resource-exhausted") msg = "Could not save — Firebase usage limit reached. Please try again shortly.";
-    else if(code==="invalid-argument" || /longer than|exceeds|too large|maximum/i.test(msgText)) msg = "Could not save — your content is too large (likely a photo). Replace or remove a large photo, then try again.";
-    showToast(msg, true);
-    __pdbToastShown = true;
-    return false;
   }
+  if(!allOk){
+    showToast(firstErrorMsg || "Could not save — check your connection, admin sign-in, or try a smaller/fewer photo.", true);
+    __pdbToastShown = true;
+  }
+  return allOk;
 }
 async function persistOwnProfile(uid, profile){
   try{ await setDoc(doc(fsdb,"users",uid), profile); return true; }
@@ -3089,7 +3136,9 @@ function applyImgEditor(){
   const usePng = pngLikeType(__imgEd.fileType);
   /* ADDED: shrink adaptively so a single photo can't balloon the (single-document) site data past
      Firestore's 1MB limit — PNG has no quality slider, so it shrinks by resolution instead. */
-  const TARGET_BYTES = 260000;
+  /* Lowered so a section with several photos (e.g. 8-10 team/service photos, or the 10 homepage
+     mission+gallery photos) can all safely fit within that section's own ~900KB save budget. */
+  const TARGET_BYTES = 80000;
   let maxDim = 1000, dataUrl = "", quality = 0.85, tries = 0;
   while(tries < 7){
     let outW = sw, outH = sh;
