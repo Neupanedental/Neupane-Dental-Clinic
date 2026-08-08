@@ -823,6 +823,12 @@ let editMode = false;
 let toastTimer = null;
 let __pdbToastShown = false; /* ADDED: prevents a caller's generic fallback toast from instantly overwriting persistDB()'s specific diagnosis */
 
+/* ADDED: if the page loads with a hash that doesn't match any real route (e.g. a stale
+   shared link, or a hosting redirect quirk), land on the home page instead of a dead-end
+   "Page not found" right after the intro animation. In-app navigation to a genuinely broken
+   link later in the session still shows the normal "Page not found" page as before. */
+const KNOWN_ROUTE_KEYS = new Set(["services","service","pricing","about","news","book","privacy","terms","login","signup","dashboard"]);
+
 /* ===================== BOOTSTRAP ===================== */
 async function boot(){
   let merged = await loadSplitDB();
@@ -883,8 +889,13 @@ async function boot(){
     if(e.target.id==="seoDescInput"){ seoDraft.description = e.target.value; refreshSeoDescWarn(); refreshSeoPreview(); return; }
     if(e.target.id==="seoKwInput"){ return; }
   });
-  ROUTE = location.hash || "#/";
-  render();
+  const initialParts = parseRoute();
+  if(initialParts.length && !KNOWN_ROUTE_KEYS.has(initialParts[0])){
+    location.hash = "#/"; // unknown route on first load — the hashchange listener above renders home
+  } else {
+    ROUTE = location.hash || "#/";
+    render();
+  }
 }
 function normalizeDB(db){
   if(!db) return JSON.parse(JSON.stringify(DEFAULT_DB));
