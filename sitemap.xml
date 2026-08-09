@@ -1,0 +1,22 @@
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<url>
+<loc>https://www.neupanedental.com.np/</loc>
+<priority>1.0</priority>
+</url>
+<url>
+<loc>https://www.neupanedental.com.np/#/about</loc>
+<priority>0.8</priority>
+</url>
+<url>
+<loc>https://www.neupanedental.com.np/#/services</loc>
+<priority>0.8</priority>
+</url>
+<url>
+<loc>https://www.neupanedental.com.np/#/news</loc>
+<priority>0.7</priority>
+</url>
+<url>
+<loc>https://www.neupanedental.com.np/#/book</loc>
+<priority>0.8</priority>
+</url>
+</urlset>
