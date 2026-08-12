@@ -963,6 +963,7 @@ function normalizeDB(db){
    service's photo can never block ANY other service, team member, news post, or a plain text edit
    from saving — every item gets its own independent ~1MB budget. A small "core" document keeps an
    index of which ids currently exist so loading knows what to fetch. */
+const SEO_PAGE_KEYS = ["home","services","pricing","about","news","book","privacy","terms"];
 function splitDBForSave(){
   const { missionImages, galleryImages, ...restSiteInfo } = DB.siteInfo;
   /* ADDED: guarantees every item has a stable, unique id before it's used as part of a document
@@ -985,10 +986,11 @@ function splitDBForSave(){
     customBlocks: DB.customBlocks.map(x=>x.id)
   };
   const docs = [
-    {id:"core", label:"site text & settings", value:{siteInfo:restSiteInfo, seoPages:DB.seoPages, reviews:DB.reviews, faqsGlobal:DB.faqsGlobal, itemIndex}},
+    {id:"core", label:"site text & settings", value:{siteInfo:restSiteInfo, reviews:DB.reviews, faqsGlobal:DB.faqsGlobal, itemIndex}},
     {id:"missionImages", label:"mission photos", value:{missionImages:missionImages||[]}},
     {id:"galleryImages", label:"gallery photos", value:{galleryImages:galleryImages||[]}}
   ];
+  SEO_PAGE_KEYS.forEach(k=> docs.push({id:"seo-"+k, label:"SEO settings for \""+k+"\"", value: DB.seoPages[k] || {title:"",description:"",keywords:[],image:""}}));
   DB.team.forEach(t=> docs.push({id:"team-"+t.id, label:"team member \""+(t.name||t.id)+"\"", value:t}));
   DB.services.forEach(s=> docs.push({id:"service-"+s.id, label:"service \""+(s.name||s.id)+"\"", value:s}));
   DB.news.forEach(n=> docs.push({id:"news-"+n.id, label:"news post \""+(n.title||n.id)+"\"", value:n}));
@@ -998,9 +1000,10 @@ function splitDBForSave(){
 async function loadSplitDB(core){
   const idx = core.itemIndex || {team:[],services:[],news:[],customBlocks:[]};
   const fetchEach = (prefix, ids)=> Promise.all(ids.map(id=> getDoc(doc(fsdb,"sitedata",prefix+id)).catch(()=>null)));
-  const [missionSnap, gallerySnap, teamSnaps, serviceSnaps, newsSnaps, blockSnaps] = await Promise.all([
+  const [missionSnap, gallerySnap, seoSnaps, teamSnaps, serviceSnaps, newsSnaps, blockSnaps] = await Promise.all([
     getDoc(doc(fsdb,"sitedata","missionImages")).catch(()=>null),
     getDoc(doc(fsdb,"sitedata","galleryImages")).catch(()=>null),
+    fetchEach("seo-", SEO_PAGE_KEYS),
     fetchEach("team-", idx.team||[]),
     fetchEach("service-", idx.services||[]),
     fetchEach("news-", idx.news||[]),
@@ -1017,9 +1020,17 @@ async function loadSplitDB(core){
     missionImages = coreImages.missionImages||[];
     galleryImages = coreImages.galleryImages||[];
   }
+  let seoPages = {};
+  const anySeoSplit = seoSnaps.some(s=>s&&s.exists());
+  if(anySeoSplit){
+    SEO_PAGE_KEYS.forEach((k,i)=>{ seoPages[k] = (seoSnaps[i]&&seoSnaps[i].exists()) ? seoSnaps[i].data().value : {title:"",description:"",keywords:[],image:""}; });
+  } else {
+    // Not split yet — fall back to seoPages still embedded in "core" (migrated forward on next save).
+    seoPages = core.seoPages || {};
+  }
   return {
     siteInfo: Object.assign({}, core.siteInfo, { missionImages, galleryImages }),
-    seoPages: core.seoPages, reviews: core.reviews, faqsGlobal: core.faqsGlobal,
+    seoPages, reviews: core.reviews, faqsGlobal: core.faqsGlobal,
     team: teamSnaps.filter(s=>s&&s.exists()).map(s=>s.data().value),
     services: serviceSnaps.filter(s=>s&&s.exists()).map(s=>s.data().value),
     news: newsSnaps.filter(s=>s&&s.exists()).map(s=>s.data().value),
