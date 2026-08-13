@@ -848,9 +848,12 @@ const KNOWN_ROUTE_KEYS = new Set(["services","service","pricing","about","news",
 
 /* ===================== BOOTSTRAP ===================== */
 async function boot(){
-  // 404.html redirect trick — restore the originally requested path
+  // Worker serves index.html for all paths — read the actual pathname directly
   const redirectPath = sessionStorage.getItem('__spa_path');
   if(redirectPath){ sessionStorage.removeItem('__spa_path'); history.replaceState(null,"",redirectPath); }
+  // If landed on a real path (e.g. /about, /news/n1), use it directly
+  const currentPath = location.pathname + location.search;
+  if(currentPath && currentPath !== "/") ROUTE = currentPath;
   let merged = null;
   let needsMigrationWrite = false;
   const coreSnap = await getDoc(doc(fsdb,"sitedata","core")).catch(()=>null);
@@ -921,8 +924,10 @@ async function boot(){
   });
   const initialParts = parseRoute();
   if(initialParts.length && !KNOWN_ROUTE_KEYS.has(initialParts[0])){
+    // Truly unknown route — go home
     history.replaceState(null,"","/"); ROUTE="/"; render(); return;
   } else {
+    // Known route or home — render current path directly
     ROUTE = location.pathname + location.search;
     render();
   }
