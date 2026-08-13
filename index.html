@@ -576,6 +576,13 @@ window.LOGO = LOGO;
 (function(){
   var simg = document.getElementById("splashLogoImg");
   if(simg) simg.src = LOGO;
+  // Only show splash on very first page load — not on every navigation
+  var splash = document.getElementById("introSplash");
+  if(sessionStorage.getItem('__visited')){
+    if(splash){ splash.style.display='none'; }
+    return;
+  }
+  sessionStorage.setItem('__visited','1');
   var start = Date.now();
   function dismiss(){
     var el = document.getElementById("introSplash");
