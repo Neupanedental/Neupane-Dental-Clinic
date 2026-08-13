@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Neupane Dental Clinic</title>
+  <script>
+    // GitHub Pages SPA routing trick.
+    // GitHub serves this file when /news/n1 etc. is not found.
+    // We save the path in sessionStorage, go to /, and index.html picks it up.
+    sessionStorage.setItem('__spa_path', location.pathname + location.search);
+    location.replace('/');
+  </script>
+</head>
+<body></body>
+</html>
