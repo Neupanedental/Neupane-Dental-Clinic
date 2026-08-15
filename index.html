@@ -12,14 +12,14 @@
 <link rel="canonical" href="https://www.neupanedental.com.np/">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Neupane Dental Clinic">
-<meta property="og:title" content="Neupane Dental Clinic — Best Dental Care in Rupandehi, Nepal">
+<meta property="og:title" content="Neupane Dental Clinic — Dental Care in Rupandehi, Nepal">
 <meta property="og:description" content="Neupane Dental Clinic offers modern, affordable dental care in Tilottama-03, Divertole, Rupandehi, Nepal.">
-<meta property="og:image"content="https://www.neupanedental.com.np/dpen.jpeg"
+<meta property="og:image" content="https://images.unsplash.com/photo-1606811841689-23dfddce3e95?w=1200&q=80">
 <meta property="og:url" content="https://www.neupanedental.com.np/">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Neupane Dental Clinic — Best Dental Care in Rupandehi, Nepal">
+<meta name="twitter:title" content="Neupane Dental Clinic — Dental Care in Rupandehi, Nepal">
 <meta name="twitter:description" content="Neupane Dental Clinic offers modern, affordable dental care in Tilottama-03, Divertole, Rupandehi, Nepal.">
-<meta name="twitter:image" content="https://www.neupanedental.com.np/dpen.jpeg"
+<meta name="twitter:image" content="https://images.unsplash.com/photo-1606811841689-23dfddce3e95?w=1200&q=80">
 <script type="application/ld+json" id="ldJson">{}</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -866,7 +866,15 @@ async function boot(){
     needsMigrationWrite = true;
   }
   DB = normalizeDB(merged);
-  if(needsMigrationWrite) await persistDB(); // one-time: write into the current per-item structure (older docs are left untouched as a backup)
+  if(needsMigrationWrite) await persistDB();
+  // Update static og:image/twitter:image from saved ogImageUrl if set (public URL for social bots)
+  const savedOgUrl = DB.siteInfo.seo && DB.siteInfo.seo.ogImageUrl;
+  if(savedOgUrl){
+    const ogImg = document.querySelector('meta[property="og:image"]');
+    const twImg = document.querySelector('meta[name="twitter:image"]');
+    if(ogImg) ogImg.content = savedOgUrl;
+    if(twImg) twImg.content = savedOgUrl;
+  }
   if(DB.siteInfo.emailjs && DB.siteInfo.emailjs.publicKey && window.emailjs){
     try{ emailjs.init({publicKey:DB.siteInfo.emailjs.publicKey}); }catch(e){}
   }
@@ -1551,6 +1559,11 @@ function applySEO(){
   let rawTitle = pageMeta.title || "";
   let desc = pageMeta.description || seo.defaultDescription || "";
   let image = pageMeta.image || seo.ogImage || (DB.siteInfo.missionImages && DB.siteInfo.missionImages[0]) || "";
+  // ogImageUrl is a public URL set by admin specifically for social sharing (Facebook/WhatsApp)
+  // It takes priority over base64 images which social bots cannot display
+  const publicOgUrl = seo.ogImageUrl || "";
+  const isBase64 = img => img && img.startsWith("data:");
+  const socialImage = publicOgUrl || (isBase64(image) ? "" : image) || "";
   let keywords = (pageMeta.keywords && pageMeta.keywords.length) ? pageMeta.keywords.join(", ") : (seo.keywords || "");
   let ldType = "website";
   let article = null;
@@ -1571,12 +1584,12 @@ function applySEO(){
   setMetaProp("og:site_name", siteName);
   setMetaProp("og:title", fullTitle);
   setMetaProp("og:description", desc || seo.defaultDescription || "");
-  setMetaProp("og:image", image || "");
+  setMetaProp("og:image", socialImage || image || "");
   setMetaProp("og:url", location.href);
   setMetaName("twitter:card", "summary_large_image");
   setMetaName("twitter:title", fullTitle);
   setMetaName("twitter:description", desc || seo.defaultDescription || "");
-  setMetaName("twitter:image", image || "");
+  setMetaName("twitter:image", socialImage || image || "");
 
   let ld;
   if(article){
@@ -2507,9 +2520,14 @@ function pageAdmin(){
             <div class="field"><label>Keywords (comma separated)</label><input name="keywords" value="${esc(DB.siteInfo.seo.keywords)}" placeholder="dental clinic nepal, dentist rupandehi"></div>
           </div>
           <div class="field"><label>Default Meta Description</label><textarea name="defaultDescription" rows="2">${esc(DB.siteInfo.seo.defaultDescription)}</textarea></div>
-          <div class="admin-row-tools" style="margin:4px 0 18px;">
-            <button type="button" class="admin-mini-btn" data-action="edit-img" data-path="siteInfo.seo.ogImage">${icon('upload')} ${DB.siteInfo.seo.ogImage?'Change':'Set'} Social Share Image (OG Image)</button>
-            <span class="pill">${DB.siteInfo.seo.ogImage?'Set ✓':'Using default photo'}</span>
+          <div class="admin-row-tools" style="margin:4px 0 8px;">
+            <button type="button" class="admin-mini-btn" data-action="edit-img" data-path="siteInfo.seo.ogImage">${icon('upload')} ${DB.siteInfo.seo.ogImage?'Change':'Set'} Social Share Photo</button>
+            <span class="pill">${DB.siteInfo.seo.ogImage?'Photo set ✓':'Using default'}</span>
+          </div>
+          <div class="field" style="margin-bottom:18px;">
+            <label>Social Share Photo URL <span style="font-weight:400;color:var(--charcoal-soft);">(Facebook/WhatsApp preview — must be a public URL, not an uploaded file)</span></label>
+            <input name="ogImageUrl" value="${esc(DB.siteInfo.seo.ogImageUrl||'')}" placeholder="https://www.neupanedental.com.np/clinic-photo.jpg" style="font-size:.82rem;">
+            <p class="form-note" style="margin:4px 0 0;">Upload your clinic photo to GitHub repo root, then paste the full URL here. This is what Facebook, WhatsApp, and other social apps show when someone shares your link.</p>
           </div>
           <h4 style="margin:20px 0 10px;font-family:inherit;font-size:.95rem;">Per-Page SEO</h4>
           <p class="form-note" style="margin:0 0 12px;">Open the full SEO editor (title, description, keywords, cover image, live preview) for any page below.</p>
@@ -3625,12 +3643,19 @@ document.addEventListener("submit", async (e)=>{
     return;
   }
   if(type==="seo-settings"){
+    const ogImageUrl = (fd.get("ogImageUrl")||"").trim();
     DB.siteInfo.seo = Object.assign({}, DB.siteInfo.seo, {
       defaultTitle:(fd.get("defaultTitle")||"").trim(),
       defaultDescription:(fd.get("defaultDescription")||"").trim(),
-      keywords:(fd.get("keywords")||"").trim()
+      keywords:(fd.get("keywords")||"").trim(),
+      ogImageUrl: ogImageUrl
     });
     const ok = await persistDB();
+    // If admin set a public URL, update static HTML og:image meta tags immediately in the DOM
+    if(ok && ogImageUrl){
+      document.querySelector('meta[property="og:image"]') && (document.querySelector('meta[property="og:image"]').content = ogImageUrl);
+      document.querySelector('meta[name="twitter:image"]') && (document.querySelector('meta[name="twitter:image"]').content = ogImageUrl);
+    }
     showToast(ok?"Default SEO settings saved.":"Could not save — check your connection, admin sign-in, or try a smaller/fewer photo.", !ok);
     render();
     return;
