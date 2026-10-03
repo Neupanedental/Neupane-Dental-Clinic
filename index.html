@@ -1105,7 +1105,23 @@ async function persistDB(){
     showToast(firstErrorMsg || "Could not save — check your connection, admin sign-in, or try a smaller/fewer photo.", true);
     __pdbToastShown = true;
   }
+  if(allOk) scheduleSeoCachePurge();
   return allOk;
+}
+/* Phase 4 (D4 = C): admin le Save garepachhi Cloudflare Worker ko cache clear — bot le turuntai naya title/photo dekhos.
+   Admin login bhayeko bela matra; dherai Save lagatar bhaye ek choti matra pathaucha. Fail bhaye site lai kehi asar gardaina. */
+let __seoPurgeTimer = null;
+function scheduleSeoCachePurge(){
+  const u = fbAuth.currentUser;
+  if(!u || u.uid !== ADMIN_UID) return;
+  clearTimeout(__seoPurgeTimer);
+  __seoPurgeTimer = setTimeout(async ()=>{
+    try{
+      const token = await fbAuth.currentUser.getIdToken();
+      const r = await fetch("/__purge", {method:"POST", headers:{"Authorization":"Bearer "+token}, keepalive:true});
+      if(!r.ok) console.warn("SEO cache purge failed:", r.status);
+    }catch(e){ console.warn("SEO cache purge failed:", e); }
+  }, 1500);
 }
 /* Best-effort cleanup: removes an item's now-unused per-item document when that item is deleted.
    Failure here is non-critical (an orphaned doc is harmless), so errors are just logged. */
@@ -1554,6 +1570,29 @@ function withSiteName(t, siteName){
   if(!t) return siteName;
   return t.toLowerCase().includes("neupane") ? t : `${t} | ${siteName}`;
 }
+/* Phase 4: Worker (Cloudflare) sanga ekai niyam — SITE_ORIGIN, photo ko kram, base64 → /og/... */
+const SITE_ORIGIN = "https://www.neupanedental.com.np";
+function seoHashStr(s){ let h = 0x811c9dc5; const step = Math.max(1, Math.floor(s.length/4096)); for(let i=0;i<s.length;i+=step){ h ^= s.charCodeAt(i); h = Math.imul(h, 0x01000193); } h ^= s.length; return (h>>>0).toString(36); }
+function seoResolveImage(img, ogPath){
+  if(!img || typeof img!=="string") return "";
+  if(img.startsWith("data:image/")){
+    const mime = (img.slice(5, img.indexOf(";"))||"image/jpeg").toLowerCase();
+    const ext = ({"image/jpeg":"jpg","image/jpg":"jpg","image/png":"png","image/webp":"webp","image/gif":"gif"})[mime] || "jpg";
+    return `${SITE_ORIGIN}${ogPath}.${ext}?v=${seoHashStr(img)}`;
+  }
+  if(/^https?:\/\//i.test(img)) return img;
+  if(img.startsWith("/")) return SITE_ORIGIN + img;
+  return "";
+}
+/* Worker ko isKnownRouteShape() jastai — chinne URL ko akar */
+function seoKnownRouteShape(parts){
+  if(parts.length===0) return true;
+  const p0 = parts[0];
+  if(["services","pricing","about","book","privacy","terms","login","signup","dashboard"].includes(p0)) return parts.length===1;
+  if(p0==="service") return parts.length===2;
+  if(p0==="news"){ if(parts[1]==="cat") return parts.length===3 && ["news","success"].includes(parts[2]); return parts.length<=2; }
+  return false;
+}
 function applySEO(){
   const seo = (DB.siteInfo && DB.siteInfo.seo) || {};
   const pages = DB.seoPages || {};
@@ -1563,53 +1602,61 @@ function applySEO(){
   const pageMeta = pages[pageKey] || {};
   let rawTitle = pageMeta.title || "";
   let desc = pageMeta.description || seo.defaultDescription || "";
-  let image = pageMeta.image || seo.ogImage || (DB.siteInfo.missionImages && DB.siteInfo.missionImages[0]) || "";
-  // ogImageUrl is a public URL set by admin specifically for social sharing (Facebook/WhatsApp)
-  // It takes priority over base64 images which social bots cannot display
-  const publicOgUrl = seo.ogImageUrl || "";
-  const isBase64 = img => img && img.startsWith("data:");
-  const socialImage = publicOgUrl || (isBase64(image) ? "" : image) || "";
+  let image = pageMeta.image || "";
+  let imageOgPath = image ? "/og/page/"+pageKey : "";
   let keywords = (pageMeta.keywords && pageMeta.keywords.length) ? pageMeta.keywords.join(", ") : (seo.keywords || "");
   let ldType = "website";
   let article = null;
+  let notFound = !seoKnownRouteShape(parts);
 
   if(parts[0]==="service" && parts[1]){
     const sv = DB.services.find(x=>x.id===parts[1]);
-    if(sv && sv.seo){ rawTitle = sv.seo.title || sv.name; desc = sv.seo.description || sv.short || desc; image = sv.seo.image || sv.img || image; if(sv.seo.keywords && sv.seo.keywords.length) keywords = sv.seo.keywords.join(", "); }
+    if(!sv) notFound = true;
+    else { const s = sv.seo||{}; rawTitle = s.title || sv.name || rawTitle; desc = s.description || sv.short || desc; if(s.image || sv.img){ image = s.image || sv.img; imageOgPath = "/og/service/"+sv.id; } if(s.keywords && s.keywords.length) keywords = s.keywords.join(", "); }
   } else if(parts[0]==="news" && parts[1] && parts[1]!=="cat"){
     const n = DB.news.find(x=>x.id===parts[1]);
-    if(n && n.seo){ rawTitle = n.seo.title || n.title; desc = n.seo.description || n.excerpt || desc; image = n.seo.image || n.img || image; if(n.seo.keywords && n.seo.keywords.length) keywords = n.seo.keywords.join(", "); ldType="article"; article = n; }
+    if(!n) notFound = true;
+    else { const s = n.seo||{}; rawTitle = s.title || n.title || rawTitle; desc = s.description || n.excerpt || desc; if(s.image || n.img){ image = s.image || n.img; imageOgPath = "/og/news/"+n.id; } if(s.keywords && s.keywords.length) keywords = s.keywords.join(", "); ldType="article"; article = n; }
   }
-  const fullTitle = withSiteName(rawTitle, siteName) || seo.defaultTitle || siteName;
+  // Photo: page/service/news ko aaphnai → Social Share Photo URL → upload gareko Social Share Photo → og-image.jpg
+  let ogImage = seoResolveImage(image, imageOgPath);
+  if(!ogImage && seo.ogImageUrl) ogImage = seo.ogImageUrl;
+  if(!ogImage && seo.ogImage) ogImage = seoResolveImage(seo.ogImage, "/og/site");
+  if(!ogImage) ogImage = SITE_ORIGIN + "/og-image.jpg";
+  // Title khali bhaye admin ko Default Site Title (Decision A)
+  const fullTitle = rawTitle ? withSiteName(rawTitle, siteName) : (seo.defaultTitle || siteName);
+  const canonical = SITE_ORIGIN + (parts.length ? "/" + parts.map(encodeURIComponent).join("/") : "/");
+  const isPrivate = ["login","signup","dashboard"].includes(parts[0]);
   document.title = fullTitle;
   setMetaName("description", desc || seo.defaultDescription || "");
   setMetaName("keywords", keywords || "");
-  setCanonical(location.href);
+  setMetaName("robots", (isPrivate || notFound) ? "noindex, nofollow" : "index, follow");
+  setCanonical(canonical);
   setMetaProp("og:type", ldType==="article" ? "article" : "website");
   setMetaProp("og:site_name", siteName);
   setMetaProp("og:title", fullTitle);
   setMetaProp("og:description", desc || seo.defaultDescription || "");
-  setMetaProp("og:image", socialImage || image || "");
-  setMetaProp("og:url", location.href);
+  setMetaProp("og:image", ogImage);
+  setMetaProp("og:url", canonical);
   setMetaName("twitter:card", "summary_large_image");
   setMetaName("twitter:title", fullTitle);
   setMetaName("twitter:description", desc || seo.defaultDescription || "");
-  setMetaName("twitter:image", socialImage || image || "");
+  setMetaName("twitter:image", ogImage);
 
   let ld;
   if(article){
     ld = {"@context":"https://schema.org","@type":"Article",
-      headline: rawTitle, description: desc, image: image||undefined,
-      datePublished: article.date, author:{"@type":"Organization",name:siteName},
+      headline: rawTitle, description: desc, image: ogImage,
+      datePublished: article.date || undefined, author:{"@type":"Organization",name:siteName},
       publisher:{"@type":"Organization",name:siteName}};
   } else if(pageKey==="home"){
     ld = {"@context":"https://schema.org","@type":"Dentist",
-      name:siteName, image: image||undefined,
-      telephone: DB.siteInfo.phone1, email: DB.siteInfo.email,
-      address:{"@type":"PostalAddress",streetAddress:DB.siteInfo.address},
-      url: location.origin + location.pathname};
+      name:siteName, image: ogImage,
+      telephone: DB.siteInfo.phone1 || undefined, email: DB.siteInfo.email || undefined,
+      address:{"@type":"PostalAddress",streetAddress:DB.siteInfo.address || undefined},
+      url: SITE_ORIGIN + "/"};
   } else {
-    ld = {"@context":"https://schema.org","@type":"Organization", name:siteName, url: location.origin + location.pathname};
+    ld = {"@context":"https://schema.org","@type":"Organization", name:siteName, url: canonical};
   }
   setJsonLd(ld);
 }
@@ -2530,9 +2577,10 @@ function pageAdmin(){
             <span class="pill">${DB.siteInfo.seo.ogImage?'Photo set ✓':'Using default'}</span>
           </div>
           <div class="field" style="margin-bottom:18px;">
-            <label>Social Share Photo URL <span style="font-weight:400;color:var(--charcoal-soft);">(Facebook/WhatsApp preview — must be a public URL, not an uploaded file)</span></label>
+            <label>Social Share Photo URL <span style="font-weight:400;color:var(--charcoal-soft);">(optional — fallback photo for Facebook/WhatsApp previews)</span></label>
             <input name="ogImageUrl" value="${esc(DB.siteInfo.seo.ogImageUrl||'')}" placeholder="https://www.neupanedental.com.np/clinic-photo.jpg" style="font-size:.82rem;">
-            <p class="form-note" style="margin:4px 0 0;">Upload your clinic photo to GitHub repo root, then paste the full URL here. This is what Facebook, WhatsApp, and other social apps show when someone shares your link.</p>
+            <p class="form-note" style="margin:4px 0 0;">Every page, service and news post automatically uses its own photo when shared (uploaded photos work too). This URL — or the uploaded Social Share Photo above — is used only for pages that have no photo of their own. Changes reach Facebook/WhatsApp within a few seconds of saving.</p>
+            <p class="form-note" style="margin:6px 0 0;">Facebook still shows an old preview? Open <a href="https://developers.facebook.com/tools/debug/?q=${encodeURIComponent(SITE_ORIGIN + '/')}" target="_blank" rel="noopener" style="color:var(--gold-deep);font-weight:600;">Facebook Sharing Debugger ↗</a>, paste the page link and click <b>Scrape Again</b>.</p>
           </div>
           <h4 style="margin:20px 0 10px;font-family:inherit;font-size:.95rem;">Per-Page SEO</h4>
           <p class="form-note" style="margin:0 0 12px;">Open the full SEO editor (title, description, keywords, cover image, live preview) for any page below.</p>
