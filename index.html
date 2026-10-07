@@ -651,6 +651,64 @@ body.dpen-admin-bar.dpen-on .toast{bottom:168px;}
 .dpen-adm .dpen-conv p{margin:0 0 6px;font-size:.8rem;}
 .dpen-adm .dpen-pill-ok{font-size:.68rem;font-weight:700;border-radius:999px;padding:3px 8px;background:#e8f6ee;color:#23824f;}
 .dpen-adm .dpen-pill-g{font-size:.68rem;font-weight:700;border-radius:999px;padding:3px 8px;background:var(--ivory);color:var(--gold-deep);}
+
+/* ================= NAYA: photo frame focus/zoom (har thau ko lagi chhuttai) ================= */
+img.fimg{object-position:var(--fx,50%) var(--fy,50%);transform:scale(var(--fz,1));transform-origin:var(--fx,50%) var(--fy,50%);}
+@media(max-width:640px){
+  img.fimg{object-position:var(--mx,var(--fx,50%)) var(--my,var(--fy,50%));transform:scale(var(--mz,var(--fz,1)));transform-origin:var(--mx,var(--fx,50%)) var(--my,var(--fy,50%));}
+}
+.news-card:hover .thumb img.fimg{transform:scale(calc(var(--fz,1) * 1.08));}
+.price-card .thumb{overflow:hidden;position:relative;}
+.detail-cover{position:relative;}
+.img-tools{position:absolute;top:10px;right:10px;display:flex;gap:6px;z-index:3;}
+.img-tools .admin-mini-btn{background:rgba(26,22,17,.88);color:var(--gold-light);border-color:transparent;border-radius:999px;padding:6px 11px;}
+.img-tools .admin-mini-btn.main{background:var(--gold-light);color:#1a1611;}
+.img-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:16px;}
+.img-stats div{background:#fff;border:1px solid rgba(180,135,74,.25);border-radius:12px;padding:12px;text-align:center;}
+.img-stats b{display:block;font-size:1.5rem;color:var(--charcoal);}
+.img-stats span{font-size:.74rem;color:var(--charcoal-soft);}
+/* Adjust Photo editor */
+.modal-box.ie-box{max-width:980px;padding:26px 26px 22px;text-align:left;max-height:94vh;overflow:auto;}
+.ie-sub{font-size:.86rem;color:var(--charcoal-soft);margin:0 0 14px;}
+.ie-grid{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,1fr);gap:22px;align-items:start;}
+.ie-grid.ie-solo{grid-template-columns:minmax(0,1fr);max-width:560px;margin:0 auto;}
+.ie-tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px;}
+.ie-tab{border:1.5px solid rgba(180,135,74,.4);border-radius:20px;padding:5px 12px;font-size:.76rem;font-weight:600;color:var(--charcoal-soft);background:#fff;cursor:pointer;font-family:inherit;}
+.ie-tab small{opacity:.7;font-weight:500;}
+.ie-tab.on{background:var(--charcoal);color:var(--gold-light);border-color:var(--charcoal);}
+.ie-stage{position:relative;background:#111;border-radius:12px;overflow:hidden;touch-action:none;user-select:none;line-height:0;width:fit-content;max-width:100%;margin:0 auto;}
+.ie-stage img{display:block;max-width:100%;max-height:52vh;pointer-events:none;}
+.ie-win{position:absolute;border:2px solid var(--gold-light);box-shadow:0 0 0 2000px rgba(0,0,0,.55);cursor:move;}
+.ie-win.round{border-radius:50%;}
+.ie-win:after{content:"";position:absolute;inset:0;border-radius:inherit;opacity:.35;pointer-events:none;
+  background:linear-gradient(var(--gold-light),var(--gold-light)) 33.3% 0/1px 100% no-repeat,linear-gradient(var(--gold-light),var(--gold-light)) 66.6% 0/1px 100% no-repeat,linear-gradient(var(--gold-light),var(--gold-light)) 0 33.3%/100% 1px no-repeat,linear-gradient(var(--gold-light),var(--gold-light)) 0 66.6%/100% 1px no-repeat;}
+.ie-lbl{position:absolute;left:-2px;bottom:100%;background:var(--gold-light);color:#1a1611;font-size:.68rem;font-weight:700;padding:3px 8px;border-radius:6px 6px 0 0;line-height:1.3;white-space:nowrap;}
+.ie-win.round .ie-lbl{display:none;}
+.ie-hint{position:absolute;bottom:10px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,.65);color:#fff;font-size:.72rem;padding:5px 12px;border-radius:20px;white-space:nowrap;line-height:1.3;pointer-events:none;}
+.ie-ctrl{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:12px;font-size:.8rem;}
+.ie-ctrl label{font-weight:600;color:var(--charcoal-soft);font-size:.8rem;}
+.ie-ctrl input[type=range]{flex:1;min-width:120px;accent-color:var(--gold);}
+.ie-ctrl select{border:1px solid rgba(180,135,74,.4);border-radius:8px;padding:7px 10px;font-family:inherit;font-size:.82rem;background:#fff;max-width:100%;}
+.ie-zv{font-weight:600;min-width:36px;}
+.ie-btn{border:1.5px solid rgba(180,135,74,.45);background:#fff;border-radius:8px;padding:6px 10px;font-size:.78rem;font-weight:600;color:var(--charcoal);cursor:pointer;font-family:inherit;}
+.ie-info{margin-top:12px;background:#fff;border:1px solid rgba(180,135,74,.3);border-radius:10px;padding:8px 12px;font-size:.78rem;color:var(--charcoal-soft);line-height:1.5;}
+.ie-info b{color:var(--charcoal);}
+.ie-side h4{font-size:.74rem;letter-spacing:.08em;text-transform:uppercase;color:var(--gold-deep);margin:0 0 10px;}
+.ie-pv{margin-bottom:12px;cursor:pointer;}
+.ie-pv.ro{cursor:default;opacity:.92;}
+.ie-cap{font-size:.74rem;color:var(--charcoal-soft);margin-bottom:4px;display:flex;justify-content:space-between;gap:8px;}
+.ie-cap b{color:var(--charcoal);}
+.ie-fr{overflow:hidden;border-radius:10px;background:#222;position:relative;}
+.ie-fr.round{border-radius:50%;}
+.ie-fr img{width:100%;height:100%;object-fit:cover;display:block;}
+.ie-pv.sel .ie-fr{outline:2.5px solid var(--gold);outline-offset:2px;}
+.ie-cropv{background-repeat:no-repeat;}
+.ie-btns{display:flex;gap:10px;justify-content:flex-end;margin-top:18px;flex-wrap:wrap;}
+@media(max-width:760px){
+  .ie-grid{grid-template-columns:minmax(0,1fr);}
+  .modal-box.ie-box{padding:20px 14px;}
+  .img-stats{grid-template-columns:1fr;}
+}
 </style>
 </head>
 <body>
@@ -1064,6 +1122,7 @@ function normalizeDB(db){
   db.customBlocks.forEach(b=>{ const key="custom:"+b.id; if(!db.siteInfo.homeSectionOrder.includes(key)) db.siteInfo.homeSectionOrder.push(key); });
   if(!db.siteInfo.sectionSettings || typeof db.siteInfo.sectionSettings!=="object") db.siteInfo.sectionSettings = {};
   if(!db.siteInfo.imageAnims || typeof db.siteInfo.imageAnims!=="object") db.siteInfo.imageAnims = {};
+  if(!db.siteInfo.imgMeta || typeof db.siteInfo.imgMeta!=="object") db.siteInfo.imgMeta = {};
   return db;
 }
 /* ===================== ADDED: site data split across many per-item Firestore documents =====================
@@ -1201,7 +1260,7 @@ async function persistDB(){
     showToast(firstErrorMsg || "Could not save — check your connection, admin sign-in, or try a smaller/fewer photo.", true);
     __pdbToastShown = true;
   }
-  if(allOk) scheduleSeoCachePurge();
+  if(allOk){ scheduleSeoCachePurge(); gcImages().catch(e=> console.warn("gcImages", e)); }
   return allOk;
 }
 /* Phase 4 (D4 = C): admin le Save garepachhi Cloudflare Worker ko cache clear — bot le turuntai naya title/photo dekhos.
@@ -1225,6 +1284,211 @@ async function deleteItemDoc(prefix, id){
   if(!id) return;
   try{ await deleteDoc(doc(fsdb,"sitedata",prefix+id)); }catch(e){ console.error("deleteItemDoc failed for", prefix+id, e); }
 }
+/* ===================== NAYA: Photo system — har photo aafnai Firestore doc (images/<id>) =====================
+   DB ma photo ko satta "/img/<id>" matra baschha. Cloudflare Worker le /img/<id> Firestore bata padhera
+   aafno cache bata dinchha (Firestore ek choti matra padhinchha). Photo ko id kahile badlindaina —
+   photo badalda naya id banchha, purano doc Save pachhi aafai hatchha (gcImages).
+   Har thau (frame) ko focus/zoom DB.siteInfo.imgMeta[<key>].f[<frame>] = [x%, y%, zoom] ma baschha. */
+const IMG_QUALITY = {
+  low:  {label:"Low",  max:1000, target:100000, note:"1000px, ~100KB"},
+  auto: {label:"Auto", max:1600, target:300000, note:"1600px, ~300KB"},
+  high: {label:"High", max:2000, target:500000, note:"2000px, ~500KB"},
+  max:  {label:"Max",  max:2400, target:650000, note:"2400px, ~650KB"}
+};
+const IMG_DOC_LIMIT = 950000; // Firestore ko 1MB doc limit bhanda tala (base64 string ko length)
+const FRAME_DEFS = {
+  coverD: {label:"Cover – computer", a:3.4},
+  coverM: {label:"Cover – mobile", a:1.1},
+  card:   {label:"News list card", a:1.85},
+  price:  {label:"Pricing card", a:2.35},
+  team:   {label:"Team photo (golo)", a:1, round:true},
+  main:   {label:"Home – Mission thulo photo", a:1.3},
+  tile:   {label:"Home – sano photo", a:1.75},
+  about:  {label:"About page photo", a:1.2},
+  block:  {label:"Section photo", a:1.6},
+  brow:   {label:"Gallery row photo", a:1.65},
+  share:  {label:"Facebook/WhatsApp share", a:1.91, crop:true}
+};
+const IMG_LOCAL = new Map();   // id -> dataUrl: yo session ma upload/migrate bhayeka photo turuntai dekhaauna
+const IMG_SESSION = new Set(); // yo session ma banayeka id — gcImages() le yinlai chhuDaina
+function imgIdOf(u){ const m = (typeof u==="string") && u.match(/^\/img\/([A-Za-z0-9_-]{6,64})$/); return m ? m[1] : ""; }
+const __hashMemo = new Map();
+function strHash(s){
+  let h = __hashMemo.get(s); if(h) return h;
+  let a = 5381, b = 52711;
+  for(let i=0;i<s.length;i++){ const c = s.charCodeAt(i); a = Math.imul(a,33) ^ c; b = Math.imul(b,31) ^ c; }
+  h = (a>>>0).toString(36) + (b>>>0).toString(36);
+  if(__hashMemo.size > 400) __hashMemo.clear();
+  __hashMemo.set(s, h); return h;
+}
+/* imgMeta ko key: naya photo ko id, purano/bahira ko photo ko lagi URL ko hash */
+function imgKey(u){ if(!u || typeof u!=="string") return ""; return imgIdOf(u) || ("u_"+strHash(u)); }
+function imgSrc(u){ const id = imgIdOf(u); if(id && IMG_LOCAL.has(id)) return IMG_LOCAL.get(id); return u || ""; }
+function imgMetaMap(){
+  if(!DB.siteInfo.imgMeta || typeof DB.siteInfo.imgMeta!=="object") DB.siteInfo.imgMeta = {};
+  return DB.siteInfo.imgMeta;
+}
+function getFocus(u, fk){
+  const m = (DB.siteInfo.imgMeta||{})[imgKey(u)];
+  const f = m && m.f && m.f[fk];
+  return Array.isArray(f) ? {x:+f[0], y:+f[1], z:+(f[2]||1)} : {x:50, y:50, z:1};
+}
+function focusIsDefault(f){ return f.x===50 && f.y===50 && f.z===1; }
+function focusVars(u, fr){
+  const one = (p, f)=> focusIsDefault(f) ? "" : `--${p}x:${f.x}%;--${p}y:${f.y}%;--${p}z:${f.z};`;
+  if(fr==="cover") return one("f", getFocus(u,"coverD")) + one("m", getFocus(u,"coverM"));
+  return fr ? one("f", getFocus(u, fr)) : "";
+}
+/* Website bhari photo dekhaaune eutai tarika: frame anusar focus/zoom, lazy load */
+function fimg(u, fr, o){
+  o = o || {};
+  return `<img class="fimg${o.cls?" "+o.cls:""}" src="${esc(imgSrc(u))}" alt="${esc(o.alt||"")}" ${o.eager?"":'loading="lazy" '}decoding="async" style="${focusVars(u, fr)}${o.style||""}"${o.attrs?" "+o.attrs:""}>`;
+}
+/* Kun path ko photo website ma kun-kun thau (frame) ma dekhinchha */
+function framesForPath(path){
+  if(!path) return [];
+  if(/^services\.\d+\.img$/.test(path)) return ["coverD","coverM","price"];
+  if(/^news\.\d+\.img$/.test(path)) return ["card","coverD","coverM"];
+  if(/^team\.\d+\.img$/.test(path)) return ["team"];
+  if(path==="siteInfo.missionImages.0") return ["main"];
+  if(/^siteInfo\.missionImages\.\d+$/.test(path)) return ["tile"];
+  if(/^siteInfo\.galleryImages\.\d+$/.test(path)) return ["about"];
+  if(/^customBlocks\.\d+\.img$/.test(path)) return ["block"];
+  if(/^customBlocks\.\d+\.images\.\d+$/.test(path)) return ["brow"];
+  if(/(^|\.)seo\.image$|^seoPages\.|^siteInfo\.seo\.ogImage$/.test(path)) return ["share"];
+  return [];
+}
+function newImgId(){
+  const abc = "ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz23456789";
+  const r = new Uint8Array(20); crypto.getRandomValues(r);
+  return Array.from(r, x=> abc[x % abc.length]).join("");
+}
+/* Photo lai Firestore "images" ma aafnai doc ma rakhne. "/img/<id>" farkauchha. */
+async function uploadImageDoc(dataUrl, w, h, q){
+  if(!dataUrl || dataUrl.length > IMG_DOC_LIMIT) throw new Error("photo too large");
+  const id = newImgId();
+  await setDoc(doc(fsdb, "images", id), {d:dataUrl, w:Math.round(w||0), h:Math.round(h||0), q:String(q||""), t:Date.now()});
+  IMG_LOCAL.set(id, dataUrl);
+  IMG_SESSION.add(id);
+  imgMetaMap()[id] = {s:1, w:Math.round(w||0), h:Math.round(h||0), q:String(q||"")};
+  return "/img/"+id;
+}
+/* Website ka sabai photo field (migrate ra gc ko lagi) */
+function allImageRefs(){
+  const out = [];
+  const add = (path)=>{ const v = getPath(DB, path); if(typeof v==="string" && v) out.push({path, val:v}); };
+  const s = DB.siteInfo || {};
+  (s.missionImages||[]).forEach((_,i)=> add("siteInfo.missionImages."+i));
+  (s.galleryImages||[]).forEach((_,i)=> add("siteInfo.galleryImages."+i));
+  add("siteInfo.seo.ogImage");
+  (DB.team||[]).forEach((_,i)=> add(`team.${i}.img`));
+  (DB.services||[]).forEach((_,i)=>{ add(`services.${i}.img`); add(`services.${i}.seo.image`); });
+  (DB.news||[]).forEach((_,i)=>{ add(`news.${i}.img`); add(`news.${i}.seo.image`); });
+  (DB.customBlocks||[]).forEach((b,i)=>{ add(`customBlocks.${i}.img`); (b.images||[]).forEach((_,j)=> add(`customBlocks.${i}.images.${j}`)); });
+  Object.keys(DB.seoPages||{}).forEach(k=> add(`seoPages.${k}.image`));
+  return out;
+}
+/* Save safal bhaye pachhi: kahi pani prayog nabhayeko photo doc ra focus hataaune (admin matra) */
+async function gcImages(){
+  const u = fbAuth.currentUser;
+  if(!u || u.uid !== ADMIN_UID) return;
+  const meta = DB.siteInfo.imgMeta;
+  if(!meta || !Object.keys(meta).length) return;
+  const { imgMeta, ...restInfo } = DB.siteInfo;
+  const text = JSON.stringify(Object.assign({}, DB, {siteInfo:restInfo}));
+  const usedIds = new Set();
+  text.replace(/\/img\/([A-Za-z0-9_-]{6,64})/g, (all, id)=>{ usedIds.add(id); return all; });
+  const usedKeys = new Set(allImageRefs().map(r=> imgKey(r.val)));
+  for(const k of Object.keys(meta)){
+    const m = meta[k];
+    if(m && m.s){
+      if(usedIds.has(k) || IMG_SESSION.has(k)) continue;
+      try{ await deleteDoc(doc(fsdb, "images", k)); delete meta[k]; IMG_LOCAL.delete(k); }
+      catch(e){ console.warn("image cleanup failed", k, e); }
+    } else if(!usedKeys.has(k)){
+      delete meta[k];
+    }
+  }
+}
+/* Worker nabhaye / bigriye pani photo dekhaos: /img/<id> load bhayena bhane sidhai Firestore bata */
+document.addEventListener("error", async (e)=>{
+  const el = e.target;
+  if(!el || el.tagName!=="IMG" || el.dataset.imgFb) return;
+  const id = imgIdOf(el.getAttribute("src")||"");
+  if(!id) return;
+  el.dataset.imgFb = "1";
+  try{
+    const snap = await getDoc(doc(fsdb, "images", id));
+    const d = snap.exists() && snap.data().d;
+    if(d){ IMG_LOCAL.set(id, d); el.src = d; }
+  }catch(err){ console.warn("image fallback failed", id, err); }
+}, true);
+function imgDims(src){
+  return new Promise(res=>{ const im = new Image(); im.onload = ()=> res({w:im.naturalWidth, h:im.naturalHeight}); im.onerror = ()=> res({w:0, h:0}); im.src = src; });
+}
+/* Admin: purano (base64, site data bhitra) photo lai naya system ma sarne — ek choti thichne */
+async function migrateOldImages(){
+  const refs = allImageRefs().filter(r=> r.val.startsWith("data:image/"));
+  if(!refs.length){ showToast("Sabai photo naya system mai chhan."); return; }
+  const uniq = new Set(refs.map(r=> r.val)).size;
+  const yes = await confirmModal("Photo naya system ma sarne?", `${uniq} wata purano photo aafnai chhuttai doc ma sarinchha. Kehi second lagna sakchha — sakinjel yo page band nagarnus.`, {danger:false, confirmText:"Ho, sarnus"});
+  if(!yes) return;
+  const status = (t)=>{ const el = document.getElementById("imgMigStatus"); if(el) el.textContent = t; };
+  const btn = document.querySelector('[data-action="img-migrate"]'); if(btn) btn.disabled = true;
+  const meta = imgMetaMap();
+  const done = new Map();
+  let n = 0, fail = 0;
+  for(const r of refs){
+    let url = done.get(r.val);
+    if(!url){
+      n++; status(`${n}/${uniq} sardai…`);
+      try{
+        const dim = await imgDims(r.val);
+        url = await uploadImageDoc(r.val, dim.w, dim.h, "old");
+        const oldK = "u_"+strHash(r.val);
+        if(meta[oldK] && meta[oldK].f) meta[imgIdOf(url)].f = meta[oldK].f;
+        delete meta[oldK];
+        done.set(r.val, url);
+      }catch(e){ console.error("migrate failed for", r.path, e); fail++; continue; }
+    }
+    setPath(DB, r.path, url);
+  }
+  status("Save gardai…");
+  const ok = await persistDB();
+  render();
+  if(ok && !fail) showToast(`${done.size} wata photo naya system ma sariyo ✓`);
+  else if(ok) showToast(`${done.size} sariyo, ${fail} sarna sakiyena — feri try garnus.`, true);
+  else if(!__pdbToastShown) showToast("Save hun sakena — internet ra admin login check garera feri try garnus.", true);
+}
+function imgAdminSection(){
+  const refs = allImageRefs();
+  const uniq = (f)=> new Set(refs.filter(f).map(r=> r.val)).size;
+  const nNew = uniq(r=> !!imgIdOf(r.val));
+  const nOld = uniq(r=> r.val.startsWith("data:image/"));
+  const nLink = uniq(r=> /^https?:\/\//i.test(r.val));
+  return `
+  <section class="alt-bg" id="imgAdmin">
+    <div class="wrap">
+      <div class="card-panel">
+        <h3 style="margin-bottom:6px;">Photo Storage</h3>
+        <p class="form-note" style="margin:0 0 14px;">Har photo aafnai chhuttai doc ma baschha ra Cloudflare cache bata chito khulchha. Photo halda Quality (Low / Auto / High / Max) chhanna milchha. Website ma photo mathi ko <b>✂ Adjust</b> le har thau ko lagi photo milauna milchha.</p>
+        <div class="img-stats">
+          <div><b>${nNew}</b><span>Naya system ma</span></div>
+          <div><b>${nOld}</b><span>Purano (sarna baaki)</span></div>
+          <div><b>${nLink}</b><span>Bahira ko link (Unsplash aadi)</span></div>
+        </div>
+        ${nOld ? `
+        <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
+          <button type="button" class="gold-btn" data-action="img-migrate"><span>Purano photo naya system ma sarne (${nOld})</span></button>
+          <span id="imgMigStatus" class="form-note" style="margin:0;"></span>
+        </div>
+        <p class="form-note" style="margin:10px 0 0;">Sarda photo ko quality badhdaina (purano photo saano banaayeko thiyo). Ramro quality chahiyo bhane tyo photo ma "Change" garera feri upload garnus.</p>`
+        : `<span class="pill">Sabai photo naya system ma chhan ✓</span>`}
+      </div>
+    </div>
+  </section>`;
+}
+
 async function persistOwnProfile(uid, profile){
   try{ await setDoc(doc(fsdb,"users",uid), profile); return true; }
   catch(e){ console.error("persistOwnProfile failed", e); return false; }
@@ -1893,8 +2157,9 @@ function missionSectionHTML(ed, s){
     <div class="wrap">
       <div class="grid cols-2" style="align-items:center;gap:50px;">
         <div class="reveal" style="border-radius:26px;overflow:hidden;box-shadow:var(--shadow);position:relative;">
-          <img src="${s.missionImages[0]}" style="width:100%;height:420px;object-fit:cover;">
+          ${fimg(s.missionImages[0], "main", {style:"width:100%;height:420px;object-fit:cover;display:block;"})}
           ${ed?`<div class="mission-tools" style="opacity:1;background:linear-gradient(0deg,rgba(15,12,8,.55),transparent 60%);align-items:flex-end;justify-content:flex-end;padding:14px;">
+            <button type="button" class="admin-mini-btn" data-action="adjust-img" data-path="siteInfo.missionImages.0" title="Adjust photo">✂ Adjust</button>
             <button class="admin-mini-btn" data-action="edit-img" data-path="siteInfo.missionImages.0">${icon('upload')} Replace Photo</button>
           </div>`:''}
         </div>
@@ -1907,8 +2172,9 @@ function missionSectionHTML(ed, s){
       <div class="grid cols-4 reveal stagger" style="margin-top:44px;">
         ${s.missionImages.slice(1).map((g,gi)=>`
           <div class="mission-tile">
-            <img src="${g}">
+            ${fimg(g, "tile")}
             ${ed?`<div class="mission-tools">
+              <button type="button" class="admin-mini-btn" data-action="adjust-img" data-path="siteInfo.missionImages.${gi+1}" title="Adjust photo">✂</button>
               <button class="admin-mini-btn" data-action="edit-img" data-path="siteInfo.missionImages.${gi+1}" title="Replace">${icon('upload')}</button>
               <button class="admin-mini-btn danger" data-action="del-mission-img" data-idx="${gi+1}" title="Remove">✕</button>
             </div>`:''}
@@ -2013,8 +2279,9 @@ function renderCustomBlock(block, idx, ed){
   }
   if(block.type==="text-image"){
     const imgHTML = `<div class="${revealClassFor(block.imgAnim)}" style="position:relative;border-radius:22px;overflow:hidden;box-shadow:var(--shadow);">
-        <img src="${esc(block.img)}" style="width:100%;height:340px;object-fit:cover;display:block;">
+        ${fimg(block.img, "block", {style:"width:100%;height:340px;object-fit:cover;display:block;"})}
         ${ed?`<div class="mission-tools" style="opacity:1;background:linear-gradient(0deg,rgba(15,12,8,.55),transparent 60%);align-items:flex-end;justify-content:flex-end;padding:14px;">
+          <button type="button" class="admin-mini-btn" data-action="adjust-img" data-path="${base}.img" title="Adjust photo">✂ Adjust</button>
           <button class="admin-mini-btn" data-action="edit-img" data-path="${base}.img">${icon('upload')} Replace Photo</button>
         </div>`:''}
       </div>`;
@@ -2054,8 +2321,9 @@ function renderCustomBlock(block, idx, ed){
           ${imgs.map((im,i)=>{
             const rc = revealClassFor((block.imagesAnim&&block.imagesAnim[i])||'up');
             return `<div class="${rc}" style="position:relative;border-radius:18px;overflow:hidden;box-shadow:var(--shadow);">
-              <img src="${esc(im)}" style="width:100%;height:220px;object-fit:cover;display:block;">
+              ${fimg(im, "brow", {style:"width:100%;height:220px;object-fit:cover;display:block;"})}
               ${ed?`<div class="mission-tools">
+                <button type="button" class="admin-mini-btn" data-action="adjust-img" data-path="${base}.images.${i}" title="Adjust photo">✂</button>
                 <button class="admin-mini-btn" data-action="edit-img" data-path="${base}.images.${i}" title="Replace">${icon('upload')}</button>
                 <button class="admin-mini-btn danger" data-action="del-block-img" data-sec="${base}" data-idx="${i}" title="Remove">✕</button>
               </div>`:''}
@@ -2172,20 +2440,20 @@ function linkEditRaw(key){
 }
 function teamCard(t,i,ed){
   return `<div class="team-card reveal">
-    <div class="photo"><img src="${t.img}" alt="${esc(t.name)}" ${ed?`data-action="edit-img" data-path="team.${i}.img"`:''} style="${ed?'cursor:pointer;':''}"></div>
+    <div class="photo">${fimg(t.img, "team", {alt:t.name, attrs: ed?`data-action="edit-img" data-path="team.${i}.img" title="Change photo"`:'', style: ed?'cursor:pointer;':''})}</div>
     <h4 ${ed?`data-bind="team.${i}.name" contenteditable="true"`:''}>${esc(t.name)}</h4>
     <span ${ed?`data-bind="team.${i}.role" contenteditable="true"`:''}>${esc(t.role)}</span>
-    ${ed?`<div class="admin-row-tools"><button class="admin-mini-btn danger" data-action="del-team" data-idx="${i}">Remove</button></div>`:''}
+    ${ed?`<div class="admin-row-tools"><button type="button" class="admin-mini-btn" data-action="adjust-img" data-path="team.${i}.img" title="Adjust photo">✂ Adjust Photo</button><button class="admin-mini-btn danger" data-action="del-team" data-idx="${i}">Remove</button></div>`:''}
   </div>`;
 }
 function serviceCard(sv,i,ed){
   return `<div class="service-card reveal">
-    <div class="ico"><img src="${sv.img}" alt=""></div>
+    <div class="ico"><img src="${esc(imgSrc(sv.img))}" alt="" loading="lazy" decoding="async"></div>
     <h3 ${ed?`data-bind="services.${i}.name" contenteditable="true"`:''}>${esc(sv.name)}</h3>
     <p ${ed?`data-bind="services.${i}.short" contenteditable="true"`:''}>${esc(sv.short)}</p>
     <span class="price-tag">From <span ${ed?`data-bind="services.${i}.price" contenteditable="true"`:''}>${esc(sv.price)}</span></span>
     <a href="/service/${sv.id}" class="link-more">Learn More →</a>
-    ${ed?`<div class="admin-row-tools"><button class="admin-mini-btn" data-action="edit-img" data-path="services.${i}.img">Change Image</button><button class="admin-mini-btn seo-btn" data-action="open-seo" data-kind="service" data-id="${sv.id}">${icon('search')} SEO</button><button class="admin-mini-btn danger" data-action="del-service" data-idx="${i}">Remove</button></div>`:''}
+    ${ed?`<div class="admin-row-tools"><button class="admin-mini-btn" data-action="edit-img" data-path="services.${i}.img">Change Image</button><button type="button" class="admin-mini-btn" data-action="adjust-img" data-path="services.${i}.img" title="Adjust photo">✂ Adjust Image</button><button class="admin-mini-btn seo-btn" data-action="open-seo" data-kind="service" data-id="${sv.id}">${icon('search')} SEO</button><button class="admin-mini-btn danger" data-action="del-service" data-idx="${i}">Remove</button></div>`:''}
   </div>`;
 }
 function reviewChip(r){
@@ -2234,7 +2502,7 @@ function pageServiceDetail(id){
   </section>
   <section style="padding-top:0;">
     <div class="wrap">
-      <div class="detail-cover"><img src="${sv.img}" ${ed?`data-action="edit-img" data-path="services.${idx}.img" style="cursor:pointer;"`:''}></div>
+      <div class="detail-cover">${fimg(sv.img, "cover", {eager:true})}${ed?`<div class="img-tools"><button type="button" class="admin-mini-btn main" data-action="adjust-img" data-path="services.${idx}.img" title="Adjust photo">✂ Adjust</button><button type="button" class="admin-mini-btn" data-action="edit-img" data-path="services.${idx}.img">🔄 Change</button></div>`:''}</div>
       <div class="content-block reveal">
         <div ${ed?`data-bind="services.${idx}.long" data-rich="1" contenteditable="true"`:''}>${richOut(sv.long)}</div>
         <div class="card-panel" style="margin:30px 0;">
@@ -2276,7 +2544,7 @@ function pagePricing(){
       <div class="grid cols-3 reveal stagger">
         ${DB.services.map((sv,i)=>`
           <div class="price-card">
-            <div class="thumb"><img src="${sv.img}"></div>
+            <div class="thumb">${fimg(sv.img, "price")}${ed?`<div class="img-tools"><button type="button" class="admin-mini-btn main" data-action="adjust-img" data-path="services.${i}.img" title="Adjust photo">✂ Adjust</button><button type="button" class="admin-mini-btn" data-action="edit-img" data-path="services.${i}.img">🔄 Change</button></div>`:''}</div>
             <div class="body">
               <h4><a href="/service/${sv.id}" ${ed?`data-bind="services.${i}.name" contenteditable="true"`:''}>${esc(sv.name)}</a></h4>
               <ul>
@@ -2319,8 +2587,9 @@ function pageAbout(){
         <div class="reveal grid cols-2">
           ${s.galleryImages.slice(2).map((g,gi)=>`
             <div class="mission-tile" style="height:220px;${gi===1?'margin-top:26px;':''}">
-              <img src="${g}">
+              ${fimg(g, "about")}
               ${ed?`<div class="mission-tools">
+                <button type="button" class="admin-mini-btn" data-action="adjust-img" data-path="siteInfo.galleryImages.${gi+2}" title="Adjust photo">✂</button>
                 <button class="admin-mini-btn" data-action="edit-img" data-path="siteInfo.galleryImages.${gi+2}" title="Replace">${icon('upload')}</button>
                 <button class="admin-mini-btn danger" data-action="del-gallery-img" data-idx="${gi+2}" title="Remove">✕</button>
               </div>`:''}
@@ -2386,7 +2655,7 @@ function pageNews(filter){
 function newsCard(n,ed){
   return `<a href="/news/${n.id}" style="display:block;position:relative;">
     <div class="news-card">
-      <div class="thumb"><img src="${n.img}"></div>
+      <div class="thumb">${fimg(n.img, "card")}</div>
       <div class="body">
         <span class="tag">${n.cat==='success'?'Success Story':'News'}</span>
         <h3>${esc(n.title)}</h3>
@@ -2429,7 +2698,7 @@ function pageNewsDetail(id){
   </section>
   <section style="padding-top:0;">
     <div class="wrap">
-      <div class="detail-cover"><img src="${n.img}" ${ed?`data-action="edit-img" data-path="news.${idx}.img" style="cursor:pointer;"`:''}></div>
+      <div class="detail-cover">${fimg(n.img, "cover", {eager:true})}${ed?`<div class="img-tools"><button type="button" class="admin-mini-btn main" data-action="adjust-img" data-path="news.${idx}.img" title="Adjust photo">✂ Adjust</button><button type="button" class="admin-mini-btn" data-action="edit-img" data-path="news.${idx}.img">🔄 Change</button></div>`:''}</div>
       <div class="content-block reveal">
         <div ${ed?`data-bind="news.${idx}.content" data-rich="1" contenteditable="true"`:''}>${richOut(n.content)}</div>
       </div>
@@ -2658,6 +2927,7 @@ function pageAdmin(){
       </div>
     </div>
   </section>
+  ${imgAdminSection()}
   ${dpenAdminSection()}
   <section class="alt-bg">
     <div class="wrap">
@@ -3525,6 +3795,8 @@ document.addEventListener("click", async (e)=>{
     return;
   }
   if(action==="edit-img"){ pickAndSetImage(el.dataset.path); return; }
+  if(action==="adjust-img"){ adjustImage(el.dataset.path); return; }
+  if(action==="img-migrate"){ migrateOldImages(); return; }
   /* ===================== ADDED: drag-drop section builder actions ===================== */
   if(action==="open-block-library"){ openBlockLibrary(el.dataset.after||""); return; }
   if(action==="close-block-library"){ closeBlockLibrary(); return; }
@@ -3601,7 +3873,7 @@ document.addEventListener("click", async (e)=>{
       blk.images.push(dataUrl); blk.imagesAnim.push(anim||'up');
       const ok = await persistDB(); render();
       showToast(ok?"Photo added.":"Could not save — check your connection, admin sign-in, or try a smaller/fewer photo.", !ok);
-    }, true);
+    }, true, ["brow"]);
     return;
   }
   if(action==="del-block-img"){
@@ -3667,7 +3939,7 @@ document.addEventListener("click", async (e)=>{
       DB.siteInfo.missionImages.push(dataUrl);
       const ok = await persistDB(); render();
       showToast(ok?"Photo added.":"Could not save — check your connection, admin sign-in, or try a smaller/fewer photo.", !ok);
-    });
+    }, false, ["tile"]);
     return;
   }
   if(action==="del-mission-img"){ DB.siteInfo.missionImages.splice(+el.dataset.idx,1); const ok = await persistDB(); render(); if(!ok) showToast("Could not save — check your connection, admin sign-in, or try a smaller/fewer photo.", true); return; }
@@ -3676,7 +3948,7 @@ document.addEventListener("click", async (e)=>{
       DB.siteInfo.galleryImages.push(dataUrl);
       const ok = await persistDB(); render();
       showToast(ok?"Photo added.":"Could not save — check your connection, admin sign-in, or try a smaller/fewer photo.", !ok);
-    });
+    }, false, ["about"]);
     return;
   }
   if(action==="del-gallery-img"){
@@ -3792,7 +4064,8 @@ document.addEventListener("click", async (e)=>{
 });
 
 /* ===================== LOCAL IMAGE UPLOAD (no URLs — pick from device) ===================== */
-function pickAndSetImage(path, onDone, forceAllowAnim){
+/* NAYA: frames = photo website ma dekhine thau haru (framesForPath bata aafai pani aauchha) */
+function pickAndSetImage(path, onDone, forceAllowAnim, frames){
   let input = document.getElementById("hiddenFileInput");
   if(!input){
     input = document.createElement("input");
@@ -3805,18 +4078,43 @@ function pickAndSetImage(path, onDone, forceAllowAnim){
     if(!file) return;
     const bind = imageAnimBinding(path);
     const allowAnim = !!bind || !!forceAllowAnim;
-    openImageEditor(file, allowAnim, bind?bind.get():"up", async (dataUrl, anim)=>{
-      try{
-        if(path){
-          setPath(DB, path, dataUrl);
-          if(bind) bind.set(anim);
-          const ok = await persistDB(); render();
-          showToast(ok?"Photo updated.":"Could not save — check your connection, admin sign-in, or try a smaller/fewer photo.", !ok);
-        } else if(onDone){ onDone(dataUrl, anim); }
-      }catch(err){ showToast("Could not save that photo — please try again.", true); }
-    });
+    const reader = new FileReader();
+    reader.onerror = ()=> showToast("Could not read that image — please try another file.", true);
+    reader.onload = ()=>{
+      openImageEditor({
+        mode:"new", src:reader.result, fileType:file.type,
+        frames: frames || framesForPath(path), allowAnim, anim: bind ? bind.get() : "up",
+        onApply: async (url, anim)=>{
+          try{
+            if(path){
+              setPath(DB, path, url);
+              if(bind) bind.set(anim);
+              const ok = await persistDB(); render();
+              showToast(ok?"Photo updated.":"Could not save — check your connection, admin sign-in, or try a smaller/fewer photo.", !ok);
+            } else if(onDone){ await onDone(url, anim); }
+          }catch(err){ showToast("Could not save that photo — please try again.", true); }
+        }
+      });
+    };
+    reader.readAsDataURL(file);
   };
   input.click();
+}
+/* NAYA: photo feri upload nagari har thau (frame) ko lagi milaune */
+function adjustImage(path){
+  const u = getPath(DB, path);
+  if(!u){ showToast("Yaha photo chhaina — pahila photo halnus.", true); return; }
+  const bind = imageAnimBinding(path);
+  openImageEditor({
+    mode:"adjust", src:imgSrc(u), origUrl:u,
+    frames: framesForPath(path), allowAnim: !!bind, anim: bind ? bind.get() : "up",
+    onApply: async (url, anim)=>{
+      if(url !== u) setPath(DB, path, url);
+      if(bind) bind.set(anim);
+      const ok = await persistDB(); render();
+      showToast(ok?"Photo milayo ✓":"Could not save — check your connection, admin sign-in, or try a smaller/fewer photo.", !ok);
+    }
+  });
 }
 /* ADDED: ties a stable per-image "entrance animation" choice to custom-block images (safe because
    custom blocks are addressed by a stable id, unlike plain arrays whose indices shift on delete). */
@@ -3829,139 +4127,305 @@ function imageAnimBinding(path){
   return null;
 }
 function pngLikeType(t){ return t==="image/png" || t==="image/webp" || t==="image/gif" || t==="image/svg+xml"; }
-/* ===================== ADDED: image editor — crop + entrance-animation picker ===================== */
+
+/* ===================== NAYA: Adjust Photo editor — frame anusar focus/zoom, ghumaune, quality, live preview ===================== */
 let __imgEd = null;
-function openImageEditor(file, allowAnim, initialAnim, onApply){
-  const reader = new FileReader();
-  reader.onerror = ()=> showToast("Could not read that image — please try another file.", true);
-  reader.onload = ()=>{
-    const img = new Image();
-    img.onerror = ()=> showToast("Could not read that image — please try another file.", true);
-    img.onload = ()=>{
-      __imgEd = { fileType:file.type, natW:img.naturalWidth, natH:img.naturalHeight, dataUrl:reader.result, onApply, allowAnim:!!allowAnim, anim: initialAnim||"up", box:null };
-      let m = document.getElementById("imgEditorModal");
-      if(!m){ m=document.createElement("div"); m.id="imgEditorModal"; m.className="modal-backdrop"; document.body.appendChild(m); }
-      m.innerHTML = renderImgEditorHTML();
-      requestAnimationFrame(()=>{ m.classList.add("show"); initCropBox(); });
+function loadEditorImage(src){
+  return new Promise((resolve)=>{
+    const cross = /^https?:\/\//i.test(src) && !src.startsWith(location.origin);
+    const tryLoad = (useCors)=>{
+      const im = new Image();
+      if(useCors) im.crossOrigin = "anonymous";
+      im.onload = ()=> resolve({im, canEncode: !cross || useCors});
+      im.onerror = ()=> useCors ? tryLoad(false) : resolve(null);
+      im.src = src;
     };
-    img.src = reader.result;
+    tryLoad(cross);
+  });
+}
+async function openImageEditor(opts){
+  const loaded = await loadEditorImage(opts.src);
+  if(!loaded){ showToast("Photo khulna sakena — feri try garnus.", true); return; }
+  const {im, canEncode} = loaded;
+  /* kaam garne canvas (dherai thulo camera photo lai 3200px samma ma) */
+  const cap = 3200, sc = Math.min(1, cap / Math.max(im.naturalWidth, im.naturalHeight));
+  const cv = document.createElement("canvas");
+  cv.width = Math.max(1, Math.round(im.naturalWidth*sc)); cv.height = Math.max(1, Math.round(im.naturalHeight*sc));
+  let canvasOk = true;
+  try{ cv.getContext("2d").drawImage(im, 0, 0, cv.width, cv.height); }catch(e){ canvasOk = false; }
+  const frames = (opts.frames||[]).filter(k=> FRAME_DEFS[k]);
+  const cropMode = frames.length===1 && FRAME_DEFS[frames[0]].crop;
+  const focus = {};
+  frames.forEach(k=>{ focus[k] = opts.mode==="adjust" && !cropMode ? getFocus(opts.origUrl, k) : {x:50, y:50, z:1}; });
+  __imgEd = {
+    mode: opts.mode, origUrl: opts.origUrl||"", fileType: opts.fileType || "", onApply: opts.onApply,
+    allowAnim: !!opts.allowAnim, anim: opts.anim || "up",
+    canvas: cv, canEncode: canEncode && canvasOk, viewUrl: opts.src, blobUrl: "",
+    w: cv.width, h: cv.height, srcW: im.naturalWidth, srcH: im.naturalHeight, rot: 0,
+    frames, cropMode, cur: frames[0] || "", focus, startFocus: JSON.stringify(focus),
+    quality: opts.mode==="adjust" ? "keep" : "auto", busy: false
   };
-  reader.readAsDataURL(file);
+  let m = document.getElementById("imgEditorModal");
+  if(!m){ m = document.createElement("div"); m.id = "imgEditorModal"; m.className = "modal-backdrop"; document.body.appendChild(m); }
+  m.innerHTML = renderImgEditorHTML();
+  wireImgEditor(m);
+  requestAnimationFrame(()=>{ m.classList.add("show"); ieRefresh(); });
 }
 function closeImageEditor(){
   const m = document.getElementById("imgEditorModal");
   if(m) m.classList.remove("show");
+  if(__imgEd && __imgEd.blobUrl) URL.revokeObjectURL(__imgEd.blobUrl);
   __imgEd = null;
 }
 function renderImgEditorHTML(){
-  const opt = (v,label)=> `<option value="${v}" ${__imgEd.anim===v?"selected":""}>${label}</option>`;
-  const animSel = __imgEd.allowAnim ? `
-    <div class="img-editor-row">
+  const ed = __imgEd;
+  const opt = (v,label)=> `<option value="${v}" ${ed.anim===v?"selected":""}>${label}</option>`;
+  const animSel = ed.allowAnim ? `
+    <div class="ie-ctrl">
       <label>Entrance animation</label>
       <select id="cropAnimSel">
         ${opt("up","Fade Up (default)")}${opt("zoom","Zoom In")}${opt("left","Slide From Left")}${opt("right","Slide From Right")}${opt("none","None")}
       </select>
     </div>` : "";
+  const qOpts = (ed.mode==="adjust" ? `<option value="keep" selected>Ahile kai (nabadalne)</option>` : "") +
+    Object.keys(IMG_QUALITY).map(k=> `<option value="${k}" ${ed.quality===k?"selected":""}>${IMG_QUALITY[k].label}${k==="auto"?" (default)":""} — ${IMG_QUALITY[k].note}</option>`).join("");
+  const tabs = ed.frames.length > 1 ? `<div class="ie-tabs">${ed.frames.map(k=> `<button type="button" class="ie-tab" data-ie-tab="${k}">${esc(FRAME_DEFS[k].label)} <small>${FRAME_DEFS[k].a}:1</small></button>`).join("")}</div>` : "";
+  const sub = !ed.frames.length ? "Photo ghumauna ra quality chhanna milchha."
+    : ed.cropMode ? "Sunaulo baakas bhitra ko bhag matra save hunchha (Facebook/WhatsApp share ko aakar)."
+    : ed.frames.length > 1 ? `Yo photo website ma ${ed.frames.length} thau ma dekhinchha. Har thau ko lagi chhuttai milaunus — original photo kaatidaina.`
+    : "Website ma dekhine bhag milaunus — original photo kaatidaina.";
   return `
-  <div class="modal-box" style="max-width:560px;">
-    <h3 style="margin-bottom:6px;">Adjust Photo</h3>
-    <p>Drag the gold corners to crop the photo.${__imgEd.allowAnim?" Then pick how it should animate in.":""}</p>
-    <div class="img-editor-stage" id="cropStage">
-      <img id="cropImg" src="${__imgEd.dataUrl}" alt="">
-      <div class="crop-box" id="cropBox">
-        <div class="crop-handle nw" data-h="nw"></div><div class="crop-handle ne" data-h="ne"></div>
-        <div class="crop-handle sw" data-h="sw"></div><div class="crop-handle se" data-h="se"></div>
+  <div class="modal-box ie-box">
+    <h3 style="margin-bottom:4px;">Adjust Photo</h3>
+    <p class="ie-sub">${sub}</p>
+    <div class="ie-grid${ed.frames.length?"":" ie-solo"}">
+      <div class="ie-left">
+        ${tabs}
+        <div class="ie-stage" id="ieStage">
+          <img id="ieImg" alt="" draggable="false">
+          ${ed.frames.length ? `<div class="ie-win" id="ieWin"><span class="ie-lbl" id="ieLbl"></span></div><div class="ie-hint">✋ Sunaulo baakas taanera thau milaunus</div>` : ""}
+        </div>
+        <div class="ie-ctrl">
+          ${ed.frames.length ? `<label>🔍 Zoom</label><input type="range" id="ieZoom" min="1" max="3" step="0.05" value="1"><span id="ieZoomV" class="ie-zv">1.0×</span>` : ""}
+          <button type="button" class="ie-btn" data-ie="rotl" title="Baya ghumaune">⟲ 90°</button>
+          <button type="button" class="ie-btn" data-ie="rotr" title="Dayan ghumaune">⟳ 90°</button>
+          ${ed.frames.length ? `<button type="button" class="ie-btn" data-ie="reset">↺ Reset</button>` : ""}
+        </div>
+        <div class="ie-ctrl">
+          <label>Quality</label>
+          <select id="ieQ">${qOpts}</select>
+        </div>
+        ${animSel}
+        <div class="ie-info" id="ieInfo"></div>
       </div>
+      ${ed.frames.length ? `<div class="ie-side"><h4>Live preview — website ma yastai dekhinchha</h4><div id="iePv"></div></div>` : ""}
     </div>
-    ${animSel}
-    <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;">
+    <div class="ie-btns">
       <button type="button" class="ghost-btn" data-action="close-img-editor">Cancel</button>
-      <button type="button" class="gold-btn" data-action="apply-img-editor"><span>Use This Photo</span></button>
+      <button type="button" class="gold-btn" data-action="apply-img-editor" id="ieApply"><span>${ed.mode==="adjust"?"Save":"Use This Photo"}</span></button>
     </div>
   </div>`;
 }
-function initCropBox(){
-  const stage = document.getElementById("cropStage");
-  const img = document.getElementById("cropImg");
-  const box = document.getElementById("cropBox");
-  if(!stage||!img||!box) return;
-  function place(){
-    const w = img.clientWidth, h = img.clientHeight;
-    if(!w||!h){ requestAnimationFrame(place); return; }
-    stage.style.width = w+"px"; stage.style.height = h+"px";
-    const bw = w*0.82, bh = h*0.82;
-    __imgEd.box = { x:(w-bw)/2, y:(h-bh)/2, w:bw, h:bh, stageW:w, stageH:h };
-    paintBox();
+/* frame ko aakar, zoom ra focus anusar photo ko kun bhag dekhinchha (0..1 fraction) */
+function ieWinRect(k){
+  const ed = __imgEd, A = FRAME_DEFS[k].a, I = ed.w / ed.h, f = ed.focus[k];
+  const ww0 = I > A ? A / I : 1, wh0 = I > A ? 1 : I / A;
+  const ww = ww0 / f.z, wh = wh0 / f.z;
+  return {l:(f.x/100)*(1-ww), t:(f.y/100)*(1-wh), w:ww, h:wh};
+}
+function ieRefresh(){
+  const ed = __imgEd; if(!ed) return;
+  const img = document.getElementById("ieImg");
+  if(img && img.getAttribute("src") !== ed.viewUrl) img.src = ed.viewUrl;
+  document.querySelectorAll("#imgEditorModal [data-ie-tab]").forEach(b=> b.classList.toggle("on", b.dataset.ieTab===ed.cur));
+  const win = document.getElementById("ieWin");
+  if(win && ed.cur){
+    const r = ieWinRect(ed.cur);
+    win.style.left = (r.l*100)+"%"; win.style.top = (r.t*100)+"%";
+    win.style.width = (r.w*100)+"%"; win.style.height = (r.h*100)+"%";
+    win.classList.toggle("round", !!FRAME_DEFS[ed.cur].round);
+    const lbl = document.getElementById("ieLbl"); if(lbl) lbl.textContent = FRAME_DEFS[ed.cur].label + " ma yati dekhinchha";
+    const z = document.getElementById("ieZoom"); if(z && +z.value !== ed.focus[ed.cur].z) z.value = ed.focus[ed.cur].z;
+    const zv = document.getElementById("ieZoomV"); if(zv) zv.textContent = ed.focus[ed.cur].z.toFixed(1)+"×";
   }
-  function paintBox(){
-    const b = __imgEd.box;
-    box.style.left=b.x+"px"; box.style.top=b.y+"px"; box.style.width=b.w+"px"; box.style.height=b.h+"px";
+  const pv = document.getElementById("iePv");
+  if(pv){
+    const items = ed.frames.map(k=>{
+      const d = FRAME_DEFS[k], f = ed.focus[k];
+      const st = d.crop ? "" : (focusIsDefault(f) ? "" : `--fx:${f.x}%;--fy:${f.y}%;--fz:${f.z};`);
+      const w = d.round ? 110 : Math.round(Math.min(360, 104*d.a));
+      return `<div class="ie-pv${k===ed.cur?" sel":""}" data-ie-tab="${k}">
+        <div class="ie-cap"><b>${esc(d.label)}</b>${k===ed.cur?"<span>milaudai…</span>":""}</div>
+        <div class="ie-fr${d.round?" round":""}" style="width:min(100%,${w}px);aspect-ratio:${d.a};">${d.crop
+          ? `<div class="ie-cropv" style="${ieCropPreviewStyle(k)}"></div>`
+          : `<img class="fimg" src="${esc(ed.viewUrl)}" alt="" style="${st}">`}</div>
+      </div>`;
+    });
+    /* service/news ko photo Facebook ma share garda — Facebook le aafai beech bata katchha */
+    const pathShare = ed.frames.some(k=> k==="coverD") ;
+    if(pathShare) items.push(`<div class="ie-pv ro"><div class="ie-cap"><b>Facebook/WhatsApp share</b><span>aafai beech bata</span></div>
+      <div class="ie-fr" style="width:min(100%,280px);aspect-ratio:1.91;"><img src="${esc(ed.viewUrl)}" alt="" style="width:100%;height:100%;object-fit:cover;"></div></div>`);
+    pv.innerHTML = items.join("");
   }
-  if(img.complete && img.naturalWidth) place(); else img.onload = place;
-  let mode=null, startX=0, startY=0, startBox=null;
-  function within(v,min,max){ return Math.max(min,Math.min(max,v)); }
-  box.addEventListener("pointerdown",(e)=>{
-    const h = e.target.closest(".crop-handle");
-    mode = h ? h.dataset.h : "move";
-    startX=e.clientX; startY=e.clientY; startBox=Object.assign({}, __imgEd.box);
-    box.setPointerCapture(e.pointerId);
+  const info = document.getElementById("ieInfo");
+  if(info){
+    const q = ed.quality==="keep" ? null : IMG_QUALITY[ed.quality];
+    const kb = ed.mode==="adjust" && ed.origUrl.startsWith("data:") ? ` · ~${Math.round(ed.origUrl.length*0.75/1024)} KB` : "";
+    info.innerHTML = `📷 Photo: <b>${ed.srcW} × ${ed.srcH} px</b>${kb}` +
+      (q ? ` · Save hune: <b>${q.label}</b> (${q.note} samma)` : ` · Quality nabadalne`) +
+      (ed.canEncode ? "" : `<br><span style="color:#b93b26;">Yo photo bahira ko link ho — ghumauna/quality badalna mildaina, position ra zoom matra milchha.</span>`);
+  }
+}
+/* share crop preview: window bhitra ko bhag matra background ma */
+function ieCropPreviewStyle(k){
+  const r = ieWinRect(k);
+  const bw = 100 / r.w, bh = 100 / r.h;
+  const px = r.w >= 1 ? 0 : (r.l / (1 - r.w)) * 100, py = r.h >= 1 ? 0 : (r.t / (1 - r.h)) * 100;
+  return `width:100%;height:100%;background-image:url('${__imgEd.viewUrl.replace(/'/g,"%27")}');background-size:${bw}% ${bh}%;background-position:${px}% ${py}%;`;
+}
+function wireImgEditor(m){
+  m.addEventListener("click", (e)=>{
+    if(!__imgEd || __imgEd.busy) return;
+    const tab = e.target.closest("[data-ie-tab]");
+    if(tab){ __imgEd.cur = tab.dataset.ieTab; ieRefresh(); return; }
+    const b = e.target.closest("[data-ie]");
+    if(!b) return;
+    const a = b.dataset.ie;
+    if(a==="rotl" || a==="rotr") ieRotate(a==="rotr" ? 90 : -90);
+    if(a==="reset" && __imgEd.cur){ __imgEd.focus[__imgEd.cur] = {x:50, y:50, z:1}; ieRefresh(); }
+  });
+  const q = m.querySelector("#ieQ");
+  if(q) q.addEventListener("change", ()=>{ if(__imgEd){ __imgEd.quality = q.value; ieRefresh(); } });
+  const z = m.querySelector("#ieZoom");
+  if(z) z.addEventListener("input", ()=>{
+    const ed = __imgEd; if(!ed || !ed.cur) return;
+    ed.focus[ed.cur].z = Math.round(Math.min(3, Math.max(1, +z.value))*100)/100;
+    ieRefresh();
+  });
+  const stage = m.querySelector("#ieStage"), win = m.querySelector("#ieWin");
+  if(!stage || !win) return;
+  let drag = null;
+  const setFromLeftTop = (l, t)=>{
+    const ed = __imgEd, k = ed.cur, r = ieWinRect(k), f = ed.focus[k];
+    const cl = Math.min(Math.max(l, 0), Math.max(0, 1 - r.w)), ct = Math.min(Math.max(t, 0), Math.max(0, 1 - r.h));
+    f.x = r.w < 0.999 ? Math.round(cl / (1 - r.w) * 1000) / 10 : 50;
+    f.y = r.h < 0.999 ? Math.round(ct / (1 - r.h) * 1000) / 10 : 50;
+    ieRefresh();
+  };
+  stage.addEventListener("pointerdown", (e)=>{
+    const ed = __imgEd; if(!ed || !ed.cur || ed.busy) return;
+    const box = stage.getBoundingClientRect();
+    const r = ieWinRect(ed.cur);
+    if(!e.target.closest("#ieWin")){
+      /* baakas bahira thichda baakas tyahi sarchha */
+      setFromLeftTop((e.clientX - box.left)/box.width - r.w/2, (e.clientY - box.top)/box.height - r.h/2);
+    }
+    const r2 = ieWinRect(ed.cur);
+    drag = {x:e.clientX, y:e.clientY, l:r2.l, t:r2.t, bw:box.width, bh:box.height};
+    stage.setPointerCapture(e.pointerId);
     e.preventDefault();
   });
-  box.addEventListener("pointermove",(e)=>{
-    if(!mode || !__imgEd) return;
-    const dx=e.clientX-startX, dy=e.clientY-startY;
-    const b=__imgEd.box, sw=b.stageW, sh=b.stageH, MIN=40;
-    if(mode==="move"){
-      b.x = within(startBox.x+dx, 0, sw-b.w);
-      b.y = within(startBox.y+dy, 0, sh-b.h);
-    } else {
-      let {x,y,w,h}=startBox;
-      if(mode.includes("e")) w = within(startBox.w+dx, MIN, sw-startBox.x);
-      if(mode.includes("s")) h = within(startBox.h+dy, MIN, sh-startBox.y);
-      if(mode.includes("w")){ const nx = within(startBox.x+dx, 0, startBox.x+startBox.w-MIN); w = startBox.w+(startBox.x-nx); x = nx; }
-      if(mode.includes("n")){ const ny = within(startBox.y+dy, 0, startBox.y+startBox.h-MIN); h = startBox.h+(startBox.y-ny); y = ny; }
-      b.x=x; b.y=y; b.w=w; b.h=h;
-    }
-    paintBox();
+  stage.addEventListener("pointermove", (e)=>{
+    if(!drag || !__imgEd) return;
+    setFromLeftTop(drag.l + (e.clientX - drag.x)/drag.bw, drag.t + (e.clientY - drag.y)/drag.bh);
   });
-  box.addEventListener("pointerup",()=>{ mode=null; });
-  box.addEventListener("pointercancel",()=>{ mode=null; });
+  const end = ()=>{ drag = null; };
+  stage.addEventListener("pointerup", end); stage.addEventListener("pointercancel", end);
 }
-function applyImgEditor(){
-  if(!__imgEd || !__imgEd.box) return;
-  const img = document.getElementById("cropImg");
-  const b = __imgEd.box;
-  const scaleX = __imgEd.natW / b.stageW, scaleY = __imgEd.natH / b.stageH;
-  const sx = b.x*scaleX, sy = b.y*scaleY, sw = b.w*scaleX, sh = b.h*scaleY;
-  const usePng = pngLikeType(__imgEd.fileType);
-  /* ADDED: shrink adaptively so a single photo can't balloon the (single-document) site data past
-     Firestore's 1MB limit — PNG has no quality slider, so it shrinks by resolution instead. */
-  /* Lowered so a section with several photos (e.g. 8-10 team/service photos, or the 10 homepage
-     mission+gallery photos) can all safely fit within that section's own ~900KB save budget. */
-  const TARGET_BYTES = 80000;
-  let maxDim = 1000, dataUrl = "", quality = 0.85, tries = 0;
-  while(tries < 7){
-    let outW = sw, outH = sh;
-    if(outW>maxDim || outH>maxDim){
-      if(outW>outH){ outH = Math.round(outH*maxDim/outW); outW = maxDim; }
-      else { outW = Math.round(outW*maxDim/outH); outH = maxDim; }
-    }
-    const canvas = document.createElement("canvas");
-    canvas.width = Math.max(1,Math.round(outW)); canvas.height = Math.max(1,Math.round(outH));
-    const ctx = canvas.getContext("2d");
-    ctx.drawImage(img, sx, sy, sw, sh, 0, 0, canvas.width, canvas.height);
-    dataUrl = usePng ? canvas.toDataURL("image/png") : canvas.toDataURL("image/jpeg", quality);
-    if(dataUrl.length <= TARGET_BYTES || maxDim<=280) break;
-    if(usePng){ maxDim = Math.round(maxDim*0.75); }
-    else if(quality > 0.4){ quality -= 0.15; }
-    else { maxDim = Math.round(maxDim*0.75); }
-    tries++;
+function ieRotate(deg){
+  const ed = __imgEd;
+  if(!ed.canEncode){ showToast("Yo photo ghumauna mildaina (bahira ko link). Naya photo upload garnus.", true); return; }
+  const src = ed.canvas, cv = document.createElement("canvas");
+  cv.width = src.height; cv.height = src.width;
+  const ctx = cv.getContext("2d");
+  ctx.translate(cv.width/2, cv.height/2); ctx.rotate(deg*Math.PI/180); ctx.drawImage(src, -src.width/2, -src.height/2);
+  ed.canvas = cv; ed.w = cv.width; ed.h = cv.height;
+  [ed.srcW, ed.srcH] = [ed.srcH, ed.srcW];
+  ed.rot = ((ed.rot + deg) % 360 + 360) % 360;
+  ed.frames.forEach(k=> ed.focus[k] = {x:50, y:50, z:1});
+  ed.busy = true;
+  cv.toBlob((b)=>{
+    if(!__imgEd) return;
+    if(ed.blobUrl) URL.revokeObjectURL(ed.blobUrl);
+    ed.blobUrl = URL.createObjectURL(b); ed.viewUrl = ed.blobUrl; ed.busy = false;
+    ieRefresh();
+  }, "image/jpeg", 0.85);
+}
+function canvasHasAlpha(cv){
+  try{
+    const t = document.createElement("canvas"); t.width = 48; t.height = 48;
+    const c = t.getContext("2d"); c.drawImage(cv, 0, 0, 48, 48);
+    const d = c.getImageData(0, 0, 48, 48).data;
+    for(let i=3;i<d.length;i+=4) if(d[i] < 250) return true;
+  }catch(e){}
+  return false;
+}
+/* quality anusar saano banaune: JPEG (pardarshi photo bhaye WebP/PNG), Firestore doc bhitra atne gari */
+function encodeEditorImage(region, preset){
+  const ed = __imgEd, P = IMG_QUALITY[preset] || IMG_QUALITY.auto;
+  const alpha = pngLikeType(ed.fileType) && canvasHasAlpha(ed.canvas);
+  const webpOk = alpha && document.createElement("canvas").toDataURL("image/webp").startsWith("data:image/webp");
+  let maxDim = P.max, q = 0.9, out = "", w = 0, h = 0;
+  for(let t=0; t<16; t++){
+    const s = Math.min(1, maxDim / Math.max(region.sw, region.sh));
+    w = Math.max(1, Math.round(region.sw*s)); h = Math.max(1, Math.round(region.sh*s));
+    const c = document.createElement("canvas"); c.width = w; c.height = h;
+    const ctx = c.getContext("2d");
+    if(!alpha){ ctx.fillStyle = "#fff"; ctx.fillRect(0, 0, w, h); }
+    ctx.imageSmoothingQuality = "high";
+    ctx.drawImage(ed.canvas, region.sx, region.sy, region.sw, region.sh, 0, 0, w, h);
+    out = !alpha ? c.toDataURL("image/jpeg", q) : webpOk ? c.toDataURL("image/webp", q) : c.toDataURL("image/png");
+    if(out.length*0.75 <= P.target && out.length <= IMG_DOC_LIMIT) break;
+    if((!alpha || webpOk) && q > 0.62) q = Math.round((q - 0.08)*100)/100;
+    else maxDim = Math.round(maxDim*0.85);
+    if(maxDim < 200) break;
   }
+  if(out.length > IMG_DOC_LIMIT) throw new Error("too large");
+  return {d:out, w, h};
+}
+async function applyImgEditor(){
+  const ed = __imgEd;
+  if(!ed || ed.busy) return;
   const animSel = document.getElementById("cropAnimSel");
-  const anim = __imgEd.allowAnim && animSel ? animSel.value : (__imgEd.anim||"up");
-  const cb = __imgEd.onApply;
+  const anim = ed.allowAnim && animSel ? animSel.value : (ed.anim||"up");
+  const focusChanged = JSON.stringify(ed.focus) !== ed.startFocus;
+  const needEncode = ed.mode==="new" || ed.rot !== 0 || ed.quality !== "keep" || (ed.cropMode && focusChanged);
+  const btn = document.getElementById("ieApply");
+  const setBusy = (on, txt)=>{ ed.busy = on; if(btn){ btn.disabled = on; btn.innerHTML = `<span>${txt}</span>`; } };
+  let url = ed.origUrl;
+  if(needEncode){
+    if(!ed.canEncode){ showToast("Yo photo ghumauna/quality badalna mildaina (bahira ko link). Naya photo upload garnus.", true); return; }
+    setBusy(true, "Saving…");
+    try{
+      let region = {sx:0, sy:0, sw:ed.w, sh:ed.h};
+      if(ed.cropMode){
+        const r = ieWinRect(ed.cur);
+        region = {sx:r.l*ed.w, sy:r.t*ed.h, sw:r.w*ed.w, sh:r.h*ed.h};
+      }
+      const enc = encodeEditorImage(region, ed.quality==="keep" ? "auto" : ed.quality);
+      url = await uploadImageDoc(enc.d, enc.w, enc.h, ed.quality==="keep" ? "auto" : ed.quality);
+    }catch(e){
+      console.error("image upload failed", e);
+      setBusy(false, ed.mode==="adjust"?"Save":"Use This Photo");
+      showToast(e && e.code==="permission-denied" ? "Photo save hun sakena — admin login feri garnus." : "Photo save hun sakena — internet check garera feri try garnus.", true);
+      return;
+    }
+  }
+  /* har frame ko focus/zoom (crop mode ma photo nai katiyo, focus chahidaina) */
+  if(!ed.cropMode && ed.frames.length){
+    const meta = imgMetaMap(), key = imgKey(url);
+    const f = {};
+    ed.frames.forEach(k=>{ const v = ed.focus[k]; if(!focusIsDefault(v)) f[k] = [v.x, v.y, v.z]; });
+    const old = (meta[key] && meta[key].f) || {};
+    const merged = Object.assign({}, needEncode ? {} : old, f);
+    ed.frames.forEach(k=>{ if(!f[k]) delete merged[k]; });
+    meta[key] = Object.assign({}, meta[key]||{}, {f:merged});
+    if(!Object.keys(merged).length) delete meta[key].f;
+    if(!Object.keys(meta[key]).length) delete meta[key];
+  }
+  const cb = ed.onApply;
   closeImageEditor();
-  cb && cb(dataUrl, anim);
+  cb && cb(url, anim);
 }
 
 /* ===================== CONFIRM MODAL (delete / sign-out, Yes-or-No) ===================== */
@@ -4112,7 +4576,7 @@ function renderSeoPreview(meta){
       <div class="spv-title">${esc(title)}</div>
       <div class="spv-desc">${esc(trimmed)}</div>
     </div>
-    ${img?`<img src="${img}" class="spv-thumb">`:''}
+    ${img?`<img src="${esc(imgSrc(img))}" class="spv-thumb">`:''}
   </div>`;
 }
 function renderSeoModalHTML(meta){
@@ -4134,7 +4598,7 @@ function renderSeoModalHTML(meta){
         <div class="field">
           <label>Cover Image</label>
           <div class="seo-img-grid" id="seoImgGrid">
-            ${meta.images.map(im=>`<img src="${im}" class="${d.image===im?'selected':''}" data-action="seo-pick-img" data-src="${esc(im)}">`).join('')}
+            ${meta.images.map(im=>`<img src="${esc(imgSrc(im))}" class="${d.image===im?'selected':''}" data-action="seo-pick-img" data-src="${esc(im)}">`).join('')}
             <div class="seo-upload-tile" data-action="seo-upload-img">${icon('upload')}</div>
           </div>
         </div>
@@ -4171,7 +4635,7 @@ document.addEventListener("click", async (e)=>{
   if(a==="seo-suggest-add"){ addSeoKeyword(el.dataset.kw); return; }
   if(a==="seo-pick-img"){ seoDraft.image = el.dataset.src; document.querySelectorAll("#seoImgGrid img").forEach(im=>im.classList.toggle("selected", im.dataset.src===el.dataset.src)); refreshSeoPreview(); return; }
   if(a==="seo-upload-img"){
-    pickAndSetImage(null, (dataUrl)=>{ seoDraft.image = dataUrl; const modal = document.getElementById("seoModal"); if(modal){ modal.innerHTML = renderSeoModalHTML(currentSeoMeta()); requestAnimationFrame(refreshSeoDescWarn); } });
+    pickAndSetImage(null, (dataUrl)=>{ seoDraft.image = dataUrl; const modal = document.getElementById("seoModal"); if(modal){ modal.innerHTML = renderSeoModalHTML(currentSeoMeta()); requestAnimationFrame(refreshSeoDescWarn); } }, false, ["share"]);
     return;
   }
   if(a==="save-seo-modal"){
