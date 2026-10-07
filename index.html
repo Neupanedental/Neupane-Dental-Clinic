@@ -560,6 +560,97 @@ section.cb-section{padding:78px 0;}
 .block-lib-card .bl-ico{font-size:1.6rem;margin-bottom:8px;}
 .block-lib-card b{display:block;font-size:.88rem;margin-bottom:4px;color:var(--teal);}
 .block-lib-card span{font-size:.72rem;color:var(--charcoal-soft);line-height:1.4;display:block;}
+/* ================= DPEN AI CHAT ================= */
+#dpenRoot{--dpen-db:22px;--dpen-mb:16px;--dpen-extra:0px;--dpen-side:22px;font-family:'Manrope',sans-serif;}
+#dpenRoot[hidden],#dpenRoot [hidden]{display:none!important;}
+body.dpen-admin-bar #dpenRoot{--dpen-extra:64px;}
+body.dpen-on .toast{bottom:104px;}
+body.dpen-admin-bar.dpen-on .toast{bottom:168px;}
+.dpen-fab,.dpen-tip,.dpen-win{position:fixed;z-index:2900;}
+.dpen-fab{bottom:calc(var(--dpen-db) + var(--dpen-extra));display:flex;align-items:center;gap:10px;background:var(--charcoal);color:#fff;border:1px solid rgba(222,188,133,.55);border-radius:999px;padding:8px 18px 8px 8px;box-shadow:0 18px 40px -12px rgba(10,8,6,.55);cursor:pointer;transition:transform .2s var(--ease);}
+.dpen-fab:hover{transform:translateY(-2px);}
+.dpen-av{width:42px;height:42px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;position:relative;flex:none;}
+.dpen-av img{width:34px;height:34px;object-fit:contain;}
+.dpen-fab .dpen-av:after{content:"";position:absolute;right:1px;bottom:2px;width:10px;height:10px;border-radius:50%;background:#3bb273;border:2px solid var(--charcoal);}
+.dpen-fab-txt{text-align:left;line-height:1.2;}
+.dpen-fab-txt b{display:block;font-size:.92rem;letter-spacing:.02em;}
+.dpen-fab-txt small{display:block;font-size:.7rem;color:var(--gold-light);}
+.dpen-tip{bottom:calc(var(--dpen-db) + var(--dpen-extra) + 70px);background:#fff;color:var(--charcoal);border-radius:14px 14px 4px 14px;padding:10px 30px 10px 14px;font-size:.82rem;line-height:1.4;font-weight:500;box-shadow:0 12px 30px -10px rgba(10,8,6,.35);max-width:240px;}
+.dpen-tip-x{position:absolute;top:4px;right:6px;border:none;background:none;color:#8a7f70;font-size:1rem;cursor:pointer;line-height:1;}
+.dpen-win{bottom:calc(var(--dpen-db) + var(--dpen-extra));width:380px;height:min(600px,calc(100vh - 40px - var(--dpen-db) - var(--dpen-extra)));background:var(--cream);border-radius:20px;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 30px 70px -20px rgba(10,8,6,.6);border:1px solid rgba(180,135,74,.35);}
+#dpenRoot[data-dside=right] .dpen-fab,#dpenRoot[data-dside=right] .dpen-win{right:var(--dpen-side);}
+#dpenRoot[data-dside=right] .dpen-tip{right:var(--dpen-side);}
+#dpenRoot[data-dside=left] .dpen-fab,#dpenRoot[data-dside=left] .dpen-win{left:var(--dpen-side);}
+#dpenRoot[data-dside=left] .dpen-tip{left:var(--dpen-side);border-radius:14px 14px 14px 4px;}
+#dpenRoot.is-open .dpen-fab,#dpenRoot.is-open .dpen-tip{display:none;}
+.dpen-hd{background:var(--charcoal);color:#fff;padding:14px 16px;display:flex;align-items:center;gap:12px;flex:none;}
+.dpen-hd .dpen-av{width:40px;height:40px;}
+.dpen-hd .dpen-av img{width:32px;height:32px;}
+.dpen-hd b{font-size:1rem;display:block;}
+.dpen-hd small{font-size:.72rem;color:var(--gold-light);display:flex;align-items:center;gap:6px;}
+.dpen-hd small:before{content:"";width:7px;height:7px;border-radius:50%;background:#3bb273;}
+.dpen-x{margin-left:auto;border:none;background:none;color:#fff;opacity:.85;font-size:1.25rem;cursor:pointer;padding:4px 6px;}
+.dpen-body{flex:1;overflow-y:auto;padding:14px;display:flex;flex-direction:column;gap:10px;overscroll-behavior:contain;}
+.dpen-msg{max-width:86%;padding:10px 13px;border-radius:14px;font-size:.86rem;line-height:1.55;color:var(--charcoal);word-wrap:break-word;overflow-wrap:anywhere;}
+.dpen-msg.bot{background:#fff;border:1px solid rgba(180,135,74,.25);border-bottom-left-radius:4px;align-self:flex-start;}
+.dpen-msg.me{background:var(--charcoal);color:#fff;border-bottom-right-radius:4px;align-self:flex-end;white-space:pre-wrap;}
+.dpen-msg ul{margin:6px 0 6px 18px;padding:0;}
+.dpen-msg p{margin:0 0 6px;}
+.dpen-msg p:last-child{margin-bottom:0;}
+.dpen-msg a{color:var(--gold-deep);font-weight:600;text-decoration:underline;}
+.dpen-chips{display:flex;gap:6px;flex-wrap:wrap;align-self:flex-start;max-width:100%;}
+.dpen-chip{border:1px solid var(--gold);color:var(--gold-deep);background:#fff;border-radius:999px;padding:6px 12px;font-size:.76rem;font-weight:700;cursor:pointer;text-decoration:none;font-family:inherit;}
+.dpen-chip.gold{background:var(--gold);color:#fff;border-color:var(--gold);}
+.dpen-typing{align-self:flex-start;background:#fff;border:1px solid rgba(180,135,74,.25);border-radius:14px;border-bottom-left-radius:4px;padding:12px 14px;display:flex;gap:4px;}
+.dpen-typing i{width:7px;height:7px;border-radius:50%;background:var(--gold);opacity:.4;animation:dpenDot 1.2s infinite;}
+.dpen-typing i:nth-child(2){animation-delay:.2s;}.dpen-typing i:nth-child(3){animation-delay:.4s;}
+@keyframes dpenDot{0%,80%,100%{opacity:.3;transform:translateY(0);}40%{opacity:1;transform:translateY(-3px);}}
+.dpen-ft{border-top:1px solid rgba(180,135,74,.25);background:#fff;padding:10px 12px;display:flex;gap:8px;align-items:flex-end;flex:none;margin:0;}
+.dpen-ft textarea{flex:1;resize:none;border:1px solid rgba(26,22,17,.15);border-radius:20px;padding:10px 14px;font:inherit;font-size:.86rem;max-height:110px;min-height:40px;outline:none;background:#fff;color:var(--charcoal);}
+.dpen-ft textarea:focus{border-color:var(--gold);}
+.dpen-send{width:40px;height:40px;border-radius:50%;border:none;background:var(--gold);color:#fff;font-weight:700;font-size:1rem;cursor:pointer;flex:none;}
+.dpen-send:disabled{opacity:.5;cursor:default;}
+.dpen-book{background:#fff;border:1px solid rgba(180,135,74,.35);border-radius:14px;padding:12px;align-self:stretch;}
+.dpen-book h5{margin:0 0 8px;font-size:.88rem;font-weight:700;color:var(--charcoal);font-family:inherit;}
+.dpen-book .form-row-2{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.dpen-book .field{margin-bottom:8px;}
+.dpen-book .field label{font-size:.7rem;}
+.dpen-book input,.dpen-book select,.dpen-book textarea{font-size:.82rem;padding:8px 10px;}
+.dpen-book .form-note{display:none;}
+@media(max-width:560px){
+  #dpenRoot[data-mside=right] .dpen-fab,#dpenRoot[data-mside=right] .dpen-tip{right:14px;left:auto;}
+  #dpenRoot[data-mside=left] .dpen-fab,#dpenRoot[data-mside=left] .dpen-tip{left:14px;right:auto;}
+  .dpen-fab{bottom:calc(var(--dpen-mb) + var(--dpen-extra));}
+  .dpen-tip{bottom:calc(var(--dpen-mb) + var(--dpen-extra) + 70px);}
+  .dpen-win{inset:0!important;width:100%;height:100%;max-height:none;border-radius:0;border:0;}
+  body.dpen-open{overflow:hidden;}
+  .dpen-book .form-row-2{grid-template-columns:1fr;}
+}
+/* admin panel */
+.dpen-adm .dpen-num{display:inline-block;width:22px;height:22px;border-radius:50%;background:var(--gold);color:#fff;font-size:.72rem;font-weight:800;text-align:center;line-height:22px;margin-right:6px;}
+.dpen-adm h4{margin:22px 0 6px;font-family:inherit;font-size:.98rem;}
+.dpen-adm .dpen-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:12px 0 4px;}
+@media(max-width:720px){.dpen-adm .dpen-stats{grid-template-columns:repeat(2,1fr);}}
+.dpen-adm .dpen-stat{background:var(--cream);border-radius:12px;padding:12px 14px;}
+.dpen-adm .dpen-stat b{font-size:1.35rem;display:block;}
+.dpen-adm .dpen-stat span{font-size:.74rem;color:var(--charcoal-soft);}
+.dpen-adm .dpen-check{display:inline-flex;align-items:center;gap:8px;font-weight:700;font-size:.86rem;margin:6px 16px 6px 0;cursor:pointer;}
+.dpen-adm .dpen-check input{width:18px;height:18px;accent-color:var(--gold);}
+.dpen-adm .dpen-pvs{display:grid;grid-template-columns:2fr 1fr;gap:12px;margin-top:8px;}
+.dpen-adm .dpen-pv{position:relative;height:130px;border:1px solid #e6dccb;border-radius:12px;background:linear-gradient(#faf7f0,#f2ecdf);touch-action:none;user-select:none;}
+.dpen-adm .dpen-pv small{position:absolute;left:10px;top:8px;font-size:.7rem;color:var(--charcoal-soft);}
+.dpen-adm .dpen-pv-chip{position:absolute;background:var(--charcoal);color:#fff;border-radius:999px;padding:5px 11px;font-size:.7rem;font-weight:700;border:2px dashed var(--gold-light);cursor:grab;white-space:nowrap;}
+.dpen-adm .dpen-test-log{border:1px dashed var(--gold);border-radius:12px;padding:10px;background:var(--cream);max-height:320px;overflow:auto;display:flex;flex-direction:column;gap:8px;min-height:60px;}
+.dpen-adm .dpen-test-log .dpen-msg{max-width:92%;}
+.dpen-adm .dpen-row{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:8px;}
+.dpen-adm .dpen-row input[type=text],.dpen-adm .dpen-row input[type=date]{flex:1;min-width:150px;}
+.dpen-adm table{width:100%;border-collapse:collapse;font-size:.8rem;margin-top:10px;}
+.dpen-adm th{text-align:left;color:var(--charcoal-soft);font-weight:700;padding:8px;border-bottom:1px solid #eee;}
+.dpen-adm td{padding:9px 8px;border-bottom:1px solid #f1ece2;vertical-align:top;}
+.dpen-adm .dpen-conv{background:var(--cream);border-radius:10px;padding:10px;margin-top:6px;}
+.dpen-adm .dpen-conv p{margin:0 0 6px;font-size:.8rem;}
+.dpen-adm .dpen-pill-ok{font-size:.68rem;font-weight:700;border-radius:999px;padding:3px 8px;background:#e8f6ee;color:#23824f;}
+.dpen-adm .dpen-pill-g{font-size:.68rem;font-weight:700;border-radius:999px;padding:3px 8px;background:var(--ivory);color:var(--gold-deep);}
 </style>
 </head>
 <body>
@@ -604,7 +695,7 @@ import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.16.0/firebas
 import { initializeAppCheck, ReCaptchaV3Provider } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-app-check.js";
 import {
   getFirestore, doc, getDoc, setDoc, addDoc, deleteDoc, updateDoc, increment,
-  collection, query, where, getDocs
+  collection, query, where, getDocs, Timestamp, limit as fsLimit
 } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-firestore.js";
 import {
   getAuth, onAuthStateChanged, signInWithEmailAndPassword,
@@ -680,6 +771,10 @@ const DEFAULT_DB = {
     emailjs:{serviceId:"", templateId:"", publicKey:""},
     copyrightText:"Neupane Dental Clinic. All rights reserved.",
     adsense:{publisherId:"", autoAds:true, adsTxtContent:""},
+    dpen:{enabled:true, deskSide:"right", deskBottom:22, mobSide:"right", mobBottom:16,
+      bubbleEnabled:true, bubbleText:"Namaste! Ma Dpen 👋 Daat ra upachar bare kehi jannu chha bhane sodhnuhos.", bubbleDelay:4,
+      welcome:"Namaste! Ma Dpen, Neupane Dental Clinic ko AI. Daat tatha mukh ko swasthya, hamro upachar, shulka wa appointment sambandhi jun sukai jankari chahiyo, nisankoch sodhnuhos. Ma tapailai sahi jankari dina tayar chhu.",
+      extraInfo:"", extraRules:"", showBooking:true, showPhone:true, showWhatsapp:true, whatsapp:"", dailyLimit:50},
     privacyContent:"Neupane Dental Clinic (\"we\", \"our\", \"us\") operates the neupanedental.com.np website. This Privacy Policy explains what information we collect when you visit our site, book an appointment, create an account, or interact with our content, and how we use, store and protect it.\n\nInformation We Collect: When you use our Book Appointment form, create an account, post a comment, or submit a review, we collect the details you provide — such as your name, phone number, email address, and message content. We also automatically collect standard technical information (such as browser type and general usage data) to help us improve the site.\n\nHow We Use Your Information: We use the information you provide to respond to appointment requests, contact you about your visit, manage your account, and improve our services. We do not sell your personal information to third parties.\n\nCookies and Advertising: Our website may use cookies and similar technologies, including those from Google AdSense, to display advertisements and measure their performance. Google and its partners may use cookies to serve ads based on a user's prior visits to this or other websites. You can opt out of personalized advertising by visiting Google's Ads Settings. Third-party vendors, including Google, use cookies to serve ads based on someone's prior visits to our website.\n\nData Security: We take reasonable measures to protect the information you share with us, but no method of transmission over the internet is 100% secure.\n\nYour Rights: You may contact us at any time to ask what information we hold about you, request corrections, or request deletion of your account and associated data.\n\nChanges to this Policy: We may update this Privacy Policy from time to time. Continued use of the site after changes are posted means you accept the revised policy.\n\nContact Us: If you have questions about this Privacy Policy, please contact us using the details in our Contact section.",
     termsContent:"Welcome to the Neupane Dental Clinic website. By accessing or using this website, you agree to be bound by the following Terms & Conditions.\n\nUse of Website: This website is provided for informational purposes about our dental services, pricing, team and clinic news, and to allow visitors to request appointments online. The information on this site does not replace professional medical/dental advice — please consult our dentists directly for diagnosis or treatment decisions.\n\nAppointments: Submitting an appointment request through this website does not guarantee a confirmed slot until our clinic staff contacts you to confirm the date and time.\n\nAccounts: If you create an account to comment, like posts, or leave a patient review, you are responsible for maintaining the confidentiality of your login details and for all activity under your account.\n\nUser Content: Comments, reviews and patient voices submitted through this site should be honest, respectful, and relevant. We reserve the right to moderate, edit or remove any content that violates these standards.\n\nIntellectual Property: All text, images, logos and content on this website are the property of Neupane Dental Clinic unless otherwise credited, and may not be reproduced without permission.\n\nThird-Party Advertising: This site may display advertisements served by Google AdSense or other advertising partners. We are not responsible for the content of third-party advertisements.\n\nLimitation of Liability: Neupane Dental Clinic is not liable for any damages arising from the use of this website or reliance on the information presented here.\n\nChanges to Terms: We may revise these Terms & Conditions at any time. Continued use of the website constitutes acceptance of the current version.\n\nContact Us: For any questions about these Terms & Conditions, please reach out using the contact details provided on this site.",
     seo:{
@@ -942,6 +1037,7 @@ function normalizeDB(db){
   db.siteInfo.emailjs = Object.assign({}, DEFAULT_DB.siteInfo.emailjs, db.siteInfo.emailjs||{});
   db.siteInfo.seo = Object.assign({}, DEFAULT_DB.siteInfo.seo, db.siteInfo.seo||{});
   db.siteInfo.adsense = Object.assign({}, DEFAULT_DB.siteInfo.adsense, db.siteInfo.adsense||{});
+  db.siteInfo.dpen = Object.assign({}, DEFAULT_DB.siteInfo.dpen, db.siteInfo.dpen||{});
   if(!db.siteInfo.privacyContent) db.siteInfo.privacyContent = DEFAULT_DB.siteInfo.privacyContent;
   if(!db.siteInfo.termsContent) db.siteInfo.termsContent = DEFAULT_DB.siteInfo.termsContent;
   db.seoPages = Object.assign({}, DEFAULT_DB.seoPages, db.seoPages||{});
@@ -2420,10 +2516,11 @@ function pageTerms(){
     </div>
   </section>`;
 }
-function appointmentForm(){
+function appointmentForm(opts){
+  opts = opts || {};
   const preSel = new URLSearchParams(location.search).get('service')||'';
   return `
-  <form data-form="appointment" novalidate>
+  <form data-form="appointment" novalidate>${opts.dpen?'<input type="hidden" name="source" value="dpen">':''}
     <div class="form-row-2">
       <div class="field"><label>Your Name *</label><input name="name" required placeholder="e.g. Sita Sharma"></div>
       <div class="field"><label>Phone Number *</label><input name="phone" required placeholder="98XXXXXXXX">
@@ -2458,7 +2555,7 @@ function appointmentForm(){
     <button class="gold-btn" type="submit" style="width:100%;justify-content:center;">
       <span class="btn-label">Submit Appointment</span>
     </button>
-    <p class="form-note">On submit, your request is saved and an email is sent automatically to <b>${DB.siteInfo.email}</b> — no need to open your own email app.</p>
+    ${opts.dpen?'':`<p class="form-note">On submit, your request is saved and an email is sent automatically to <b>${DB.siteInfo.email}</b> — no need to open your own email app.</p>`}
   </form>`;
 }
 
@@ -2561,6 +2658,7 @@ function pageAdmin(){
       </div>
     </div>
   </section>
+  ${dpenAdminSection()}
   <section class="alt-bg">
     <div class="wrap">
       <div class="card-panel">
@@ -2763,10 +2861,444 @@ function render(){
   initFaqState();
   applySEO();
   applyAdsense();
+  dpenSync();
 }
 function initFaqState(){
   document.querySelectorAll(".faq-item").forEach(el=>{ /* nothing persisted, css handles open state via class */ });
 }
+/* ===================== DPEN AI CHAT (website) =====================
+   Tala/dayan ko button, chat window, chat bhitra booking form. Jawaf Cloudflare Worker ko /__chat bata
+   (Gemini). Chat log Firestore "chatLogs" ma 30 din (expireAt — TTL). Booking form ko naam/phone AI ma jaadaina. */
+const DPEN_LOG_DAYS = 30;
+const dpen = { mounted:false, open:false, busy:false, msgs:[], el:null,
+  sid: "s" + Date.now().toString(36) + Math.random().toString(36).slice(2,8) };
+const DPEN_AV = `<span class="dpen-av"><img src="/favicon-96.png" alt=""></span>`;
+function dpenCfg(){ return Object.assign({}, DEFAULT_DB.siteInfo.dpen, (DB && DB.siteInfo && DB.siteInfo.dpen) || {}); }
+function dpenPhone(){ return String((DB && DB.siteInfo && DB.siteInfo.phone1) || "").replace(/[^\d+]/g,""); }
+function dpenWa(){ const c = dpenCfg(); return String(c.whatsapp || (DB && DB.siteInfo && DB.siteInfo.phone1) || "").replace(/\D/g,""); }
+function dpenIsMobile(){ return window.matchMedia("(max-width:560px)").matches; }
+
+/* render() pachhi har pali — On/Off, thau, admin edit mode */
+function dpenSync(){
+  if(!DB) return;
+  const c = dpenCfg();
+  const hide = !c.enabled || (isAdmin() && editMode);
+  if(!dpen.mounted){ if(hide) return; dpenMount(); }
+  const root = dpen.el;
+  root.hidden = hide;
+  if(hide && dpen.open) dpenClose();
+  document.body.classList.toggle("dpen-on", !hide);
+  document.body.classList.toggle("dpen-admin-bar", !hide && isAdmin());
+  root.dataset.dside = c.deskSide === "left" ? "left" : "right";
+  root.dataset.mside = c.mobSide === "left" ? "left" : "right";
+  root.style.setProperty("--dpen-db", (Number(c.deskBottom) >= 0 ? Number(c.deskBottom) : 22) + "px");
+  root.style.setProperty("--dpen-mb", (Number(c.mobBottom) >= 0 ? Number(c.mobBottom) : 16) + "px");
+  const tipText = root.querySelector(".dpen-tip-text");
+  if(tipText) tipText.textContent = c.bubbleText || "";
+}
+function dpenMount(){
+  const c = dpenCfg();
+  const root = document.createElement("div");
+  root.id = "dpenRoot";
+  root.innerHTML = `
+    <div class="dpen-tip" hidden><span class="dpen-tip-text"></span><button type="button" class="dpen-tip-x" data-dpen="tip-close" aria-label="Close">×</button></div>
+    <button type="button" class="dpen-fab" data-dpen="open" aria-label="Open Dpen chat">${DPEN_AV}<span class="dpen-fab-txt"><b>Dpen</b><small>Dental AI</small></span></button>
+    <div class="dpen-win" hidden role="dialog" aria-label="Dpen chat">
+      <div class="dpen-hd">${DPEN_AV}<div><b>Dpen</b><small>Neupane Dental · AI</small></div><button type="button" class="dpen-x" data-dpen="close" aria-label="Close">✕</button></div>
+      <div class="dpen-body" id="dpenBody" aria-live="polite"></div>
+      <form class="dpen-ft" id="dpenForm" autocomplete="off"><textarea id="dpenInput" rows="1" maxlength="1000" placeholder="Yaha lekhnus… (नेपाली / Roman / English)"></textarea><button type="submit" class="dpen-send" aria-label="Send">➤</button></form>
+    </div>`;
+  document.body.appendChild(root);
+  dpen.el = root; dpen.mounted = true;
+  root.addEventListener("click", dpenClick);
+  root.querySelector("#dpenForm").addEventListener("submit", (e)=>{ e.preventDefault(); e.stopPropagation(); dpenSend(); });
+  const inp = root.querySelector("#dpenInput");
+  inp.addEventListener("keydown", (e)=>{ if(e.key==="Enter" && !e.shiftKey && !e.isComposing){ e.preventDefault(); dpenSend(); } });
+  inp.addEventListener("input", ()=>{ inp.style.height = "auto"; inp.style.height = Math.min(110, inp.scrollHeight) + "px"; });
+  document.addEventListener("keydown", (e)=>{ if(e.key==="Escape" && dpen.open) dpenClose(); });
+  if(c.bubbleEnabled && c.bubbleText){
+    setTimeout(()=>{
+      const tip = root.querySelector(".dpen-tip");
+      if(!dpen.open && !root.hidden && tip){ tip.hidden = false; setTimeout(()=>{ tip.hidden = true; }, 15000); }
+    }, Math.max(0, Number(c.bubbleDelay) || 0) * 1000);
+  }
+}
+function dpenClick(e){
+  const b = e.target.closest("[data-dpen]");
+  if(!b) return;
+  const a = b.dataset.dpen;
+  if(a==="open") dpenOpen();
+  else if(a==="close") dpenClose();
+  else if(a==="tip-close") b.closest(".dpen-tip").hidden = true;
+  else if(a==="book") dpenShowBooking();
+  else if(a==="bookpage"){ dpenLog({type:"link"}); if(dpenIsMobile()) dpenClose(); navigate("/book"); }
+}
+function dpenOpen(){
+  const root = dpen.el, c = dpenCfg();
+  dpen.open = true;
+  root.classList.add("is-open");
+  root.querySelector(".dpen-tip").hidden = true;
+  root.querySelector(".dpen-win").hidden = false;
+  document.body.classList.toggle("dpen-open", dpenIsMobile());
+  if(!dpen.msgs.length) dpenAdd({role:"model", text:c.welcome || DEFAULT_DB.siteInfo.dpen.welcome, welcome:true});
+  dpenScroll();
+  if(!dpenIsMobile()) setTimeout(()=>root.querySelector("#dpenInput").focus(), 50);
+}
+function dpenClose(){
+  const root = dpen.el;
+  dpen.open = false;
+  root.classList.remove("is-open");
+  root.querySelector(".dpen-win").hidden = true;
+  document.body.classList.remove("dpen-open");
+}
+function dpenScroll(){ const b = document.getElementById("dpenBody"); if(b) b.scrollTop = b.scrollHeight; }
+
+/* Jawaf ko text: HTML escape, **bold**, "- " bullet, aaphnai site ko link */
+function dpenMd(text){
+  const linkify = (s)=> s.replace(/(https?:\/\/[^\s<]+[^\s<.,;:!?)])/g, (u)=>{
+    const raw = u.replace(/&amp;/g,"&");
+    if(raw.startsWith(SITE_ORIGIN)){ const p = raw.slice(SITE_ORIGIN.length) || "/"; return `<a href="${esc(p)}">${u}</a>`; }
+    if(/^https:\/\/(www\.)?google\.[a-z.]+\/maps|^https:\/\/maps\.app\.goo\.gl\//.test(raw)) return `<a href="${esc(raw)}" target="_blank" rel="noopener">Google Maps</a>`;
+    return u;
+  });
+  const inline = (s)=> linkify(esc(s)).replace(/\*\*(.+?)\*\*/g, "<b>$1</b>");
+  const out = []; let list = null, para = [];
+  const flushPara = ()=>{ if(para.length){ out.push(`<p>${para.join("<br>")}</p>`); para = []; } };
+  const flushList = ()=>{ if(list){ out.push(`<ul>${list.map(li=>`<li>${li}</li>`).join("")}</ul>`); list = null; } };
+  String(text||"").split(/\r?\n/).forEach(line=>{
+    const m = line.match(/^\s*(?:[-*•]|\d+[.)])\s+(.*)$/);
+    if(m){ flushPara(); (list = list || []).push(inline(m[1])); }
+    else if(!line.trim()){ flushPara(); flushList(); }
+    else { flushList(); para.push(inline(line.trim())); }
+  });
+  flushPara(); flushList();
+  return out.join("");
+}
+function dpenChipsHtml(){
+  const c = dpenCfg(), parts = [];
+  if(c.showBooking){
+    parts.push(`<button type="button" class="dpen-chip gold" data-dpen="book">📅 Booking garnus</button>`);
+    parts.push(`<button type="button" class="dpen-chip" data-dpen="bookpage">Booking page</button>`);
+  }
+  if(c.showPhone && dpenPhone()) parts.push(`<a class="dpen-chip" href="tel:${esc(dpenPhone())}">📞 Phone garnus</a>`);
+  if(c.showWhatsapp && dpenWa()) parts.push(`<a class="dpen-chip" href="https://wa.me/${esc(dpenWa())}" target="_blank" rel="noopener">💬 WhatsApp</a>`);
+  return parts.length ? `<div class="dpen-chips">${parts.join("")}</div>` : "";
+}
+function dpenAdd(m){
+  dpen.msgs.push(m);
+  const body = document.getElementById("dpenBody");
+  if(!body) return;
+  const div = document.createElement("div");
+  div.className = "dpen-msg " + (m.role==="user" ? "me" : "bot");
+  if(m.role==="user") div.textContent = m.text; else div.innerHTML = dpenMd(m.text);
+  body.appendChild(div);
+  if(m.chips){ const ch = dpenChipsHtml(); if(ch) body.insertAdjacentHTML("beforeend", ch); }
+  dpenScroll();
+}
+function dpenTyping(on){
+  const body = document.getElementById("dpenBody");
+  let t = document.getElementById("dpenTyping");
+  if(on && !t && body){ body.insertAdjacentHTML("beforeend", `<div class="dpen-typing" id="dpenTyping"><i></i><i></i><i></i></div>`); dpenScroll(); }
+  if(!on && t) t.remove();
+  const btn = dpen.el && dpen.el.querySelector(".dpen-send");
+  if(btn) btn.disabled = !!on;
+}
+function dpenLang(s){
+  if(/[ऀ-ॿ]/.test(s)) return "नेपाली";
+  if(/\b(cha|chha|ho|hunchha|huncha|garnu|garne|daat|dat|mero|tapai|kati|parcha|parchha|dukh\w*|ma|ko|lai|ra|kasari|kina|ke)\b/i.test(s)) return "Roman";
+  return s ? "English" : "";
+}
+function dpenLog(d){
+  try{
+    const rec = Object.assign({ sid:dpen.sid, t:new Date().toISOString(),
+      expireAt: Timestamp.fromDate(new Date(Date.now() + DPEN_LOG_DAYS*864e5)), lang: dpenLang(d.q||"") }, d);
+    addDoc(collection(fsdb,"chatLogs"), rec).catch(err=>console.warn("chat log failed", err && err.code));
+  }catch(e){ /* log nabhaye pani chat chalirahos */ }
+}
+/* Gemini lai pathaune history: welcome ra error message bahek, lagatar user message jodne */
+function dpenHistory(list){
+  const out = [];
+  list.forEach(m=>{
+    if(m.welcome || m.local) return;
+    const role = m.role==="user" ? "user" : "model";
+    const last = out[out.length-1];
+    if(last && last.role===role) last.text += "\n" + m.text; else out.push({role, text:m.text});
+  });
+  return out;
+}
+const DPEN_ERR = {
+  limit:"Aaja ko lagi dherai prashna bhaisakyo. Thap jankari ko lagi clinic ma phone garnus ya appointment book garnus.",
+  disabled:"Dpen ahile uplabdha chhaina. Kripaya clinic ma phone garnus ya appointment book garnus.",
+  blocked:"Maaf garnus, yo prashna ko jawaf dina sakina. Arko tarika le sodhnus ya clinic ma phone garnus.",
+  busy:"Maaf garnus, ahile jawaf dina sakina. Ek chhin pachhi feri sodhnus, ya clinic ma phone garnus."
+};
+async function dpenAsk(messages, extra){
+  try{
+    const r = await fetch("/__chat", {method:"POST", headers:Object.assign({"Content-Type":"application/json"}, (extra&&extra.headers)||{}),
+      body: JSON.stringify(Object.assign({sid:dpen.sid, messages}, (extra&&extra.body)||{}))});
+    const j = await r.json().catch(()=>({}));
+    if(j && j.ok && j.reply) return {reply:j.reply};
+    return {error:(j && j.error) || "busy"};
+  }catch(e){ return {error:"busy"}; }
+}
+function dpenSplitBook(reply){
+  const book = /\[\[BOOK\]\]/.test(reply);
+  return { book, text: reply.replace(/\s*\[\[BOOK\]\]\s*/g," ").trim() };
+}
+async function dpenSend(){
+  const inp = dpen.el.querySelector("#dpenInput");
+  const text = inp.value.trim();
+  if(!text || dpen.busy) return;
+  inp.value = ""; inp.style.height = "auto";
+  dpenAdd({role:"user", text});
+  dpen.busy = true; dpenTyping(true);
+  const res = await dpenAsk(dpenHistory(dpen.msgs));
+  dpenTyping(false); dpen.busy = false;
+  if(res.reply){
+    const {book, text:clean} = dpenSplitBook(res.reply);
+    dpenAdd({role:"model", text:clean, chips:book});
+    dpenLog({type:"msg", q:text.slice(0,2000), a:clean.slice(0,6000)});
+  } else {
+    dpenAdd({role:"model", text:DPEN_ERR[res.error] || DPEN_ERR.busy, local:true, chips:true});
+    if(res.error==="disabled") setTimeout(()=>{ if(DB.siteInfo.dpen) DB.siteInfo.dpen.enabled = false; }, 0);
+  }
+  if(!dpenIsMobile()) inp.focus();
+}
+/* Chat bhitra website kai booking form (source: dpen) */
+function dpenShowBooking(){
+  const body = document.getElementById("dpenBody");
+  const open = body.querySelector(".dpen-book:not(.done)");
+  if(open){ open.scrollIntoView({behavior:"smooth", block:"start"}); return; }
+  body.insertAdjacentHTML("beforeend", `<div class="dpen-book"><h5>📅 Book an Appointment</h5>${appointmentForm({dpen:true})}</div>`);
+  const card = body.lastElementChild;
+  card.scrollIntoView({behavior:"smooth", block:"start"});
+}
+function dpenOnBooked(form){
+  const card = form && form.closest(".dpen-book");
+  if(card){ card.classList.add("done"); card.innerHTML = `<h5>✅ Appointment request pathaiyo</h5><p class="form-note" style="display:block;margin:0;">Dhanyabad! Clinic bata chhittai phone/SMS ma confirmation aaunechha.</p>`; }
+  dpenLog({type:"booking"});
+}
+
+/* ===================== DPEN — ADMIN PANEL ===================== */
+const dpenAdm = { init:false, day:null, logs:[], loading:false, search:"", openSid:null, test:[], testBusy:false, todayLogs:null };
+function dpenToday(){ const d = new Date(); return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`; }
+function dpenDayRange(day){ const s = new Date(day+"T00:00:00"); const e = new Date(s.getTime()+864e5); return [s.toISOString(), e.toISOString()]; }
+function dpenAdminSection(){
+  const c = dpenCfg();
+  const svcCount = (DB.services||[]).length, teamCount = (DB.team||[]).length, faqCount = (DB.faqsGlobal||[]).length;
+  setTimeout(dpenAdminAfterRender, 0);
+  const chk = (name, on, label)=>`<label class="dpen-check"><input type="checkbox" name="${name}" ${on?"checked":""}> ${label}</label>`;
+  const sideSel = (name, v)=>`<select name="${name}"><option value="right" ${v!=="left"?"selected":""}>Dayan (right)</option><option value="left" ${v==="left"?"selected":""}>Baya (left)</option></select>`;
+  return `
+  <section class="alt-bg" id="dpenAdmin">
+    <div class="wrap">
+      <div class="card-panel dpen-adm">
+        <h3 style="margin-bottom:6px;">Dpen AI Chat</h3>
+        <p class="form-note" style="margin:0 0 6px;">Website ko AI chat lai yahi bata control garnus. Save garda turuntai website ma lagu hunchha.</p>
+        <div class="dpen-stats" id="dpenStats">${dpenStatsHtml()}</div>
+        <form data-form="dpen-settings">
+          <h4><span class="dpen-num">1</span>On / Off</h4>
+          ${chk("enabled", c.enabled, "Website ma Dpen dekhaune")}
+          <h4><span class="dpen-num">2</span>Button ko thau</h4>
+          <p class="form-note" style="margin:0 0 6px;">Preview ma button tanera (drag) pani milauna milchha. Number = tala bata kati px mathi.</p>
+          <div class="settings-grid">
+            <div class="field"><label>Desktop: side</label>${sideSel("deskSide", c.deskSide)}</div>
+            <div class="field"><label>Desktop: tala bata (px)</label><input type="number" name="deskBottom" min="0" max="400" value="${esc(c.deskBottom)}"></div>
+            <div class="field"><label>Mobile: side</label>${sideSel("mobSide", c.mobSide)}</div>
+            <div class="field"><label>Mobile: tala bata (px)</label><input type="number" name="mobBottom" min="0" max="400" value="${esc(c.mobBottom)}"></div>
+          </div>
+          <div class="dpen-pvs">
+            <div class="dpen-pv" data-dev="desk"><small>Desktop preview</small><span class="dpen-pv-chip">● Dpen</span></div>
+            <div class="dpen-pv" data-dev="mob"><small>Mobile preview</small><span class="dpen-pv-chip">● Dpen</span></div>
+          </div>
+          <h4><span class="dpen-num">3</span>Swagat ra Bubble</h4>
+          ${chk("bubbleEnabled", c.bubbleEnabled, "Bubble message dekhaune")}
+          <div class="settings-grid">
+            <div class="field"><label>Bubble message</label><input name="bubbleText" maxlength="200" value="${esc(c.bubbleText)}"></div>
+            <div class="field"><label>Bubble kati second pachhi aaune</label><input type="number" name="bubbleDelay" min="0" max="60" value="${esc(c.bubbleDelay)}"></div>
+          </div>
+          <div class="field"><label>Chat khulda swagat message</label><textarea name="welcome" rows="3" maxlength="600">${esc(c.welcome)}</textarea></div>
+          <h4><span class="dpen-num">4</span>Dpen le jaane jankari</h4>
+          <p class="form-note" style="margin:0 0 8px;">Website ko yi kura Dpen le <b>aafai</b> padhchha: <span class="pill">${svcCount} services ra price</span> <span class="pill">Address, phone, email</span> <span class="pill">${teamCount} team</span> <span class="pill">${faqCount} FAQ</span> <span class="pill">Branch</span></p>
+          <div class="field"><label>Thap jankari (website ma nabhayeko kura: clinic samaya, bida, parking...)</label><textarea name="extraInfo" rows="4" maxlength="4000">${esc(c.extraInfo)}</textarea></div>
+          <h4><span class="dpen-num">5</span>Dpen ko thap nirdesan</h4>
+          <p class="form-note" style="margin:0 0 8px;">Dpen kasari bolne. Mukhya surakshya niyam (medicine prescribe nagarne, pakka diagnosis nadine, emergency ma clinic pathaune) sadhai lagu hunchhan, yaha bata hatauna mildaina.</p>
+          <div class="field"><textarea name="extraRules" rows="4" maxlength="3000">${esc(c.extraRules)}</textarea></div>
+          <h4><span class="dpen-num">6</span>Button ra limit</h4>
+          ${chk("showBooking", c.showBooking, "Booking")}${chk("showPhone", c.showPhone, "Phone")}${chk("showWhatsapp", c.showWhatsapp, "WhatsApp")}
+          <div class="settings-grid">
+            <div class="field"><label>WhatsApp number (khali bhaye Phone 1)</label><input name="whatsapp" maxlength="30" value="${esc(c.whatsapp)}" placeholder="${esc(DB.siteInfo.phone1||"")}"></div>
+            <div class="field"><label>Prati visitor din ko message limit</label><input type="number" name="dailyLimit" min="1" max="500" value="${esc(c.dailyLimit)}"></div>
+          </div>
+          <div class="dpen-row" style="justify-content:flex-end;margin-top:14px;">
+            <button type="button" class="ghost-btn" data-dpen-admin="reset">Default ma farkaune</button>
+            <button class="gold-btn" type="submit">Save Dpen Settings</button>
+          </div>
+        </form>
+        <h4><span class="dpen-num">7</span>Test garnus</h4>
+        <p class="form-note" style="margin:0 0 8px;">Mathi ko thap jankari ra nirdesan (Save nagareko bhaye pani) sanga Dpen lai sodhera hernus. Yo chat history ra limit ma ganindaina.</p>
+        <div class="dpen-test-log" id="dpenTestLog"></div>
+        <div class="dpen-row"><input type="text" id="dpenTestInput" maxlength="1000" placeholder="Test message lekhnus…"><button type="button" class="gold-btn" data-dpen-admin="test">Pathaunus</button><button type="button" class="ghost-btn" data-dpen-admin="test-clear">Clear</button></div>
+        <h4><span class="dpen-num">8</span>Chat history (pachhillo ${DPEN_LOG_DAYS} din)</h4>
+        <p class="form-note" style="margin:0 0 8px;">${DPEN_LOG_DAYS} din bhanda purano chat aafai delete hunchha.</p>
+        <div class="dpen-row"><input type="date" id="dpenDay" value="${esc(dpenAdm.day||dpenToday())}" max="${dpenToday()}"><input type="text" id="dpenSearch" placeholder="🔍 Khojnus…" value="${esc(dpenAdm.search)}"><button type="button" class="ghost-btn" data-dpen-admin="load">Load</button><button type="button" class="admin-mini-btn" data-dpen-admin="del-day">Yo din ka sabai delete</button></div>
+        <div id="dpenHistory">${dpenHistoryHtml()}</div>
+      </div>
+    </div>
+  </section>`;
+}
+function dpenStatsHtml(){
+  const L = dpenAdm.todayLogs;
+  const msgs = L ? L.filter(x=>x.type==="msg") : [];
+  const chats = L ? new Set(msgs.map(x=>x.sid)).size : "…";
+  const books = L ? L.filter(x=>x.type==="booking").length : "…";
+  return `<div class="dpen-stat"><b>${chats}</b><span>Aaja ka chat</span></div>
+    <div class="dpen-stat"><b>${L?msgs.length:"…"}</b><span>Aaja ka message</span></div>
+    <div class="dpen-stat"><b>${books}</b><span>Dpen bata booking (aaja)</span></div>
+    <div class="dpen-stat"><b>${L?msgs.length:"…"} / 1000</b><span>Aaja ko AI jawaf (free limit)</span></div>`;
+}
+function dpenGroup(logs){
+  const by = {};
+  logs.forEach(x=>{ (by[x.sid] = by[x.sid] || []).push(x); });
+  return Object.keys(by).map(sid=>{
+    const items = by[sid].sort((a,b)=>a.t<b.t?-1:1);
+    const msgs = items.filter(x=>x.type==="msg");
+    return { sid, items, t:items[0].t, first:(msgs[0]&&msgs[0].q)||"", count:msgs.length,
+      lang:(msgs.find(x=>x.lang)||{}).lang||"", booked:items.some(x=>x.type==="booking"), link:items.some(x=>x.type==="link") };
+  }).sort((a,b)=>a.t<b.t?1:-1);
+}
+function dpenHistoryHtml(){
+  if(dpenAdm.loading) return `<p class="form-note">Load hudai chha…</p>`;
+  if(!dpenAdm.day) return "";
+  const q = dpenAdm.search.trim().toLowerCase();
+  let convs = dpenGroup(dpenAdm.logs);
+  if(q) convs = convs.filter(c=>c.items.some(x=>((x.q||"")+" "+(x.a||"")).toLowerCase().includes(q)));
+  if(!convs.length) return `<p class="form-note">Yo din kunai chat chhaina.</p>`;
+  return `<table><tr><th>Samaya</th><th>Pahilo prashna</th><th>Message</th><th>Bhasha</th><th>Booking</th><th></th></tr>
+    ${convs.map(cv=>`<tr><td>${esc(new Date(cv.t).toLocaleTimeString([], {hour:"2-digit",minute:"2-digit"}))}</td>
+      <td>${esc((cv.first||"—").slice(0,90))}${cv.sid===dpenAdm.openSid?`<div class="dpen-conv">${cv.items.map(x=>x.type==="msg"?`<p><b>Visitor:</b> ${esc(x.q)}</p><p><b>Dpen:</b> ${esc(x.a)}</p>`:`<p><i>${x.type==="booking"?"✓ Chat bata booking pathayo":"Booking page link thichyo"}</i></p>`).join("")}</div>`:""}</td>
+      <td>${cv.count}</td><td>${esc(cv.lang)}</td>
+      <td>${cv.booked?'<span class="dpen-pill-ok">✓ Booked</span>':cv.link?'<span class="dpen-pill-g">Link thichyo</span>':"—"}</td>
+      <td style="white-space:nowrap;"><button type="button" class="admin-mini-btn" data-dpen-admin="view" data-sid="${esc(cv.sid)}">${cv.sid===dpenAdm.openSid?"Banda":"Herne"}</button>
+        <button type="button" class="admin-mini-btn" data-dpen-admin="del-conv" data-sid="${esc(cv.sid)}">Delete</button></td></tr>`).join("")}
+  </table>`;
+}
+function dpenTestHtml(){
+  if(!dpenAdm.test.length) return `<p class="form-note" style="margin:0;">Yaha test ko jawaf dekhinchha.</p>`;
+  return dpenAdm.test.map(m=> m.role==="user" ? `<div class="dpen-msg me">${esc(m.text)}</div>` : `<div class="dpen-msg bot">${dpenMd(m.text)}</div>`).join("") + (dpenAdm.testBusy?`<div class="dpen-typing"><i></i><i></i><i></i></div>`:"");
+}
+function dpenAdmPaint(){
+  const s = document.getElementById("dpenStats"); if(s) s.innerHTML = dpenStatsHtml();
+  const h = document.getElementById("dpenHistory"); if(h) h.innerHTML = dpenHistoryHtml();
+  const t = document.getElementById("dpenTestLog"); if(t){ t.innerHTML = dpenTestHtml(); t.scrollTop = t.scrollHeight; }
+}
+function dpenAdminAfterRender(){
+  if(!document.getElementById("dpenAdmin")) return;
+  dpenPvUpdate();
+  dpenAdmPaint();
+  if(!dpenAdm.init){ dpenAdm.init = true; dpenLoadDay(dpenToday()); dpenCleanupOld(); }
+}
+async function dpenFetchDay(day){
+  const [s,e] = dpenDayRange(day);
+  const snap = await getDocs(query(collection(fsdb,"chatLogs"), where("t",">=",s), where("t","<",e)));
+  return snap.docs.map(d=>Object.assign({id:d.id}, d.data()));
+}
+async function dpenLoadDay(day){
+  dpenAdm.day = day; dpenAdm.loading = true; dpenAdm.openSid = null; dpenAdmPaint();
+  try{
+    dpenAdm.logs = await dpenFetchDay(day);
+    if(day===dpenToday()) dpenAdm.todayLogs = dpenAdm.logs;
+    else if(!dpenAdm.todayLogs) dpenAdm.todayLogs = await dpenFetchDay(dpenToday());
+  }catch(e){ console.error("chat history load failed", e); dpenAdm.logs = []; showToast("Chat history load garna sakiyena (Firestore Rules check garnus).", true); }
+  dpenAdm.loading = false; dpenAdmPaint();
+}
+/* TTL ko backup: 30 din bhanda purano log (ek choti ma 300 samma) delete */
+async function dpenCleanupOld(){
+  try{
+    const cutoff = new Date(Date.now() - DPEN_LOG_DAYS*864e5).toISOString();
+    const snap = await getDocs(query(collection(fsdb,"chatLogs"), where("t","<",cutoff), fsLimit(300)));
+    await Promise.all(snap.docs.map(d=>deleteDoc(d.ref).catch(()=>{})));
+  }catch(e){ /* rules/TTL nabhaye pani admin panel chalos */ }
+}
+async function dpenDeleteLogs(list){
+  await Promise.all(list.map(x=>deleteDoc(doc(fsdb,"chatLogs",x.id)).catch(()=>{})));
+  const ids = new Set(list.map(x=>x.id));
+  dpenAdm.logs = dpenAdm.logs.filter(x=>!ids.has(x.id));
+  if(dpenAdm.todayLogs) dpenAdm.todayLogs = dpenAdm.todayLogs.filter(x=>!ids.has(x.id));
+  dpenAdmPaint();
+}
+async function dpenAdminTest(){
+  const inp = document.getElementById("dpenTestInput");
+  const text = inp ? inp.value.trim() : "";
+  if(!text || dpenAdm.testBusy) return;
+  inp.value = "";
+  dpenAdm.test.push({role:"user", text}); dpenAdm.testBusy = true; dpenAdmPaint();
+  const form = document.querySelector('form[data-form="dpen-settings"]');
+  const draft = form ? { extraInfo: form.extraInfo.value, extraRules: form.extraRules.value } : {};
+  let res;
+  try{
+    const token = await fbAuth.currentUser.getIdToken();
+    res = await dpenAsk(dpenHistory(dpenAdm.test), {headers:{"Authorization":"Bearer "+token}, body:{test:true, draft}});
+  }catch(e){ res = {error:"busy"}; }
+  dpenAdm.testBusy = false;
+  if(res.reply){ const {book, text:clean} = dpenSplitBook(res.reply); dpenAdm.test.push({role:"model", text: clean + (book ? "\n\n(Yaha Booking / Phone / WhatsApp button dekhinchha)" : "")}); }
+  else dpenAdm.test.push({role:"model", text:"⚠️ " + (DPEN_ERR[res.error] || DPEN_ERR.busy) + " (" + res.error + ")", local:true});
+  dpenAdmPaint();
+}
+/* Preview ma button ko thau */
+function dpenPvUpdate(){
+  const form = document.querySelector('form[data-form="dpen-settings"]');
+  if(!form) return;
+  [["desk","deskSide","deskBottom"],["mob","mobSide","mobBottom"]].forEach(([dev, sideF, botF])=>{
+    const box = document.querySelector(`.dpen-pv[data-dev="${dev}"]`); if(!box) return;
+    const chip = box.querySelector(".dpen-pv-chip");
+    const side = form[sideF].value, bottom = Math.max(0, Number(form[botF].value)||0);
+    chip.style.left = side==="left" ? "10px" : "auto";
+    chip.style.right = side==="left" ? "auto" : "10px";
+    chip.style.bottom = Math.min(box.clientHeight - 30, 6 + bottom/3) + "px";
+  });
+}
+let __dpenDrag = null;
+document.addEventListener("pointerdown", (e)=>{
+  const chip = e.target.closest(".dpen-pv-chip"); if(!chip) return;
+  __dpenDrag = chip.closest(".dpen-pv"); e.preventDefault();
+});
+document.addEventListener("pointermove", (e)=>{
+  if(!__dpenDrag) return;
+  const box = __dpenDrag, r = box.getBoundingClientRect();
+  const form = document.querySelector('form[data-form="dpen-settings"]'); if(!form) return;
+  const dev = box.dataset.dev;
+  form[dev==="desk"?"deskSide":"mobSide"].value = (e.clientX - r.left) < r.width/2 ? "left" : "right";
+  form[dev==="desk"?"deskBottom":"mobBottom"].value = Math.round(Math.max(0, Math.min(400, (r.bottom - e.clientY - 18) * 3)));
+  dpenPvUpdate();
+});
+document.addEventListener("pointerup", ()=>{ __dpenDrag = null; });
+document.addEventListener("input", (e)=>{
+  if(e.target.closest && e.target.closest('form[data-form="dpen-settings"]')) dpenPvUpdate();
+  if(e.target.id==="dpenSearch"){ dpenAdm.search = e.target.value; const h = document.getElementById("dpenHistory"); if(h) h.innerHTML = dpenHistoryHtml(); }
+});
+document.addEventListener("change", (e)=>{
+  if(e.target.closest && e.target.closest('form[data-form="dpen-settings"]')) dpenPvUpdate();
+  if(e.target.id==="dpenDay" && e.target.value) dpenLoadDay(e.target.value);
+});
+document.addEventListener("keydown", (e)=>{ if(e.key==="Enter" && e.target.id==="dpenTestInput"){ e.preventDefault(); dpenAdminTest(); } });
+document.addEventListener("click", async (e)=>{
+  const b = e.target.closest("[data-dpen-admin]"); if(!b) return;
+  const a = b.dataset.dpenAdmin;
+  if(a==="test") dpenAdminTest();
+  else if(a==="test-clear"){ dpenAdm.test = []; dpenAdmPaint(); }
+  else if(a==="load"){ const d = document.getElementById("dpenDay"); dpenLoadDay((d && d.value) || dpenToday()); }
+  else if(a==="view"){ dpenAdm.openSid = dpenAdm.openSid===b.dataset.sid ? null : b.dataset.sid; dpenAdmPaint(); }
+  else if(a==="del-conv"){ if(!confirm("Yo chat delete garne?")) return; dpenDeleteLogs(dpenAdm.logs.filter(x=>x.sid===b.dataset.sid)); }
+  else if(a==="del-day"){ if(!dpenAdm.logs.length || !confirm("Yo din ka sabai chat delete garne?")) return; dpenDeleteLogs(dpenAdm.logs.slice()); }
+  else if(a==="reset"){
+    const form = document.querySelector('form[data-form="dpen-settings"]'); if(!form) return;
+    const d = DEFAULT_DB.siteInfo.dpen;
+    Object.keys(d).forEach(k=>{ const el = form.elements[k]; if(!el) return; if(el.type==="checkbox") el.checked = !!d[k]; else el.value = d[k]; });
+    dpenPvUpdate(); showToast("Default value rakhiyo — Save thichepachhi lagu hunchha.");
+  }
+});
+
 /* ===================== ADDED: drag-and-drop section reordering (admin edit mode) ===================== */
 let __dragSecId = null;
 document.addEventListener("dragstart",(e)=>{
@@ -3693,6 +4225,7 @@ document.addEventListener("submit", async (e)=>{
     const me = currentUser();
     const appt = {name,phone,email,subject,service,dentist,date:apptDate,time:apptTime,message,createdAt:new Date().toISOString()};
     if(me) appt.uid = me.uid;
+    if(fd.get("source")==="dpen") appt.source = "dpen"; // Dpen chat bhitra ko form bata
     try{
       await addDoc(collection(fsdb,"appointments"), appt);
     }catch(e){
@@ -3720,7 +4253,26 @@ document.addEventListener("submit", async (e)=>{
 
     submitBtn.disabled = false; if(label) label.textContent = "Submit Appointment";
     form.reset();
+    if(appt.source==="dpen") dpenOnBooked(form);
     showSuccessModal("Request Submitted", "Your appointment request has been submitted successfully. We will contact you shortly.");
+    return;
+  }
+  if(type==="dpen-settings"){
+    const num = (k, d, min, max)=>{ let v = parseInt(fd.get(k), 10); if(isNaN(v)) v = d; return Math.min(max, Math.max(min, v)); };
+    const str = (k, n)=> String(fd.get(k)||"").trim().slice(0, n);
+    DB.siteInfo.dpen = Object.assign({}, dpenCfg(), {
+      enabled: fd.get("enabled")==="on",
+      deskSide: fd.get("deskSide")==="left" ? "left" : "right", deskBottom: num("deskBottom", 22, 0, 400),
+      mobSide: fd.get("mobSide")==="left" ? "left" : "right", mobBottom: num("mobBottom", 16, 0, 400),
+      bubbleEnabled: fd.get("bubbleEnabled")==="on", bubbleText: str("bubbleText", 200), bubbleDelay: num("bubbleDelay", 4, 0, 60),
+      welcome: str("welcome", 600) || DEFAULT_DB.siteInfo.dpen.welcome,
+      extraInfo: str("extraInfo", 4000), extraRules: str("extraRules", 3000),
+      showBooking: fd.get("showBooking")==="on", showPhone: fd.get("showPhone")==="on", showWhatsapp: fd.get("showWhatsapp")==="on",
+      whatsapp: str("whatsapp", 30), dailyLimit: num("dailyLimit", 50, 1, 500)
+    });
+    const ok = await persistDB();
+    showToast(ok ? "Dpen settings saved." : "Could not save — check your connection or admin sign-in.", !ok);
+    render();
     return;
   }
   if(type==="emailjs-settings"){
