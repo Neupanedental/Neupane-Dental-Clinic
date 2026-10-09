@@ -310,9 +310,13 @@ section{padding:86px 0;}
 @media(max-width:640px){.form-row-2{grid-template-columns:1fr;}}
 .form-note{font-size:.8rem;color:var(--charcoal-soft);margin-top:10px;}
 .toast{position:fixed;bottom:26px;right:26px;background:var(--teal);color:#fff;padding:16px 22px;border-radius:14px;box-shadow:var(--shadow);z-index:3500;
-  display:flex;align-items:center;gap:12px;transform:translateY(140%);transition:transform .5s var(--ease);max-width:min(340px, calc(100vw - 52px));font-size:.9rem;}
-.toast.show{transform:translateY(0);}
+  display:flex;align-items:center;gap:12px;transform:translateY(140%);transition:transform .5s var(--ease),opacity .4s ease,visibility 0s linear .5s;max-width:min(340px, calc(100vw - 52px));font-size:.9rem;
+  opacity:0;visibility:hidden;pointer-events:none; /* hidden completely, even when it sits higher up (above the Dpen button / admin bar) */}
+.toast.show{transform:translateY(0);opacity:1;visibility:visible;pointer-events:auto;transition:transform .5s var(--ease),opacity .2s ease,visibility 0s;}
 .toast.err{background:#8f2b23;}
+.comment-edit textarea{width:100%;border:1px solid rgba(180,135,74,.4);border-radius:12px;padding:10px 12px;font:inherit;font-size:.9rem;resize:vertical;margin-top:6px;background:#fff;color:var(--charcoal);}
+.comment-edit-btns{display:flex;gap:8px;margin-top:8px;}
+.comment-edit-btns .gold-btn,.comment-edit-btns .ghost-btn{padding:8px 18px;font-size:.82rem;}
 
 /* footer */
 footer{background:linear-gradient(170deg,var(--teal),#0c0a07),var(--noise);background-blend-mode:normal,overlay;background-size:auto,150px;color:#eef4f2;padding:64px 0 26px;}
@@ -357,6 +361,9 @@ footer a:hover{opacity:1;color:var(--gold-light);}
 .comment small{color:var(--charcoal-soft);font-size:.72rem;}
 .comment p{margin:4px 0 0;font-size:.88rem;color:var(--charcoal-soft);}
 .comment .del{color:#c0392b;font-size:.72rem;font-weight:600;margin-left:auto;}
+.comment .comment-acts{margin-left:auto;display:inline-flex;gap:6px;}
+.comment .comment-acts .del{margin-left:0;}
+.comment .comment-acts .del.edit{color:var(--gold-deep);}
 
 /* badges / admin edit */
 .edit-toolbar{position:fixed;bottom:0;left:0;right:0;background:var(--teal);color:#fff;padding:12px 20px;z-index:900;display:flex;gap:14px;align-items:center;justify-content:center;box-shadow:0 -10px 30px rgba(0,0,0,.25);flex-wrap:wrap;}
@@ -1938,6 +1945,12 @@ async function ensureCommentsLikesLoaded(force){
 }
 /* One post's page: reads only that post's comments, likes and view count (not every post's).
    Skipped when the full list is already loaded; force = read again after adding/removing a comment. */
+/* the visitor's own comment being edited: {id, text} (text = what they have typed so far) */
+let __editingComment = {id:"", text:""};
+document.addEventListener("input", (e)=>{
+  const ta = e.target.closest && e.target.closest("textarea[data-comment-edit]");
+  if(ta && ta.dataset.commentEdit === __editingComment.id) __editingComment.text = ta.value;
+});
 const __postSocialLoaded = new Set();
 let __allSocialLoaded = false;   // the full list (news page) loaded successfully
 async function ensurePostSocialLoaded(id, force){
@@ -3209,14 +3222,23 @@ function pageNewsDetail(key){
       </div>
       <div style="max-width:800px;margin:0 auto 60px;">
         <h3 style="margin-bottom:18px;">Comments (${comments.length})</h3>
-        ${comments.map(c=>`
+        ${comments.map(c=>{
+          const mine = !!(SESSION && c.uid && c.uid === SESSION.uid);
+          const editing = mine && __editingComment.id === c.id;
+          return `
           <div class="comment">
             <div class="av">${initials(c.name)}</div>
             <div style="flex:1;">
-              <div style="display:flex;align-items:center;gap:8px;"><b>${esc(c.name)}</b><small>${fmtDate(c.date)}</small>${isAdmin()?`<button class="del" data-action="del-comment" data-cid="${esc(c.id)}">Delete</button>`:''}</div>
-              <p>${esc(c.text)}</p>
+              <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;"><b>${esc(c.name)}</b><small>${fmtDate(c.date)}${c.editedAt?' · (edited)':''}</small>${((mine || isAdmin()) && !editing)?`<span class="comment-acts">${mine?`<button type="button" class="del edit" data-action="edit-comment" data-cid="${esc(c.id)}">Edit</button>`:''}<button type="button" class="del" data-action="del-comment" data-cid="${esc(c.id)}">Delete</button></span>`:''}</div>
+              ${editing ? `<div class="comment-edit">
+                <textarea data-comment-edit="${esc(c.id)}" rows="3" maxlength="5000" aria-label="Edit your comment">${esc(__editingComment.text)}</textarea>
+                <div class="comment-edit-btns">
+                  <button type="button" class="gold-btn" data-action="save-comment-edit" data-cid="${esc(c.id)}" data-nid="${esc(n.id)}"><span>Save</span></button>
+                  <button type="button" class="ghost-btn" data-action="cancel-comment-edit">Cancel</button>
+                </div>
+              </div>` : `<p>${esc(c.text)}</p>`}
             </div>
-          </div>`).join('') || `<p style="color:var(--charcoal-soft);font-size:.9rem;">No comments yet — be the first to share your thoughts.</p>`}
+          </div>`;}).join('') || `<p style="color:var(--charcoal-soft);font-size:.9rem;">No comments yet — be the first to share your thoughts.</p>`}
         <form data-form="comment" data-nid="${esc(n.id)}" style="margin-top:22px;">
           ${(!u || u.isAnonymous)?`<div class="field"><label>Your Name</label><input name="guestName" placeholder="e.g. Sita Sharma" required></div>`:''}
           <div class="field"><textarea name="text" rows="3" placeholder="Write a comment..." required></textarea></div>
@@ -3572,7 +3594,8 @@ function navigate(href, opts){
     if(u.origin !== location.origin){ location.href = u.href; return; }
     target = (u.hash.startsWith("#/") && u.pathname==="/") ? legacyHashToPath(u.hash) : (u.pathname + u.search);
   }
-  if(target === location.pathname + location.search && !location.hash) return;
+  /* a link to the page already open (e.g. the logo or "Home" while on Home): go back to the top */
+  if(target === location.pathname + location.search && !location.hash){ window.scrollTo({top:0, behavior:"smooth"}); return; }
   collectEdits();
   if(!opts.replace){ try{ history.replaceState(Object.assign({}, history.state, {scrollY: window.scrollY}), ""); }catch(e){} }
   if(opts.replace) history.replaceState(null, "", target);
@@ -4619,6 +4642,38 @@ document.addEventListener("click", async (e)=>{
   if(action==="del-appt"){
     try{ await deleteDoc(doc(fsdb,"appointments",el.dataset.id)); showToast("Appointment removed."); ensureAppointmentsLoaded(true); }
     catch(e){ showToast("Could not delete — check Firestore rules.", true); }
+    return;
+  }
+  if(action==="edit-comment"){
+    const c = Object.values(NEWS_COMMENTS).flat().find(x=> x && x.id===el.dataset.cid);
+    if(!c || !SESSION || c.uid !== SESSION.uid) return;
+    __editingComment = {id:c.id, text:c.text||""};
+    render();
+    const ta = document.querySelector(`textarea[data-comment-edit="${CSS.escape(c.id)}"]`);
+    if(ta){ ta.focus(); ta.setSelectionRange(ta.value.length, ta.value.length); }
+    return;
+  }
+  if(action==="cancel-comment-edit"){ __editingComment = {id:"", text:""}; render(); return; }
+  if(action==="save-comment-edit"){
+    if(el.disabled) return;
+    const cid = el.dataset.cid, nid = el.dataset.nid;
+    const ta = document.querySelector(`textarea[data-comment-edit="${CSS.escape(cid)}"]`);
+    const text = (ta ? ta.value : __editingComment.text).trim();
+    if(!text){ showToast("The comment cannot be empty. Use Delete to remove it.", true); return; }
+    if(text.length > 5000){ showToast("The comment is too long (5000 characters at most).", true); return; }
+    el.disabled = true;
+    try{
+      const editedAt = new Date().toISOString();
+      await updateDoc(doc(fsdb,"comments",cid), {text, editedAt});
+      const c = (NEWS_COMMENTS[nid]||[]).find(x=> x.id===cid);
+      if(c){ c.text = text; c.editedAt = editedAt; }
+      __editingComment = {id:"", text:""};
+      showToast("Comment updated.");
+      render();
+    }catch(e){
+      el.disabled = false;
+      showToast("Could not update the comment — check your connection and try again.", true);
+    }
     return;
   }
   if(action==="del-comment"){
