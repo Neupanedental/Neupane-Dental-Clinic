@@ -709,6 +709,15 @@ img.fimg{object-position:var(--fx,50%) var(--fy,50%);transform:scale(var(--fz,1)
   .modal-box.ie-box{padding:20px 14px;}
   .img-stats{grid-template-columns:1fr;}
 }
+
+/* ================= NAYA (Phase 0): Data backup panel ================= */
+.backup-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.backup-card{background:#fff;border:1px solid rgba(180,135,74,.25);border-radius:14px;padding:16px;display:flex;flex-direction:column;gap:8px;align-items:flex-start;}
+.backup-card b{color:var(--charcoal);font-size:.95rem;}
+.backup-card em{font-style:normal;color:#b93b26;font-size:.8rem;}
+.backup-card span{font-size:.8rem;color:var(--charcoal-soft);line-height:1.5;flex:1;}
+.backup-card.private{border-color:rgba(185,59,38,.3);}
+@media(max-width:640px){.backup-grid{grid-template-columns:1fr;}}
 </style>
 </head>
 <body>
@@ -1460,6 +1469,124 @@ async function migrateOldImages(){
   else if(ok) showToast(`${done.size} sariyo, ${fail} sarna sakiyena — feri try garnus.`, true);
   else if(!__pdbToastShown) showToast("Save hun sakena — internet ra admin login check garera feri try garnus.", true);
 }
+/* ===================== NAYA (Phase 0): Data backup download (admin matra) =====================
+   1) Website content: sitedata ka sabai doc + website ma prayog bhayeka sabai photo (images/<id>).
+   2) Patient data: appointment, review, comment, like, view, Dpen chat, user profile — chhuttai file,
+      kinaki yasma patient ko naam/phone/email chha. Yo file kasai lai pathaune hoina. */
+let __backupBusy = false;
+function backupStamp(){
+  const d = new Date(), p = n=> String(n).padStart(2,"0");
+  return `${d.getFullYear()}-${p(d.getMonth()+1)}-${p(d.getDate())}_${p(d.getHours())}${p(d.getMinutes())}`;
+}
+function backupDownload(obj, name){
+  const blob = new Blob([JSON.stringify(obj, null, 1)], {type:"application/json"});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url; a.download = name;
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(()=> URL.revokeObjectURL(url), 4000);
+  return blob.size;
+}
+function backupStatus(t){ const el = document.getElementById("backupStatus"); if(el) el.textContent = t; }
+function backupPlain(v){
+  /* Firestore Timestamp jasta object lai JSON ma padhna milne banaune */
+  if(v && typeof v.toDate === "function"){ try{ return {__ts: v.toDate().toISOString()}; }catch(e){ return null; } }
+  if(Array.isArray(v)) return v.map(backupPlain);
+  if(v && typeof v === "object"){ const o = {}; for(const k in v) o[k] = backupPlain(v[k]); return o; }
+  return v;
+}
+async function backupCollection(name, out, errors){
+  try{
+    const snap = await getDocs(collection(fsdb, name));
+    out[name] = {};
+    snap.docs.forEach(d=>{ out[name][d.id] = backupPlain(d.data()); });
+    return snap.size;
+  }catch(e){ errors.push(name+": "+((e && (e.code||e.message))||"error")); return 0; }
+}
+async function backupSiteContent(){
+  if(__backupBusy) return;
+  const u = fbAuth.currentUser;
+  if(!u || u.uid !== ADMIN_UID){ showToast("Backup admin login bhayeko bela matra milchha.", true); return; }
+  __backupBusy = true;
+  const errors = [], out = {};
+  try{
+    backupStatus("Website ko data padhdai…");
+    const n = await backupCollection("sitedata", out, errors);
+    if(!n){ throw new Error("sitedata padhna sakiyena"); }
+    /* website ma prayog bhayeka sabai photo ko id (data bhitra "/img/<id>" + photo list) */
+    const ids = new Set();
+    JSON.stringify(out.sitedata).replace(/\/img\/([A-Za-z0-9_-]{6,64})/g, (all, id)=>{ ids.add(id); return all; });
+    Object.keys(DB.siteInfo.imgMeta||{}).forEach(k=>{ const m = DB.siteInfo.imgMeta[k]; if(m && m.s) ids.add(k); });
+    out.images = {};
+    let i = 0, missing = 0;
+    for(const id of ids){
+      i++; backupStatus(`Photo ${i}/${ids.size} padhdai…`);
+      try{
+        const s = await getDoc(doc(fsdb, "images", id));
+        if(s.exists()) out.images[id] = s.data(); else missing++;
+      }catch(e){ errors.push("images/"+id+": "+((e && (e.code||e.message))||"error")); }
+    }
+    const file = {
+      kind: "ndc-site-backup", version: 1, createdAt: new Date().toISOString(), site: location.host,
+      counts: { sitedata: Object.keys(out.sitedata).length, images: Object.keys(out.images).length, imagesMissing: missing },
+      errors, sitedata: out.sitedata, images: out.images
+    };
+    const size = backupDownload(file, `ndc-website-backup_${backupStamp()}.json`);
+    backupStatus(`Download bhayo ✓ — ${file.counts.sitedata} data doc, ${file.counts.images} photo, ${(size/1048576).toFixed(1)} MB`);
+    showToast(errors.length ? `Backup bhayo, tara ${errors.length} wota kura padhna sakiyena (file bhitra "errors" hernus).` : "Website backup download bhayo ✓", !!errors.length);
+  }catch(e){
+    console.error("site backup failed", e);
+    backupStatus("");
+    showToast("Backup hun sakena — internet ra admin login check garera feri try garnus.", true);
+  }finally{ __backupBusy = false; }
+}
+async function backupPatientData(){
+  if(__backupBusy) return;
+  const u = fbAuth.currentUser;
+  if(!u || u.uid !== ADMIN_UID){ showToast("Backup admin login bhayeko bela matra milchha.", true); return; }
+  const yes = await confirmModal("Patient data download?", "Yo file ma patient ko naam, phone, email ra appointment chha. Aafno computer ma surakshit rakhnus — kasai lai napathaunus.", {danger:false, confirmText:"Download garnus"});
+  if(!yes) return;
+  __backupBusy = true;
+  const errors = [], out = {};
+  try{
+    const cols = ["appointments","patientVoices","comments","likes","views","chatLogs","users"];
+    for(const c of cols){ backupStatus(`${c} padhdai…`); await backupCollection(c, out, errors); }
+    const counts = {}; cols.forEach(c=> counts[c] = out[c] ? Object.keys(out[c]).length : 0);
+    const file = { kind: "ndc-patient-backup", version: 1, createdAt: new Date().toISOString(), site: location.host, counts, errors, data: out };
+    backupDownload(file, `ndc-PATIENT-DATA-private_${backupStamp()}.json`);
+    backupStatus(`Patient data download bhayo ✓ — ${counts.appointments} appointment, ${counts.users} user`);
+    showToast(errors.length ? `Backup bhayo, tara ${errors.length} wota kura padhna sakiyena.` : "Patient data download bhayo ✓", !!errors.length);
+  }catch(e){
+    console.error("patient backup failed", e);
+    backupStatus("");
+    showToast("Backup hun sakena — feri try garnus.", true);
+  }finally{ __backupBusy = false; }
+}
+function backupAdminSection(){
+  return `
+  <section class="alt-bg" id="backupAdmin">
+    <div class="wrap">
+      <div class="card-panel">
+        <h3 style="margin-bottom:6px;">Data Backup</h3>
+        <p class="form-note" style="margin:0 0 14px;">Website ko data aafno computer ma download garera rakhnus. Thulo change garnu aghi ra mahina ko ek choti download garnu ramro.</p>
+        <div class="backup-grid">
+          <div class="backup-card">
+            <b>1. Website content</b>
+            <span>Text, price, service, news, team, review, setting, SEO ra sabai photo.</span>
+            <button type="button" class="gold-btn" data-action="backup-site"><span>Website backup download</span></button>
+          </div>
+          <div class="backup-card private">
+            <b>2. Patient data <em>(private)</em></b>
+            <span>Appointment, patient review, comment, like, Dpen chat ra user profile. Yo file kasai lai napathaunus.</span>
+            <button type="button" class="ghost-btn" data-action="backup-patient">Patient data download</button>
+          </div>
+        </div>
+        <p id="backupStatus" class="form-note" style="margin:12px 0 0;"></p>
+      </div>
+    </div>
+  </section>`;
+}
+
 function imgAdminSection(){
   const refs = allImageRefs();
   const uniq = (f)=> new Set(refs.filter(f).map(r=> r.val)).size;
@@ -2927,6 +3054,7 @@ function pageAdmin(){
       </div>
     </div>
   </section>
+  ${backupAdminSection()}
   ${imgAdminSection()}
   ${dpenAdminSection()}
   <section class="alt-bg">
@@ -3797,6 +3925,8 @@ document.addEventListener("click", async (e)=>{
   if(action==="edit-img"){ pickAndSetImage(el.dataset.path); return; }
   if(action==="adjust-img"){ adjustImage(el.dataset.path); return; }
   if(action==="img-migrate"){ migrateOldImages(); return; }
+  if(action==="backup-site"){ backupSiteContent(); return; }
+  if(action==="backup-patient"){ backupPatientData(); return; }
   /* ===================== ADDED: drag-drop section builder actions ===================== */
   if(action==="open-block-library"){ openBlockLibrary(el.dataset.after||""); return; }
   if(action==="close-block-library"){ closeBlockLibrary(); return; }
