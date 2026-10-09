@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Neupane Dental Clinic</title>
 <meta name="description" content="Neupane Dental Clinic offers modern, affordable dental care in Tilottama-03, Divertole, Rupandehi, Nepal.">
-<meta name="keywords" content="dental clinic nepal, dentist rupandehi, best dental care , best dental near me, best dental in butwal , dental near me , affortable dental care , high quality dental care , best price , neupane dental , dat banaune thau , rct treatment , extraction , surgical extraction , dental treatment price in nepal ,dental clinic tilottama">
+<meta name="keywords" content="dental clinic nepal, dentist rupandehi, best dental care , best dental near me, best dental in butwal , dental near me , affordable dental care , high quality dental care , best price , neupane dental , dat banaune thau , rct treatment , extraction , surgical extraction , dental treatment price in nepal ,dental clinic tilottama">
 <meta name="robots" content="index, follow">
 <meta name="author" content="Neupane Dental Clinic">
 <link id="siteFavicon" rel="icon" href="/favicon.ico" sizes="any">
@@ -28,7 +28,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,500&family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4.4.1/dist/email.min.js" integrity="sha384-SALc35EccAf6RzGw4iNsyj7kTPr33K7RoGzYu+7heZhT8s0GZouafRiCg1qy44AS" crossorigin="anonymous"></script>
 <style>
 :root{
   /* -- Home Studio inspired: matte noir, brass hardware, warm linen -- luxury-with-grain palette -- */
@@ -49,6 +49,7 @@
 }
 *{box-sizing:border-box;}
 html{scroll-behavior:smooth;overflow-x:hidden;width:100%;}
+@supports (overflow-x:clip){ html{overflow-x:clip;} }
 body{
   margin:0;
   background:var(--cream);
@@ -57,6 +58,7 @@ body{
   -webkit-font-smoothing:antialiased;
   overflow-x:hidden;
 }
+@supports (overflow-x:clip){ body{overflow-x:clip;} }
 h1,h2,h3,h4,.display{
   font-family:'Cormorant Garamond',serif;
   font-weight:600;
@@ -107,11 +109,12 @@ button{font-family:inherit;cursor:pointer;}
 }
 #siteHeader.scrolled{box-shadow:0 8px 30px -18px rgba(0,0,0,.25);}
 #siteHeader.nav-hidden{transform:translateY(-100%);}
+body.nav-is-hidden .sec-toolbar{top:6px;}
 .headbar{display:flex;align-items:center;justify-content:space-between;padding:12px 28px;max-width:1300px;margin:0 auto;gap:18px;}
 .brand{display:flex;align-items:center;gap:12px;}
 .brand img{height:46px;width:46px;object-fit:contain;}
 .brand .name{font-family:'Cormorant Garamond',serif;font-weight:700;font-size:1.28rem;letter-spacing:.04em;color:var(--teal);line-height:1;}
-.brand .name small{display:block;font-family:'Jost',sans-serif;font-size:.56rem;letter-spacing:.32em;color:var(--gold-deep);font-weight:600;margin-top:3px;}
+.brand .name small{display:block;font-family:'Manrope',sans-serif;font-size:.56rem;letter-spacing:.32em;color:var(--gold-deep);font-weight:600;margin-top:3px;}
 nav.mainnav{display:flex;gap:6px;align-items:center;flex-wrap:wrap;}
 nav.mainnav a{padding:9px 14px;border-radius:999px;font-size:.88rem;font-weight:500;color:var(--charcoal-soft);transition:all .25s;position:relative;}
 nav.mainnav a:hover,nav.mainnav a.active{background:var(--teal);color:#fff;}
@@ -138,10 +141,11 @@ nav.mainnav a:hover,nav.mainnav a.active{background:var(--teal);color:#fff;}
   display:none;position:fixed;top:0;right:0;bottom:0;z-index:960;
   width:320px;max-width:85vw;background:#111111;color:#ffffff;
   flex-direction:column;
-  transform:translateX(100%);transition:transform .3s ease;
+  transform:translateX(100%);transition:transform .3s ease,visibility 0s linear .3s;
   box-shadow:-20px 0 60px rgba(0,0,0,.5);
+  visibility:hidden; /* closed: no shadow at the screen edge, and its links are skipped by Tab / screen readers */
 }
-.mobile-drawer.open{transform:translateX(0);}
+.mobile-drawer.open{transform:translateX(0);visibility:visible;transition:transform .3s ease,visibility 0s;}
 @media(max-width:1024px){
   .mobile-drawer{display:flex;}
 }
@@ -227,6 +231,11 @@ nav.mainnav a:hover,nav.mainnav a.active{background:var(--teal);color:#fff;}
 @keyframes floaty{0%,100%{transform:translateY(0) rotateX(6deg) rotateY(-8deg);}50%{transform:translateY(-18px) rotateX(-4deg) rotateY(8deg);}}
 @keyframes sweep{0%{opacity:0;transform:translateX(-40%);}45%{opacity:1;}100%{opacity:0;transform:translateX(60%);}}
 @media(prefers-reduced-motion:reduce){.medallion,.medallion .ring,.medallion .shine{animation:none!important;}}
+/* very small phones (≤380px): the medallion shrinks to fit instead of being cut off at the right edge */
+@media(max-width:380px){
+  .medallion{width:min(300px, calc(100vw - 56px));height:min(300px, calc(100vw - 56px));}
+  .medallion-stage{height:min(440px, calc(100vw + 80px));}
+}
 
 /* ---------- section basics ---------- */
 section{padding:86px 0;}
@@ -300,8 +309,8 @@ section{padding:86px 0;}
 .form-row-2{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
 @media(max-width:640px){.form-row-2{grid-template-columns:1fr;}}
 .form-note{font-size:.8rem;color:var(--charcoal-soft);margin-top:10px;}
-.toast{position:fixed;bottom:26px;right:26px;background:var(--teal);color:#fff;padding:16px 22px;border-radius:14px;box-shadow:var(--shadow);z-index:2000;
-  display:flex;align-items:center;gap:12px;transform:translateY(140%);transition:transform .5s var(--ease);max-width:340px;font-size:.9rem;}
+.toast{position:fixed;bottom:26px;right:26px;background:var(--teal);color:#fff;padding:16px 22px;border-radius:14px;box-shadow:var(--shadow);z-index:3500;
+  display:flex;align-items:center;gap:12px;transform:translateY(140%);transition:transform .5s var(--ease);max-width:min(340px, calc(100vw - 52px));font-size:.9rem;}
 .toast.show{transform:translateY(0);}
 .toast.err{background:#8f2b23;}
 
@@ -490,10 +499,13 @@ body.admin-edit-mode .admin-section{display:block;position:relative;}
 body.admin-edit-mode .admin-section.dragging{opacity:.35;}
 body.admin-edit-mode .admin-section.drag-over-top{box-shadow:inset 0 4px 0 0 var(--gold);}
 body.admin-edit-mode .admin-section.drag-over-bottom{box-shadow:inset 0 -4px 0 0 var(--gold);}
-.sec-toolbar{position:sticky;top:6px;z-index:80;display:flex;gap:8px;align-items:center;justify-content:center;width:max-content;margin:0 auto;background:rgba(26,22,17,.92);padding:6px 8px 6px 4px;border-radius:999px;backdrop-filter:blur(6px);box-shadow:0 8px 22px -10px rgba(0,0,0,.55);}
+.sec-toolbar{position:sticky;top:84px;transition:top .5s cubic-bezier(.22,1,.36,1);z-index:80;display:flex;gap:8px;align-items:center;justify-content:center;width:max-content;margin:0 auto;background:rgba(26,22,17,.92);padding:6px 8px 6px 4px;border-radius:999px;backdrop-filter:blur(6px);box-shadow:0 8px 22px -10px rgba(0,0,0,.55);}
 .sec-toolbar .admin-mini-btn{background:#fff;}
 .sec-drag{cursor:grab;color:var(--gold-light);font-size:1.05rem;line-height:1;padding:3px 8px;user-select:none;}
 .sec-drag:active{cursor:grabbing;}
+/* phones/tablets cannot drag: ▲ ▼ buttons move a section instead */
+.sec-move{display:none;padding:4px 9px;}
+@media (hover:none), (max-width:900px){ .sec-move{display:inline-flex;} }
 .add-section-bar{display:flex;justify-content:center;padding:34px 0;}
 .add-section-bar .admin-mini-btn{padding:10px 20px;font-size:.8rem;border-radius:999px;}
 
@@ -652,7 +664,7 @@ body.dpen-admin-bar.dpen-on .toast{bottom:168px;}
 .dpen-adm .dpen-pill-ok{font-size:.68rem;font-weight:700;border-radius:999px;padding:3px 8px;background:#e8f6ee;color:#23824f;}
 .dpen-adm .dpen-pill-g{font-size:.68rem;font-weight:700;border-radius:999px;padding:3px 8px;background:var(--ivory);color:var(--gold-deep);}
 
-/* ================= NAYA: photo frame focus/zoom (har thau ko lagi chhuttai) ================= */
+/* ================= Photo frame focus/zoom (separate for each place the photo appears) ================= */
 img.fimg{object-position:var(--fx,50%) var(--fy,50%);transform:scale(var(--fz,1));transform-origin:var(--fx,50%) var(--fy,50%);}
 @media(max-width:640px){
   img.fimg{object-position:var(--mx,var(--fx,50%)) var(--my,var(--fy,50%));transform:scale(var(--mz,var(--fz,1)));transform-origin:var(--mx,var(--fx,50%)) var(--my,var(--fy,50%));}
@@ -710,14 +722,29 @@ img.fimg{object-position:var(--fx,50%) var(--fy,50%);transform:scale(var(--fz,1)
   .img-stats{grid-template-columns:1fr;}
 }
 
-/* ================= NAYA (Phase 0): Data backup panel ================= */
-.backup-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+/* ================= Data backup panel ================= */
+.backup-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px;}
 .backup-card{background:#fff;border:1px solid rgba(180,135,74,.25);border-radius:14px;padding:16px;display:flex;flex-direction:column;gap:8px;align-items:flex-start;}
 .backup-card b{color:var(--charcoal);font-size:.95rem;}
 .backup-card em{font-style:normal;color:#b93b26;font-size:.8rem;}
 .backup-card span{font-size:.8rem;color:var(--charcoal-soft);line-height:1.5;flex:1;}
 .backup-card.private{border-color:rgba(185,59,38,.3);}
 @media(max-width:640px){.backup-grid{grid-template-columns:1fr;}}
+
+/* ================= Grain texture on all pages except Home (Home keeps its own). Neutral grey noise blended
+   with "overlay", so the section colours stay the same and only the texture is added. Any new section gets it. */
+body:not([data-page="home"]) #app section:not(.hero){position:relative;display:flow-root;}
+body:not([data-page="home"]) #app section:not(.hero)::before{
+  content:'';position:absolute;inset:0;pointer-events:none;z-index:0;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='140' height='140'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix type='saturate' values='0'/><feComponentTransfer><feFuncR type='linear' slope='3' intercept='-1.20'/><feFuncG type='linear' slope='3' intercept='-1.20'/><feFuncB type='linear' slope='3' intercept='-1.20'/><feFuncA type='linear' slope='0' intercept='1'/></feComponentTransfer></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+  background-size:150px;mix-blend-mode:overlay;opacity:.6;
+}
+body:not([data-page="home"]) #app section:not(.hero) > *{position:relative;z-index:1;}
+/* ================= Load error screen (site data could not be read) ================= */
+.load-error{min-height:70vh;display:flex;align-items:center;justify-content:center;padding:40px 16px;}
+.load-error-box{max-width:420px;text-align:center;background:#fff;border-radius:20px;padding:34px 26px;box-shadow:var(--shadow);border:1px solid rgba(180,135,74,.25);}
+.load-error-box h2{margin:12px 0 8px;font-size:1.6rem;}
+.load-error-box p{color:var(--charcoal-soft);margin:0 0 18px;line-height:1.6;}
 </style>
 </head>
 <body>
@@ -739,12 +766,15 @@ window.LOGO = LOGO;
   var simg = document.getElementById("splashLogoImg");
   if(simg) simg.src = LOGO;
   var start = Date.now();
+  /* the full intro only when the visitor lands on the home page; any other page gets a short one */
+  var onHome = (location.pathname || "/") === "/";
+  var minShow = onHome ? 1500 : 300, maxShow = onHome ? 4500 : 2500;
   function dismiss(){
     var el = document.getElementById("introSplash");
     if(!el || el.__dismissed) return;
     el.__dismissed = true;
     var elapsed = Date.now() - start;
-    var wait = Math.max(0, 1500 - elapsed);
+    var wait = Math.max(0, minShow - elapsed);
     setTimeout(function(){
       el.classList.add("hide");
       setTimeout(function(){ if(el && el.parentNode) el.parentNode.removeChild(el); }, 900);
@@ -752,7 +782,7 @@ window.LOGO = LOGO;
   }
   if(document.readyState === "complete"){ dismiss(); }
   else { window.addEventListener("load", dismiss); }
-  setTimeout(dismiss, 4500);
+  setTimeout(dismiss, maxShow);
 })();
 </script>
 <script type="module">
@@ -767,7 +797,7 @@ import {
 import {
   getAuth, onAuthStateChanged, signInWithEmailAndPassword,
   createUserWithEmailAndPassword, signOut, updateProfile, signInAnonymously,
-  GoogleAuthProvider, signInWithPopup, linkWithPopup
+  GoogleAuthProvider, signInWithPopup, linkWithPopup, signInWithCredential
 } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-auth.js";
 
 const firebaseConfig = {
@@ -839,8 +869,8 @@ const DEFAULT_DB = {
     copyrightText:"Neupane Dental Clinic. All rights reserved.",
     adsense:{publisherId:"", autoAds:true, adsTxtContent:""},
     dpen:{enabled:true, deskSide:"right", deskBottom:22, mobSide:"right", mobBottom:16,
-      bubbleEnabled:true, bubbleText:"Namaste! Ma Dpen 👋 Daat ra upachar bare kehi jannu chha bhane sodhnuhos.", bubbleDelay:4,
-      welcome:"Namaste! Ma Dpen, Neupane Dental Clinic ko AI. Daat tatha mukh ko swasthya, hamro upachar, shulka wa appointment sambandhi jun sukai jankari chahiyo, nisankoch sodhnuhos. Ma tapailai sahi jankari dina tayar chhu.",
+      bubbleEnabled:true, bubbleText:"Hi! I'm Dpen 👋 Ask me anything about your teeth or our treatments.", bubbleDelay:4,
+      welcome:"Hello! I'm Dpen, the AI of Neupane Dental Clinic. Ask me anything about dental and oral health, our treatments, prices or appointments. I'm here to give you accurate information.",
       extraInfo:"", extraRules:"", showBooking:true, showPhone:true, showWhatsapp:true, whatsapp:"", dailyLimit:50},
     privacyContent:"Neupane Dental Clinic (\"we\", \"our\", \"us\") operates the neupanedental.com.np website. This Privacy Policy explains what information we collect when you visit our site, book an appointment, create an account, or interact with our content, and how we use, store and protect it.\n\nInformation We Collect: When you use our Book Appointment form, create an account, post a comment, or submit a review, we collect the details you provide — such as your name, phone number, email address, and message content. We also automatically collect standard technical information (such as browser type and general usage data) to help us improve the site.\n\nHow We Use Your Information: We use the information you provide to respond to appointment requests, contact you about your visit, manage your account, and improve our services. We do not sell your personal information to third parties.\n\nCookies and Advertising: Our website may use cookies and similar technologies, including those from Google AdSense, to display advertisements and measure their performance. Google and its partners may use cookies to serve ads based on a user's prior visits to this or other websites. You can opt out of personalized advertising by visiting Google's Ads Settings. Third-party vendors, including Google, use cookies to serve ads based on someone's prior visits to our website.\n\nData Security: We take reasonable measures to protect the information you share with us, but no method of transmission over the internet is 100% secure.\n\nYour Rights: You may contact us at any time to ask what information we hold about you, request corrections, or request deletion of your account and associated data.\n\nChanges to this Policy: We may update this Privacy Policy from time to time. Continued use of the site after changes are posted means you accept the revised policy.\n\nContact Us: If you have questions about this Privacy Policy, please contact us using the details in our Contact section.",
     termsContent:"Welcome to the Neupane Dental Clinic website. By accessing or using this website, you agree to be bound by the following Terms & Conditions.\n\nUse of Website: This website is provided for informational purposes about our dental services, pricing, team and clinic news, and to allow visitors to request appointments online. The information on this site does not replace professional medical/dental advice — please consult our dentists directly for diagnosis or treatment decisions.\n\nAppointments: Submitting an appointment request through this website does not guarantee a confirmed slot until our clinic staff contacts you to confirm the date and time.\n\nAccounts: If you create an account to comment, like posts, or leave a patient review, you are responsible for maintaining the confidentiality of your login details and for all activity under your account.\n\nUser Content: Comments, reviews and patient voices submitted through this site should be honest, respectful, and relevant. We reserve the right to moderate, edit or remove any content that violates these standards.\n\nIntellectual Property: All text, images, logos and content on this website are the property of Neupane Dental Clinic unless otherwise credited, and may not be reproduced without permission.\n\nThird-Party Advertising: This site may display advertisements served by Google AdSense or other advertising partners. We are not responsible for the content of third-party advertisements.\n\nLimitation of Liability: Neupane Dental Clinic is not liable for any damages arising from the use of this website or reliance on the information presented here.\n\nChanges to Terms: We may revise these Terms & Conditions at any time. Continued use of the website constitutes acceptance of the current version.\n\nContact Us: For any questions about these Terms & Conditions, please reach out using the contact details provided on this site.",
@@ -972,20 +1002,6 @@ const DEFAULT_DB = {
   ]
 };
 
-/* ===================== STORAGE HELPERS (Firestore-backed) ===================== */
-async function loadJSON(key, shared, fallback){
-  try{
-    const snap = await getDoc(doc(fsdb, "sitedata", key));
-    return snap.exists() ? snap.data().value : fallback;
-  }catch(e){ console.error("loadJSON failed for", key, e); return fallback; }
-}
-async function saveJSON(key, shared, value){
-  try{
-    await setDoc(doc(fsdb, "sitedata", key), {value});
-    return true;
-  }catch(e){ console.error("saveJSON failed for", key, e); return false; }
-}
-
 let DB = JSON.parse(JSON.stringify(DEFAULT_DB));
 // Only the CURRENTLY signed-in real user's own profile is ever loaded/cached —
 // never a list of everyone, to keep other users' name/phone/email private.
@@ -994,30 +1010,42 @@ let APPOINTMENTS = [];           // lazy-loaded, admin-only (each is its own Fir
 let PATIENT_VOICES = [];         // lazy-loaded, admin-only (all reviews, for moderation)
 let MY_VOICES = {uid:null, list:[]}; // lazy-loaded, current user's own submitted reviews
 let MY_APPTS = {uid:null, list:[]};   // lazy-loaded, current user's own appointments (only if booked while signed in)
-let NEWS_COMMENTS = {};          // newsId -> [{id,name,uid,text,date,guest}], lazy-loaded
-let NEWS_LIKES = {};             // newsId -> {count, uids:Set}, lazy-loaded
-let NEWS_VIEWS = {};             // newsId -> count, lazy-loaded (live view counter, separate from the admin-editable base number)
+let NEWS_COMMENTS = Object.create(null);          // newsId -> [{id,name,uid,text,date,guest}], lazy-loaded
+let NEWS_LIKES = Object.create(null);             // newsId -> {count, uids:Set}, lazy-loaded
+let NEWS_VIEWS = Object.create(null);             // newsId -> count, lazy-loaded (live view counter, separate from the admin-editable base number)
 let apptsLoaded = false, allVoicesLoaded = false, commentsLikesLoaded = false;
 let SESSION = null; // {uid, email} — populated from Firebase Auth
 let authReady = false; // true once Firebase has resolved the initial auth state at least once
 let ROUTE = "/";
 let editMode = false;
 let toastTimer = null;
-let __pdbToastShown = false; /* ADDED: prevents a caller's generic fallback toast from instantly overwriting persistDB()'s specific diagnosis */
-
-/* ADDED: if the page loads with a hash that doesn't match any real route (e.g. a stale
-   shared link, or a hosting redirect quirk), land on the home page instead of a dead-end
-   "Page not found" right after the intro animation. In-app navigation to a genuinely broken
-   link later in the session still shows the normal "Page not found" page as before. */
-const KNOWN_ROUTE_KEYS = new Set(["services","service","pricing","about","news","book","privacy","terms","login","signup","dashboard"]);
+let __pdbToastAt = 0; /* when persistDB() showed its own error: the caller's generic toast right after it is skipped */
 
 /* ===================== BOOTSTRAP ===================== */
+/* Shown instead of the site when the website data cannot be read (no internet, Firebase limit, outage).
+   Never falls back to the built-in demo content, and never saves anything. */
+function renderLoadError(){
+  const app = document.getElementById("app");
+  if(!app) return;
+  app.innerHTML = `<div class="load-error"><div class="load-error-box">
+    <img src="/favicon-96.png" alt="" width="56" height="56">
+    <h2>Neupane Dental Clinic</h2>
+    <p>Sorry — the website could not load right now. Please check your internet connection and try again.</p>
+    <button type="button" class="gold-btn" onclick="location.reload()"><span>Try again</span></button>
+  </div></div>`;
+}
+let __pendingMigrationWrite = false;
 async function boot(){
-  redirectLegacyHash(); // purano /#/services jasto link lai /services ma (Phase 3)
+  redirectLegacyHash(); // old /#/services style links → /services
   let merged = null;
   let needsMigrationWrite = false;
-  const coreSnap = await getDoc(doc(fsdb,"sitedata","core")).catch(()=>null);
-  if(coreSnap && coreSnap.exists()){
+  let coreErr = null;
+  merged = await loadSiteFromWorker();   // fast path: the Worker's cached copy
+  const coreSnap = merged ? null : await getDoc(doc(fsdb,"sitedata","core")).catch(e=>{ coreErr = e; return null; });
+  if(coreErr){ console.error("could not read site data", coreErr); renderLoadError(); return; }
+  if(merged){
+    /* loaded from the cached copy */
+  } else if(coreSnap && coreSnap.exists()){
     const core = coreSnap.data().value;
     if(core.itemIndex){
       merged = await loadSplitDB(core); // current per-item format
@@ -1028,12 +1056,15 @@ async function boot(){
   } else {
     // No split structure at all yet — fall back to the very first single "sitedata/sitedata"
     // document (pre-migration real data), or null if this is a genuinely brand-new site.
-    const oldSnap = await getDoc(doc(fsdb,"sitedata","sitedata")).catch(()=>null);
+    let oldErr = null;
+    const oldSnap = await getDoc(doc(fsdb,"sitedata","sitedata")).catch(e=>{ oldErr = e; return null; });
+    if(oldErr){ console.error("could not read site data", oldErr); renderLoadError(); return; }
     merged = (oldSnap && oldSnap.exists()) ? oldSnap.data().value : null;
     needsMigrationWrite = true;
   }
   DB = normalizeDB(merged);
-  if(needsMigrationWrite) await persistDB();
+  /* an older data format is converted and saved once — only when the admin is signed in (visitors cannot save) */
+  __pendingMigrationWrite = needsMigrationWrite;
   // Update static og:image/twitter:image from saved ogImageUrl if set (public URL for social bots)
   const savedOgUrl = DB.siteInfo.seo && DB.siteInfo.seo.ogImageUrl;
   if(savedOgUrl){
@@ -1046,6 +1077,8 @@ async function boot(){
     try{ emailjs.init({publicKey:DB.siteInfo.emailjs.publicKey}); }catch(e){}
   }
   onAuthStateChanged(fbAuth, async (user)=>{
+    if(__pendingMigrationWrite && user && !user.isAnonymous && user.uid === ADMIN_UID){ __pendingMigrationWrite = false; persistDB(); }
+    if(user && !user.isAnonymous && user.uid === ADMIN_UID) ensureAdminFreshData();
     if(user && !user.isAnonymous){
       try{
         const ref = doc(fsdb,"users",user.uid);
@@ -1067,11 +1100,15 @@ async function boot(){
     authReady = true;
     render();
   });
-  /* Phase 3: path routing — browser ko back/forward */
-  window.addEventListener("popstate", ()=>{ ROUTE = location.pathname || "/"; render(); window.scrollTo({top:0,behavior:"smooth"}); });
-  /* Purano "#/..." hash aayo bhane (jastai Firestore ma save bhayeko link) path ma badalne */
+  /* Path routing — browser back/forward */
+  window.addEventListener("popstate", (ev)=>{
+    collectEdits(); ROUTE = location.pathname || "/"; render();
+    const y = ev.state && typeof ev.state.scrollY === "number" ? ev.state.scrollY : 0;
+    requestAnimationFrame(()=> window.scrollTo({top:y, behavior: y ? "instant" : "smooth"}));
+  });
+  /* An old "#/..." hash (e.g. a link saved in Firestore) is converted to a path */
   window.addEventListener("hashchange", ()=>{ if(location.hash.startsWith("#/")) navigate(location.hash, {replace:true}); });
-  /* Site bhitra ka link: page reload nagari navigate() */
+  /* Internal links: navigate() without a page reload */
   document.addEventListener("click", handleInternalLinkClick);
 
   /* ---------- mobile drawer wiring ---------- */
@@ -1095,7 +1132,7 @@ async function boot(){
     if(e.target.id==="seoDescInput"){ seoDraft.description = e.target.value; refreshSeoDescWarn(); refreshSeoPreview(); return; }
     if(e.target.id==="seoKwInput"){ return; }
   });
-  ROUTE = location.pathname || "/"; // unknown route bhaye pageContent() le "Page not found" dekhaucha (Worker le 404 dinchha)
+  ROUTE = location.pathname || "/"; // unknown routes show "Page not found" via pageContent() (the Worker returns 404)
   render();
 }
 function normalizeDB(db){
@@ -1105,16 +1142,25 @@ function normalizeDB(db){
   db.siteInfo.seo = Object.assign({}, DEFAULT_DB.siteInfo.seo, db.siteInfo.seo||{});
   db.siteInfo.adsense = Object.assign({}, DEFAULT_DB.siteInfo.adsense, db.siteInfo.adsense||{});
   db.siteInfo.dpen = Object.assign({}, DEFAULT_DB.siteInfo.dpen, db.siteInfo.dpen||{});
+  /* The first Dpen defaults were in Roman Nepali and got saved with the site data. If they were never
+     customised (exact old text), switch them to the current English defaults. Custom text is kept. */
+  const OLD_DPEN_BUBBLE = "Namaste! Ma Dpen 👋 Daat ra upachar bare kehi jannu chha bhane sodhnuhos.";
+  const OLD_DPEN_WELCOME = "Namaste! Ma Dpen, Neupane Dental Clinic ko AI. Daat tatha mukh ko swasthya, hamro upachar, shulka wa appointment sambandhi jun sukai jankari chahiyo, nisankoch sodhnuhos. Ma tapailai sahi jankari dina tayar chhu.";
+  if(db.siteInfo.dpen.bubbleText === OLD_DPEN_BUBBLE) db.siteInfo.dpen.bubbleText = DEFAULT_DB.siteInfo.dpen.bubbleText;
+  if(db.siteInfo.dpen.welcome === OLD_DPEN_WELCOME) db.siteInfo.dpen.welcome = DEFAULT_DB.siteInfo.dpen.welcome;
   if(!db.siteInfo.privacyContent) db.siteInfo.privacyContent = DEFAULT_DB.siteInfo.privacyContent;
   if(!db.siteInfo.termsContent) db.siteInfo.termsContent = DEFAULT_DB.siteInfo.termsContent;
   db.seoPages = Object.assign({}, DEFAULT_DB.seoPages, db.seoPages||{});
   if(!Array.isArray(db.siteInfo.missionImages) || !db.siteInfo.missionImages.length) db.siteInfo.missionImages = DEFAULT_DB.siteInfo.missionImages.slice();
   if(!Array.isArray(db.siteInfo.galleryImages) || !db.siteInfo.galleryImages.length) db.siteInfo.galleryImages = DEFAULT_DB.siteInfo.galleryImages.slice();
-  db.team = db.team && db.team.length ? db.team : DEFAULT_DB.team;
-  db.services = db.services && db.services.length ? db.services : DEFAULT_DB.services;
-  db.news = db.news && db.news.length ? db.news : DEFAULT_DB.news;
-  db.reviews = db.reviews && db.reviews.length ? db.reviews : DEFAULT_DB.reviews;
-  db.faqsGlobal = db.faqsGlobal && db.faqsGlobal.length ? db.faqsGlobal : DEFAULT_DB.faqsGlobal;
+  ["aboutServicesList","whyChooseUs"].forEach(k=>{
+    if(Array.isArray(db.siteInfo[k])) db.siteInfo[k] = db.siteInfo[k].map(x=> typeof x==="string" ? x.replace(/^(?:\s*[\u2705\u2714]\uFE0F?)+\s*/,"") : x);
+  });
+  db.team = Array.isArray(db.team) ? db.team : JSON.parse(JSON.stringify(DEFAULT_DB.team));
+  db.services = Array.isArray(db.services) ? db.services : JSON.parse(JSON.stringify(DEFAULT_DB.services));
+  db.news = Array.isArray(db.news) ? db.news : JSON.parse(JSON.stringify(DEFAULT_DB.news));
+  db.reviews = Array.isArray(db.reviews) ? db.reviews : JSON.parse(JSON.stringify(DEFAULT_DB.reviews));
+  db.faqsGlobal = Array.isArray(db.faqsGlobal) ? db.faqsGlobal : JSON.parse(JSON.stringify(DEFAULT_DB.faqsGlobal));
   if(db.siteInfo.copyrightText) db.siteInfo.copyrightText = db.siteInfo.copyrightText.replace(/^(©\s*\d{4}\s*)+/,"").trim() || DEFAULT_DB.siteInfo.copyrightText;
   if(!Array.isArray(db.siteInfo.branches)) db.siteInfo.branches = [];
   (db.services||[]).forEach(sv=>{
@@ -1156,7 +1202,11 @@ function splitDBForSave(){
   ensureIds(DB.services, "service");
   ensureIds(DB.news, "news");
   ensureIds(DB.customBlocks, "block");
+  /* for the Worker: URL name (current or earlier) → post id, and post id → current URL name */
+  const newsSlugs = {}, newsSlugOf = {};
+  DB.news.forEach(n=>{ (n.slugHistory||[]).forEach(h=>{ newsSlugs[h] = n.id; }); if(n.slug){ newsSlugs[n.slug] = n.id; newsSlugOf[n.id] = n.slug; } });
   const itemIndex = {
+    newsSlugs, newsSlugOf,
     team: DB.team.map(x=>x.id),
     services: DB.services.map(x=>x.id),
     news: DB.news.map(x=>x.id),
@@ -1174,55 +1224,153 @@ function splitDBForSave(){
   DB.customBlocks.forEach(b=> docs.push({id:"customblock-"+b.id, label:"custom section", value:b}));
   return docs;
 }
-async function loadSplitDB(core){
+/* true when any part of the site data failed to load — saving is then blocked, so a missing item
+   can never be written over or have its photos cleaned up */
+let __loadIncomplete = false;
+function loadFail(e){ __loadIncomplete = true; console.error("site data part failed to load", e); return null; }
+/* ---- Save only what changed ----
+   __savedDocs remembers, for each "sitedata" document, the content Firestore holds (as a key-order-independent
+   string). persistDB() writes only the documents that differ, plus "core" with a new "rev" number.
+   "rev" tells the admin's browser whether the copy it loaded is the newest one. */
+const __savedDocs = new Map();
+let __dataRev = null;          // core.rev of the data this page loaded
+let __dataFromCache = false;   // true when the data came from the Worker's cached copy (/__site.json)
+function stableStr(v){
+  if(v === null || typeof v !== "object") return JSON.stringify(v === undefined ? null : v);
+  if(Array.isArray(v)) return "[" + v.map(stableStr).join(",") + "]";
+  return "{" + Object.keys(v).filter(k=> v[k] !== undefined).sort().map(k=> JSON.stringify(k) + ":" + stableStr(v[k])).join(",") + "}";
+}
+function docSig(id, value){
+  if(id === "core" && value && typeof value === "object"){ const { rev, ...rest } = value; return stableStr(rest); }
+  return stableStr(value);
+}
+/* the "sitedata" document ids that hold the current site (besides "core") */
+function splitDocIds(core){
+  const idx = core.itemIndex || {};
+  const ids = ["missionImages","galleryImages"];
+  SEO_PAGE_KEYS.forEach(k=> ids.push("seo-"+k));
+  (idx.team||[]).forEach(id=> ids.push("team-"+id));
+  (idx.services||[]).forEach(id=> ids.push("service-"+id));
+  (idx.news||[]).forEach(id=> ids.push("news-"+id));
+  (idx.customBlocks||[]).forEach(id=> ids.push("customblock-"+id));
+  return ids;
+}
+/* builds the site data from core + a lookup of the other documents (val(id) → value, or undefined if missing).
+   coreImages: the older combined photo document, used only when the split photo documents do not exist. */
+function assembleSplitDB(core, val, coreImages){
   const idx = core.itemIndex || {team:[],services:[],news:[],customBlocks:[]};
-  const fetchEach = (prefix, ids)=> Promise.all(ids.map(id=> getDoc(doc(fsdb,"sitedata",prefix+id)).catch(()=>null)));
-  const [missionSnap, gallerySnap, seoSnaps, teamSnaps, serviceSnaps, newsSnaps, blockSnaps] = await Promise.all([
-    getDoc(doc(fsdb,"sitedata","missionImages")).catch(()=>null),
-    getDoc(doc(fsdb,"sitedata","galleryImages")).catch(()=>null),
-    fetchEach("seo-", SEO_PAGE_KEYS),
-    fetchEach("team-", idx.team||[]),
-    fetchEach("service-", idx.services||[]),
-    fetchEach("news-", idx.news||[]),
-    fetchEach("customblock-", idx.customBlocks||[])
-  ]);
   let missionImages, galleryImages;
-  if((missionSnap && missionSnap.exists()) || (gallerySnap && gallerySnap.exists())){
-    missionImages = (missionSnap && missionSnap.exists()) ? (missionSnap.data().value.missionImages||[]) : [];
-    galleryImages = (gallerySnap && gallerySnap.exists()) ? (gallerySnap.data().value.galleryImages||[]) : [];
+  const mi = val("missionImages"), gi = val("galleryImages");
+  if(mi !== undefined || gi !== undefined){
+    missionImages = (mi && mi.missionImages) || [];
+    galleryImages = (gi && gi.galleryImages) || [];
   } else {
     // Not split yet — fall back to the older combined "coreImages" document (migrated forward on next save).
-    const coreImagesSnap = await getDoc(doc(fsdb,"sitedata","coreImages")).catch(()=>null);
-    const coreImages = (coreImagesSnap && coreImagesSnap.exists()) ? coreImagesSnap.data().value : {};
-    missionImages = coreImages.missionImages||[];
-    galleryImages = coreImages.galleryImages||[];
+    missionImages = (coreImages && coreImages.missionImages) || [];
+    galleryImages = (coreImages && coreImages.galleryImages) || [];
   }
   let seoPages = {};
-  const anySeoSplit = seoSnaps.some(s=>s&&s.exists());
-  if(anySeoSplit){
-    SEO_PAGE_KEYS.forEach((k,i)=>{ seoPages[k] = (seoSnaps[i]&&seoSnaps[i].exists()) ? seoSnaps[i].data().value : {title:"",description:"",keywords:[],image:""}; });
+  if(SEO_PAGE_KEYS.some(k=> val("seo-"+k) !== undefined)){
+    SEO_PAGE_KEYS.forEach(k=>{ const v = val("seo-"+k); seoPages[k] = v !== undefined ? v : {title:"",description:"",keywords:[],image:""}; });
   } else {
     // Not split yet — fall back to seoPages still embedded in "core" (migrated forward on next save).
     seoPages = core.seoPages || {};
   }
+  const items = (prefix, ids)=> (ids||[]).map(id=> val(prefix+id)).filter(v=> v !== undefined);
   return {
     siteInfo: Object.assign({}, core.siteInfo, { missionImages, galleryImages }),
     seoPages, reviews: core.reviews, faqsGlobal: core.faqsGlobal,
-    team: teamSnaps.filter(s=>s&&s.exists()).map(s=>s.data().value),
-    services: serviceSnaps.filter(s=>s&&s.exists()).map(s=>s.data().value),
-    news: newsSnaps.filter(s=>s&&s.exists()).map(s=>s.data().value),
-    customBlocks: blockSnaps.filter(s=>s&&s.exists()).map(s=>s.data().value)
+    team: items("team-", idx.team),
+    services: items("service-", idx.services),
+    news: items("news-", idx.news),
+    customBlocks: items("customblock-", idx.customBlocks)
   };
+}
+function rememberLoadedDocs(core, got){
+  __savedDocs.clear();
+  __savedDocs.set("core", docSig("core", core));
+  got.forEach((v, id)=> __savedDocs.set(id, docSig(id, v)));
+  __dataRev = (core && core.rev != null) ? core.rev : null;
+}
+async function loadSplitDB(core){
+  const ids = splitDocIds(core);
+  const snaps = await Promise.all(ids.map(id=> getDoc(doc(fsdb,"sitedata",id)).catch(loadFail)));
+  const got = new Map();
+  snaps.forEach((s,i)=>{ if(s && s.exists()) got.set(ids[i], s.data().value); });
+  let coreImages = null;
+  if(!got.has("missionImages") && !got.has("galleryImages")){
+    const coreImagesSnap = await getDoc(doc(fsdb,"sitedata","coreImages")).catch(loadFail);
+    coreImages = (coreImagesSnap && coreImagesSnap.exists()) ? coreImagesSnap.data().value : {};
+  }
+  rememberLoadedDocs(core, got);
+  return assembleSplitDB(core, id=> got.get(id), coreImages);
+}
+/* The Worker's cached copy of all site documents (one request instead of ~40 Firestore reads).
+   Returns null when it is not available (no Worker, old data format, timeout) — the caller then reads Firestore. */
+async function loadSiteFromWorker(){
+  try{
+    const ctrl = new AbortController();
+    const timer = setTimeout(()=> ctrl.abort(), 7000);
+    let j;
+    try{
+      const r = await fetch("/__site.json", {signal: ctrl.signal, headers:{"Accept":"application/json"}});
+      if(!r.ok || !/json/i.test(r.headers.get("Content-Type")||"")) return null;
+      j = await r.json();
+    }finally{ clearTimeout(timer); }
+    if(!j || j.v !== 1 || !j.docs || typeof j.docs !== "object" || Array.isArray(j.docs)) return null;
+    const core = j.docs.core;
+    if(!core || typeof core !== "object" || !core.itemIndex) return null;
+    const has = (id)=> Object.prototype.hasOwnProperty.call(j.docs, id);
+    if(!has("missionImages") && !has("galleryImages")) return null;
+    const got = new Map();
+    splitDocIds(core).forEach(id=>{ if(has(id)) got.set(id, j.docs[id]); });
+    rememberLoadedDocs(core, got);
+    __dataFromCache = true;
+    return assembleSplitDB(core, id=> got.get(id), null);
+  }catch(e){
+    console.warn("cached site data unavailable — reading Firestore", e && (e.name || e.message));
+    return null;
+  }
+}
+/* Admin only: the cached copy can be a few seconds old right after a Save. Before the admin edits anything,
+   check "core.rev" in Firestore; if it is newer, read everything again from Firestore. */
+let __adminFreshPromise = null;
+let __adminDataReloaded = false;   // the check found newer data and loaded it
+function ensureAdminFreshData(){
+  if(!__dataFromCache) return Promise.resolve(true);
+  if(__adminFreshPromise) return __adminFreshPromise;
+  __adminFreshPromise = (async ()=>{
+    try{
+      const snap = await getDoc(doc(fsdb,"sitedata","core"));
+      if(!snap.exists()) return false;
+      const core = snap.data().value || {};
+      const same = (core.rev == null ? null : core.rev) === __dataRev && docSig("core", core) === __savedDocs.get("core");
+      if(!same){
+        const merged = core.itemIndex ? await loadSplitDB(core) : null;
+        if(!merged){ __loadIncomplete = true; return false; }
+        DB = normalizeDB(merged);
+        __adminDataReloaded = true;
+        render();
+      }
+      __dataFromCache = false;
+      return true;
+    }catch(e){
+      console.error("admin data check failed", e);
+      __adminFreshPromise = null;
+      return false;
+    }
+  })();
+  return __adminFreshPromise;
 }
 /* Reads the PREVIOUS split format (one whole-array document per section — "team","services","news",
    "customBlocks") so existing sites migrate forward automatically the first time this loads. */
 async function loadLegacySplitDB(core){
   const [teamSnap, servicesSnap, newsSnap, blocksSnap, coreImagesSnap] = await Promise.all([
-    getDoc(doc(fsdb,"sitedata","team")).catch(()=>null),
-    getDoc(doc(fsdb,"sitedata","services")).catch(()=>null),
-    getDoc(doc(fsdb,"sitedata","news")).catch(()=>null),
-    getDoc(doc(fsdb,"sitedata","customBlocks")).catch(()=>null),
-    getDoc(doc(fsdb,"sitedata","coreImages")).catch(()=>null)
+    getDoc(doc(fsdb,"sitedata","team")).catch(loadFail),
+    getDoc(doc(fsdb,"sitedata","services")).catch(loadFail),
+    getDoc(doc(fsdb,"sitedata","news")).catch(loadFail),
+    getDoc(doc(fsdb,"sitedata","customBlocks")).catch(loadFail),
+    getDoc(doc(fsdb,"sitedata","coreImages")).catch(loadFail)
   ]);
   const coreImages = (coreImagesSnap && coreImagesSnap.exists()) ? coreImagesSnap.data().value : {};
   return {
@@ -1238,9 +1386,53 @@ async function loadLegacySplitDB(core){
   };
 }
 async function persistDB(){
-  const docs = splitDBForSave();
-  let allOk = true, firstErrorMsg = "";
+  if(__loadIncomplete){
+    showToast("Some website content did not load, so saving is paused to protect your data. Please reload the page and try again.", true);
+    __pdbToastAt = Date.now();
+    return false;
+  }
+  /* admin's page loaded the cached copy: make sure it is the newest data before writing anything */
+  const checkWasPending = __dataFromCache;
+  if(!(await ensureAdminFreshData()) || __loadIncomplete){
+    showToast("Could not check the latest website data, so nothing was saved. Please check your internet and try again.", true);
+    __pdbToastAt = Date.now();
+    return false;
+  }
+  if(checkWasPending && __adminDataReloaded){
+    /* the page was showing an older copy: it now shows the newest data, so the change must be made again */
+    showToast("The website had newer data. The page now shows it — please make your change again and save.", true);
+    __pdbToastAt = Date.now();
+    return false;
+  }
+  /* another tab or device may have saved since this page loaded: never write over newer data */
+  if(__savedDocs.has("core")){
+    let live = null;
+    try{ const sn = await getDoc(doc(fsdb,"sitedata","core")); live = sn.exists() ? (sn.data().value || {}) : null; }
+    catch(e){
+      showToast("Could not check the latest website data, so nothing was saved. Please check your internet and try again.", true);
+      __pdbToastAt = Date.now();
+      return false;
+    }
+    if(live && ((live.rev == null ? null : live.rev) !== __dataRev || docSig("core", live) !== __savedDocs.get("core"))){
+      showToast("The website was changed from another tab or device. Nothing was saved — please reload the page, then make your change again.", true);
+      __pdbToastAt = Date.now();
+      return false;
+    }
+  }
+  const allDocs = splitDBForSave();
+  /* write only the documents that changed; "core" (with a new rev) goes last, after the items */
+  const changed = allDocs.filter(d=> d.id !== "core" && __savedDocs.get(d.id) !== docSig(d.id, d.value));
+  const coreDoc = allDocs.find(d=> d.id === "core");
+  if(!changed.length && __savedDocs.get("core") === docSig("core", coreDoc.value)){
+    __unsavedEdits = false;
+    return true;   // nothing changed
+  }
+  coreDoc.value.rev = Date.now();
+  const docs = changed.concat([coreDoc]);
+  let allOk = true, firstErrorMsg = "", wroteAny = false;
   for(const {id, label, value} of docs){
+    /* if any item failed, "core" is not written: it would list an item that was never saved */
+    if(id === "core" && !allOk) continue;
     try{
       const approxBytes = new Blob([JSON.stringify(value)]).size;
       if(approxBytes > 900000){
@@ -1251,6 +1443,9 @@ async function persistDB(){
     }catch(e){ /* size check itself failing shouldn't block the save attempt */ }
     try{
       await setDoc(doc(fsdb, "sitedata", id), {value});
+      __savedDocs.set(id, docSig(id, value));
+      wroteAny = true;
+      if(id === "core") __dataRev = value.rev;
     }catch(e){
       console.error("persistDB failed for", id, e);
       allOk = false;
@@ -1267,13 +1462,15 @@ async function persistDB(){
   }
   if(!allOk){
     showToast(firstErrorMsg || "Could not save — check your connection, admin sign-in, or try a smaller/fewer photo.", true);
-    __pdbToastShown = true;
+    __pdbToastAt = Date.now();
   }
-  if(allOk){ scheduleSeoCachePurge(); gcImages().catch(e=> console.warn("gcImages", e)); }
+  if(wroteAny) scheduleSeoCachePurge();
+  if(allOk){ __unsavedEdits = false; gcImages().catch(e=> console.warn("gcImages", e)); }
   return allOk;
 }
-/* Phase 4 (D4 = C): admin le Save garepachhi Cloudflare Worker ko cache clear — bot le turuntai naya title/photo dekhos.
-   Admin login bhayeko bela matra; dherai Save lagatar bhaye ek choti matra pathaucha. Fail bhaye site lai kehi asar gardaina. */
+/* After an admin Save, clear the Cloudflare Worker's cached site content (the fast /__site.json copy,
+   page titles/photos for bots, sitemap) so everyone sees the change right away. Photos (/img) stay cached.
+   Admin only; several quick Saves send a single request. A failure has no effect on the site. */
 let __seoPurgeTimer = null;
 function scheduleSeoCachePurge(){
   const u = fbAuth.currentUser;
@@ -1291,35 +1488,35 @@ function scheduleSeoCachePurge(){
    Failure here is non-critical (an orphaned doc is harmless), so errors are just logged. */
 async function deleteItemDoc(prefix, id){
   if(!id) return;
-  try{ await deleteDoc(doc(fsdb,"sitedata",prefix+id)); }catch(e){ console.error("deleteItemDoc failed for", prefix+id, e); }
+  try{ await deleteDoc(doc(fsdb,"sitedata",prefix+id)); __savedDocs.delete(prefix+id); }catch(e){ console.error("deleteItemDoc failed for", prefix+id, e); }
 }
-/* ===================== NAYA: Photo system — har photo aafnai Firestore doc (images/<id>) =====================
-   DB ma photo ko satta "/img/<id>" matra baschha. Cloudflare Worker le /img/<id> Firestore bata padhera
-   aafno cache bata dinchha (Firestore ek choti matra padhinchha). Photo ko id kahile badlindaina —
-   photo badalda naya id banchha, purano doc Save pachhi aafai hatchha (gcImages).
-   Har thau (frame) ko focus/zoom DB.siteInfo.imgMeta[<key>].f[<frame>] = [x%, y%, zoom] ma baschha. */
+/* ===================== Photo system — every photo is its own Firestore doc (images/<id>) =====================
+   The site data stores only "/img/<id>". The Cloudflare Worker reads /img/<id> from Firestore once and
+   serves it from its cache. A photo id never changes — replacing a photo creates a new id, and the old
+   doc is removed automatically after the next Save (gcImages).
+   Per-place (frame) focus/zoom lives in DB.siteInfo.imgMeta[<key>].f[<frame>] = [x%, y%, zoom]. */
 const IMG_QUALITY = {
   low:  {label:"Low",  max:1000, target:100000, note:"1000px, ~100KB"},
   auto: {label:"Auto", max:1600, target:300000, note:"1600px, ~300KB"},
   high: {label:"High", max:2000, target:500000, note:"2000px, ~500KB"},
   max:  {label:"Max",  max:2400, target:650000, note:"2400px, ~650KB"}
 };
-const IMG_DOC_LIMIT = 950000; // Firestore ko 1MB doc limit bhanda tala (base64 string ko length)
+const IMG_DOC_LIMIT = 950000; // stays under Firestore's 1MB doc limit (length of the base64 string)
 const FRAME_DEFS = {
   coverD: {label:"Cover – computer", a:3.4},
   coverM: {label:"Cover – mobile", a:1.1},
   card:   {label:"News list card", a:1.85},
   price:  {label:"Pricing card", a:2.35},
-  team:   {label:"Team photo (golo)", a:1, round:true},
-  main:   {label:"Home – Mission thulo photo", a:1.3},
-  tile:   {label:"Home – sano photo", a:1.75},
+  team:   {label:"Team photo (round)", a:1, round:true},
+  main:   {label:"Home – Mission large photo", a:1.3},
+  tile:   {label:"Home – small photo", a:1.75},
   about:  {label:"About page photo", a:1.2},
   block:  {label:"Section photo", a:1.6},
   brow:   {label:"Gallery row photo", a:1.65},
   share:  {label:"Facebook/WhatsApp share", a:1.91, crop:true}
 };
-const IMG_LOCAL = new Map();   // id -> dataUrl: yo session ma upload/migrate bhayeka photo turuntai dekhaauna
-const IMG_SESSION = new Set(); // yo session ma banayeka id — gcImages() le yinlai chhuDaina
+const IMG_LOCAL = new Map();   // id -> dataUrl: photos uploaded/migrated in this session, shown instantly
+const IMG_SESSION = new Set(); // ids created in this session — gcImages() never removes these
 function imgIdOf(u){ const m = (typeof u==="string") && u.match(/^\/img\/([A-Za-z0-9_-]{6,64})$/); return m ? m[1] : ""; }
 const __hashMemo = new Map();
 function strHash(s){
@@ -1330,7 +1527,7 @@ function strHash(s){
   if(__hashMemo.size > 400) __hashMemo.clear();
   __hashMemo.set(s, h); return h;
 }
-/* imgMeta ko key: naya photo ko id, purano/bahira ko photo ko lagi URL ko hash */
+/* imgMeta key: the photo id for new photos, a hash of the URL for old/external photos */
 function imgKey(u){ if(!u || typeof u!=="string") return ""; return imgIdOf(u) || ("u_"+strHash(u)); }
 function imgSrc(u){ const id = imgIdOf(u); if(id && IMG_LOCAL.has(id)) return IMG_LOCAL.get(id); return u || ""; }
 function imgMetaMap(){
@@ -1348,12 +1545,12 @@ function focusVars(u, fr){
   if(fr==="cover") return one("f", getFocus(u,"coverD")) + one("m", getFocus(u,"coverM"));
   return fr ? one("f", getFocus(u, fr)) : "";
 }
-/* Website bhari photo dekhaaune eutai tarika: frame anusar focus/zoom, lazy load */
+/* The one way photos are rendered site-wide: per-frame focus/zoom, lazy loading */
 function fimg(u, fr, o){
   o = o || {};
   return `<img class="fimg${o.cls?" "+o.cls:""}" src="${esc(imgSrc(u))}" alt="${esc(o.alt||"")}" ${o.eager?"":'loading="lazy" '}decoding="async" style="${focusVars(u, fr)}${o.style||""}"${o.attrs?" "+o.attrs:""}>`;
 }
-/* Kun path ko photo website ma kun-kun thau (frame) ma dekhinchha */
+/* Which places (frames) on the site show the photo at a given data path */
 function framesForPath(path){
   if(!path) return [];
   if(/^services\.\d+\.img$/.test(path)) return ["coverD","coverM","price"];
@@ -1372,7 +1569,7 @@ function newImgId(){
   const r = new Uint8Array(20); crypto.getRandomValues(r);
   return Array.from(r, x=> abc[x % abc.length]).join("");
 }
-/* Photo lai Firestore "images" ma aafnai doc ma rakhne. "/img/<id>" farkauchha. */
+/* Stores a photo as its own doc in Firestore "images". Returns "/img/<id>". */
 async function uploadImageDoc(dataUrl, w, h, q){
   if(!dataUrl || dataUrl.length > IMG_DOC_LIMIT) throw new Error("photo too large");
   const id = newImgId();
@@ -1382,7 +1579,7 @@ async function uploadImageDoc(dataUrl, w, h, q){
   imgMetaMap()[id] = {s:1, w:Math.round(w||0), h:Math.round(h||0), q:String(q||"")};
   return "/img/"+id;
 }
-/* Website ka sabai photo field (migrate ra gc ko lagi) */
+/* Every photo field on the site (used by migration and cleanup) */
 function allImageRefs(){
   const out = [];
   const add = (path)=>{ const v = getPath(DB, path); if(typeof v==="string" && v) out.push({path, val:v}); };
@@ -1397,10 +1594,10 @@ function allImageRefs(){
   Object.keys(DB.seoPages||{}).forEach(k=> add(`seoPages.${k}.image`));
   return out;
 }
-/* Save safal bhaye pachhi: kahi pani prayog nabhayeko photo doc ra focus hataaune (admin matra) */
+/* After a successful Save: remove photo docs and focus data no longer used anywhere (admin only) */
 async function gcImages(){
   const u = fbAuth.currentUser;
-  if(!u || u.uid !== ADMIN_UID) return;
+  if(!u || u.uid !== ADMIN_UID || __loadIncomplete) return;
   const meta = DB.siteInfo.imgMeta;
   if(!meta || !Object.keys(meta).length) return;
   const { imgMeta, ...restInfo } = DB.siteInfo;
@@ -1419,7 +1616,7 @@ async function gcImages(){
     }
   }
 }
-/* Worker nabhaye / bigriye pani photo dekhaos: /img/<id> load bhayena bhane sidhai Firestore bata */
+/* Keep photos visible even if the Worker is missing/broken: if /img/<id> fails, load it straight from Firestore */
 document.addEventListener("error", async (e)=>{
   const el = e.target;
   if(!el || el.tagName!=="IMG" || el.dataset.imgFb) return;
@@ -1435,12 +1632,12 @@ document.addEventListener("error", async (e)=>{
 function imgDims(src){
   return new Promise(res=>{ const im = new Image(); im.onload = ()=> res({w:im.naturalWidth, h:im.naturalHeight}); im.onerror = ()=> res({w:0, h:0}); im.src = src; });
 }
-/* Admin: purano (base64, site data bhitra) photo lai naya system ma sarne — ek choti thichne */
+/* Admin: move old photos (base64 inside site data) into the new system — one click */
 async function migrateOldImages(){
   const refs = allImageRefs().filter(r=> r.val.startsWith("data:image/"));
-  if(!refs.length){ showToast("Sabai photo naya system mai chhan."); return; }
+  if(!refs.length){ showToast("All photos are already in the new system."); return; }
   const uniq = new Set(refs.map(r=> r.val)).size;
-  const yes = await confirmModal("Photo naya system ma sarne?", `${uniq} wata purano photo aafnai chhuttai doc ma sarinchha. Kehi second lagna sakchha — sakinjel yo page band nagarnus.`, {danger:false, confirmText:"Ho, sarnus"});
+  const yes = await confirmModal("Move photos to the new system?", `${uniq} old photo(s) will each be moved into their own document. This can take a few seconds — please keep this page open until it finishes.`, {danger:false, confirmText:"Yes, move them"});
   if(!yes) return;
   const status = (t)=>{ const el = document.getElementById("imgMigStatus"); if(el) el.textContent = t; };
   const btn = document.querySelector('[data-action="img-migrate"]'); if(btn) btn.disabled = true;
@@ -1450,7 +1647,7 @@ async function migrateOldImages(){
   for(const r of refs){
     let url = done.get(r.val);
     if(!url){
-      n++; status(`${n}/${uniq} sardai…`);
+      n++; status(`Moving ${n}/${uniq}…`);
       try{
         const dim = await imgDims(r.val);
         url = await uploadImageDoc(r.val, dim.w, dim.h, "old");
@@ -1462,17 +1659,17 @@ async function migrateOldImages(){
     }
     setPath(DB, r.path, url);
   }
-  status("Save gardai…");
+  status("Saving…");
   const ok = await persistDB();
   render();
-  if(ok && !fail) showToast(`${done.size} wata photo naya system ma sariyo ✓`);
-  else if(ok) showToast(`${done.size} sariyo, ${fail} sarna sakiyena — feri try garnus.`, true);
-  else if(!__pdbToastShown) showToast("Save hun sakena — internet ra admin login check garera feri try garnus.", true);
+  if(ok && !fail) showToast(`${done.size} photo(s) moved to the new system ✓`);
+  else if(ok) showToast(`${done.size} moved, ${fail} could not be moved — please try again.`, true);
+  else if(Date.now() - __pdbToastAt > 1500) showToast("Could not save — check your internet connection and admin sign-in, then try again.", true);
 }
-/* ===================== NAYA (Phase 0): Data backup download (admin matra) =====================
-   1) Website content: sitedata ka sabai doc + website ma prayog bhayeka sabai photo (images/<id>).
-   2) Patient data: appointment, review, comment, like, view, Dpen chat, user profile — chhuttai file,
-      kinaki yasma patient ko naam/phone/email chha. Yo file kasai lai pathaune hoina. */
+/* ===================== Data backup download (admin only) =====================
+   1) Website content: every sitedata doc + every photo used on the site (images/<id>).
+   2) Patient data: appointments, reviews, comments, likes, views, Dpen chats, user profiles — a separate
+      file because it contains patients' names/phones/emails. This file must never be shared. */
 let __backupBusy = false;
 function backupStamp(){
   const d = new Date(), p = n=> String(n).padStart(2,"0");
@@ -1489,7 +1686,7 @@ function backupDownload(obj, name){
 }
 function backupStatus(t){ const el = document.getElementById("backupStatus"); if(el) el.textContent = t; }
 function backupPlain(v){
-  /* Firestore Timestamp jasta object lai JSON ma padhna milne banaune */
+  /* Make Firestore Timestamp-like objects readable in JSON */
   if(v && typeof v.toDate === "function"){ try{ return {__ts: v.toDate().toISOString()}; }catch(e){ return null; } }
   if(Array.isArray(v)) return v.map(backupPlain);
   if(v && typeof v === "object"){ const o = {}; for(const k in v) o[k] = backupPlain(v[k]); return o; }
@@ -1506,21 +1703,21 @@ async function backupCollection(name, out, errors){
 async function backupSiteContent(){
   if(__backupBusy) return;
   const u = fbAuth.currentUser;
-  if(!u || u.uid !== ADMIN_UID){ showToast("Backup admin login bhayeko bela matra milchha.", true); return; }
+  if(!u || u.uid !== ADMIN_UID){ showToast("Backup is only available while signed in as admin.", true); return; }
   __backupBusy = true;
   const errors = [], out = {};
   try{
-    backupStatus("Website ko data padhdai…");
+    backupStatus("Reading website data…");
     const n = await backupCollection("sitedata", out, errors);
-    if(!n){ throw new Error("sitedata padhna sakiyena"); }
-    /* website ma prayog bhayeka sabai photo ko id (data bhitra "/img/<id>" + photo list) */
+    if(!n){ throw new Error("could not read sitedata"); }
+    /* ids of every photo used on the site ("/img/<id>" inside the data + the photo list) */
     const ids = new Set();
     JSON.stringify(out.sitedata).replace(/\/img\/([A-Za-z0-9_-]{6,64})/g, (all, id)=>{ ids.add(id); return all; });
     Object.keys(DB.siteInfo.imgMeta||{}).forEach(k=>{ const m = DB.siteInfo.imgMeta[k]; if(m && m.s) ids.add(k); });
     out.images = {};
     let i = 0, missing = 0;
     for(const id of ids){
-      i++; backupStatus(`Photo ${i}/${ids.size} padhdai…`);
+      i++; backupStatus(`Reading photo ${i}/${ids.size}…`);
       try{
         const s = await getDoc(doc(fsdb, "images", id));
         if(s.exists()) out.images[id] = s.data(); else missing++;
@@ -1532,34 +1729,65 @@ async function backupSiteContent(){
       errors, sitedata: out.sitedata, images: out.images
     };
     const size = backupDownload(file, `ndc-website-backup_${backupStamp()}.json`);
-    backupStatus(`Download bhayo ✓ — ${file.counts.sitedata} data doc, ${file.counts.images} photo, ${(size/1048576).toFixed(1)} MB`);
-    showToast(errors.length ? `Backup bhayo, tara ${errors.length} wota kura padhna sakiyena (file bhitra "errors" hernus).` : "Website backup download bhayo ✓", !!errors.length);
+    backupStatus(`Downloaded ✓ — ${file.counts.sitedata} data docs, ${file.counts.images} photos, ${(size/1048576).toFixed(1)} MB`);
+    showToast(errors.length ? `Backup done, but ${errors.length} item(s) could not be read (see "errors" inside the file).` : "Website backup downloaded ✓", !!errors.length);
   }catch(e){
     console.error("site backup failed", e);
     backupStatus("");
-    showToast("Backup hun sakena — internet ra admin login check garera feri try garnus.", true);
+    showToast("Backup failed — check your internet connection and admin sign-in, then try again.", true);
   }finally{ __backupBusy = false; }
 }
 async function backupPatientData(){
   if(__backupBusy) return;
   const u = fbAuth.currentUser;
-  if(!u || u.uid !== ADMIN_UID){ showToast("Backup admin login bhayeko bela matra milchha.", true); return; }
-  const yes = await confirmModal("Patient data download?", "Yo file ma patient ko naam, phone, email ra appointment chha. Aafno computer ma surakshit rakhnus — kasai lai napathaunus.", {danger:false, confirmText:"Download garnus"});
+  if(!u || u.uid !== ADMIN_UID){ showToast("Backup is only available while signed in as admin.", true); return; }
+  const yes = await confirmModal("Download patient data?", "This file contains patients' names, phone numbers, emails and appointments. Keep it safe on your own computer — never share it.", {danger:false, confirmText:"Download"});
   if(!yes) return;
   __backupBusy = true;
   const errors = [], out = {};
   try{
     const cols = ["appointments","patientVoices","comments","likes","views","chatLogs","users"];
-    for(const c of cols){ backupStatus(`${c} padhdai…`); await backupCollection(c, out, errors); }
+    for(const c of cols){ backupStatus(`Reading ${c}…`); await backupCollection(c, out, errors); }
     const counts = {}; cols.forEach(c=> counts[c] = out[c] ? Object.keys(out[c]).length : 0);
     const file = { kind: "ndc-patient-backup", version: 1, createdAt: new Date().toISOString(), site: location.host, counts, errors, data: out };
     backupDownload(file, `ndc-PATIENT-DATA-private_${backupStamp()}.json`);
-    backupStatus(`Patient data download bhayo ✓ — ${counts.appointments} appointment, ${counts.users} user`);
-    showToast(errors.length ? `Backup bhayo, tara ${errors.length} wota kura padhna sakiyena.` : "Patient data download bhayo ✓", !!errors.length);
+    backupStatus(`Patient data downloaded ✓ — ${counts.appointments} appointments, ${counts.users} users`);
+    showToast(errors.length ? `Backup done, but ${errors.length} item(s) could not be read.` : "Patient data downloaded ✓", !!errors.length);
   }catch(e){
     console.error("patient backup failed", e);
     backupStatus("");
-    showToast("Backup hun sakena — feri try garnus.", true);
+    showToast("Backup failed — please try again.", true);
+  }finally{ __backupBusy = false; }
+}
+/* Old-format documents left in "sitedata" from earlier versions of the site. The site no longer reads
+   them, but anyone could, so the admin can remove them in one click (after downloading a backup). */
+const LEGACY_SITEDATA_DOCS = ["sitedata","services","team","news","customBlocks","coreImages","users","appointments","comments","likes","patientVoices"];
+async function cleanupLegacyData(){
+  if(__backupBusy) return;
+  const u = fbAuth.currentUser;
+  if(!u || u.uid !== ADMIN_UID){ showToast("Only available while signed in as admin.", true); return; }
+  if(__loadIncomplete){ showToast("Some website content did not load. Please reload the page first.", true); return; }
+  __backupBusy = true;
+  try{
+    backupStatus("Checking old data…");
+    const core = await getDoc(doc(fsdb,"sitedata","core"));
+    if(!core.exists() || !(core.data().value||{}).itemIndex){ backupStatus(""); showToast("The current data format was not found — nothing was removed.", true); return; }
+    const found = [];
+    for(const id of LEGACY_SITEDATA_DOCS){ const sn = await getDoc(doc(fsdb,"sitedata",id)); if(sn.exists()) found.push(id); }
+    backupStatus("");
+    if(!found.length){ showToast("No old data left — everything is clean ✓"); return; }
+    const yes = await confirmModal("Remove old data?", `${found.length} old-format document(s) will be permanently deleted: ${found.join(", ")}. The website does not use them. Download a Website backup first if you have not already.`, {confirmText:"Yes, remove", cancelText:"Cancel", danger:true});
+    if(!yes) return;
+    let removed = 0;
+    for(const id of found){
+      backupStatus(`Removing ${id}…`);
+      try{ await deleteDoc(doc(fsdb,"sitedata",id)); removed++; }catch(e){ console.error("cleanup failed for", id, e); }
+    }
+    backupStatus(removed===found.length ? `Old data removed ✓ (${removed})` : `Removed ${removed} of ${found.length} — please try again.`);
+    showToast(removed===found.length ? "Old data removed ✓" : "Some old data could not be removed — please try again.", removed!==found.length);
+  }catch(e){
+    console.error("cleanup failed", e); backupStatus("");
+    showToast("Could not check old data — check your internet connection and try again.", true);
   }finally{ __backupBusy = false; }
 }
 function backupAdminSection(){
@@ -1568,17 +1796,22 @@ function backupAdminSection(){
     <div class="wrap">
       <div class="card-panel">
         <h3 style="margin-bottom:6px;">Data Backup</h3>
-        <p class="form-note" style="margin:0 0 14px;">Website ko data aafno computer ma download garera rakhnus. Thulo change garnu aghi ra mahina ko ek choti download garnu ramro.</p>
+        <p class="form-note" style="margin:0 0 14px;">Download the website data to your own computer. Best done before any big change and about once a month.</p>
         <div class="backup-grid">
           <div class="backup-card">
             <b>1. Website content</b>
-            <span>Text, price, service, news, team, review, setting, SEO ra sabai photo.</span>
+            <span>Text, prices, services, news, team, reviews, settings, SEO and all photos.</span>
             <button type="button" class="gold-btn" data-action="backup-site"><span>Website backup download</span></button>
           </div>
           <div class="backup-card private">
             <b>2. Patient data <em>(private)</em></b>
-            <span>Appointment, patient review, comment, like, Dpen chat ra user profile. Yo file kasai lai napathaunus.</span>
+            <span>Appointments, patient reviews, comments, likes, Dpen chats and user profiles. Never share this file.</span>
             <button type="button" class="ghost-btn" data-action="backup-patient">Patient data download</button>
+          </div>
+          <div class="backup-card">
+            <b>3. Clean up old data</b>
+            <span>Removes old-format copies of the site data left from earlier versions. The website does not use them. Download a Website backup first.</span>
+            <button type="button" class="ghost-btn" data-action="cleanup-legacy">Clean up old data</button>
           </div>
         </div>
         <p id="backupStatus" class="form-note" style="margin:12px 0 0;"></p>
@@ -1598,19 +1831,19 @@ function imgAdminSection(){
     <div class="wrap">
       <div class="card-panel">
         <h3 style="margin-bottom:6px;">Photo Storage</h3>
-        <p class="form-note" style="margin:0 0 14px;">Har photo aafnai chhuttai doc ma baschha ra Cloudflare cache bata chito khulchha. Photo halda Quality (Low / Auto / High / Max) chhanna milchha. Website ma photo mathi ko <b>✂ Adjust</b> le har thau ko lagi photo milauna milchha.</p>
+        <p class="form-note" style="margin:0 0 14px;">Every photo is stored in its own document and loads quickly from the Cloudflare cache. When adding a photo you can choose the quality (Low / Auto / High / Max). Use <b>✂ Adjust</b> on any photo on the site to fit it for each place it appears.</p>
         <div class="img-stats">
-          <div><b>${nNew}</b><span>Naya system ma</span></div>
-          <div><b>${nOld}</b><span>Purano (sarna baaki)</span></div>
-          <div><b>${nLink}</b><span>Bahira ko link (Unsplash aadi)</span></div>
+          <div><b>${nNew}</b><span>In the new system</span></div>
+          <div><b>${nOld}</b><span>Old (not moved yet)</span></div>
+          <div><b>${nLink}</b><span>External links (Unsplash etc.)</span></div>
         </div>
         ${nOld ? `
         <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
-          <button type="button" class="gold-btn" data-action="img-migrate"><span>Purano photo naya system ma sarne (${nOld})</span></button>
+          <button type="button" class="gold-btn" data-action="img-migrate"><span>Move old photos to the new system (${nOld})</span></button>
           <span id="imgMigStatus" class="form-note" style="margin:0;"></span>
         </div>
-        <p class="form-note" style="margin:10px 0 0;">Sarda photo ko quality badhdaina (purano photo saano banaayeko thiyo). Ramro quality chahiyo bhane tyo photo ma "Change" garera feri upload garnus.</p>`
-        : `<span class="pill">Sabai photo naya system ma chhan ✓</span>`}
+        <p class="form-note" style="margin:10px 0 0;">Moving does not improve quality (old photos were stored small). For better quality, use "Change" on that photo and upload it again.</p>`
+        : `<span class="pill">All photos are in the new system ✓</span>`}
       </div>
     </div>
   </section>`;
@@ -1629,7 +1862,7 @@ async function ensureAppointmentsLoaded(force){
     const snap = await getDocs(collection(fsdb,"appointments"));
     APPOINTMENTS = snap.docs.map(d=>({id:d.id, ...d.data()}));
   }catch(e){ console.error("loadAppointments failed", e); }
-  render();
+  collectEdits(); render();
 }
 async function ensureMyApptsLoaded(uid){
   if(MY_APPTS.uid===uid) return;
@@ -1638,7 +1871,7 @@ async function ensureMyApptsLoaded(uid){
     const snap = await getDocs(query(collection(fsdb,"appointments"), where("uid","==",uid)));
     MY_APPTS = {uid, list:snap.docs.map(d=>({id:d.id, ...d.data()}))};
   }catch(e){ console.error("loadMyAppts failed", e); }
-  render();
+  collectEdits(); render();
 }
 
 /* ---- Patient Voices (reviews): one document per submission ---- */
@@ -1649,7 +1882,20 @@ async function ensureAllVoicesLoaded(force){
     const snap = await getDocs(collection(fsdb,"patientVoices"));
     PATIENT_VOICES = snap.docs.map(d=>({id:d.id, ...d.data()}));
   }catch(e){ console.error("loadAllVoices failed", e); }
-  render();
+  collectEdits(); render();
+}
+/* approved patient reviews for the Home page (only approved ones can be read by visitors) */
+let PUBLIC_VOICES = [], publicVoicesLoaded = false;
+async function ensurePublicVoicesLoaded(){
+  if(publicVoicesLoaded) return;
+  publicVoicesLoaded = true;
+  try{
+    const snap = await getDocs(query(collection(fsdb,"patientVoices"), where("approved","==",true), fsLimit(30)));
+    PUBLIC_VOICES = snap.docs.map(d=>d.data()).filter(v=> v && v.approved === true && v.text)
+      .sort((a,b)=> String(b.date||"").localeCompare(String(a.date||"")))
+      .map(v=>({name:v.name||"Patient", rating:v.rating, text:v.text, date:v.date, source:"patient"}));
+    if(PUBLIC_VOICES.length){ collectEdits(); render(); }
+  }catch(e){ console.warn("loadPublicVoices failed", e && e.code); }
 }
 async function ensureMyVoicesLoaded(uid){
   if(MY_VOICES.uid===uid) return;
@@ -1658,7 +1904,7 @@ async function ensureMyVoicesLoaded(uid){
     const snap = await getDocs(query(collection(fsdb,"patientVoices"), where("uid","==",uid)));
     MY_VOICES = {uid, list:snap.docs.map(d=>({id:d.id, ...d.data()}))};
   }catch(e){ console.error("loadMyVoices failed", e); }
-  render();
+  collectEdits(); render();
 }
 
 /* ---- Comments + Likes + Views on news/success-story posts: one document per record (guests included via anonymous auth) ---- */
@@ -1671,13 +1917,13 @@ async function ensureCommentsLikesLoaded(force){
       getDocs(collection(fsdb,"likes")),
       getDocs(collection(fsdb,"views"))
     ]);
-    NEWS_COMMENTS = {};
+    NEWS_COMMENTS = Object.create(null);
     cSnap.docs.forEach(d=>{
       const c = {id:d.id, ...d.data()};
       (NEWS_COMMENTS[c.newsId] = NEWS_COMMENTS[c.newsId] || []).push(c);
     });
     Object.values(NEWS_COMMENTS).forEach(arr=>arr.sort((a,b)=> new Date(a.date)-new Date(b.date)));
-    NEWS_LIKES = {};
+    NEWS_LIKES = Object.create(null);
     lSnap.docs.forEach(d=>{
       const l = d.data();
       if(!NEWS_LIKES[l.newsId]) NEWS_LIKES[l.newsId] = {count:0, uids:new Set()};
@@ -1685,15 +1931,42 @@ async function ensureCommentsLikesLoaded(force){
       NEWS_LIKES[l.newsId].uids.add(l.uid);
     });
     NEWS_VIEWS = {};
-    vSnap.docs.forEach(d=>{ NEWS_VIEWS[d.id] = (d.data().count)||0; });
+    vSnap.docs.forEach(d=>{ NEWS_VIEWS[d.id] = safeCount(d.data().count); });
+    __allSocialLoaded = true;
   }catch(e){ console.error("loadCommentsLikes failed", e); }
-  render();
+  collectEdits(); render();
+}
+/* One post's page: reads only that post's comments, likes and view count (not every post's).
+   Skipped when the full list is already loaded; force = read again after adding/removing a comment. */
+const __postSocialLoaded = new Set();
+let __allSocialLoaded = false;   // the full list (news page) loaded successfully
+async function ensurePostSocialLoaded(id, force){
+  if(!id) return;
+  if(!force && (__allSocialLoaded || __postSocialLoaded.has(id))) return;
+  __postSocialLoaded.add(id);   /* kept even if the read fails, so a failure never causes a reload loop */
+  try{
+    const [cSnap, lSnap, vSnap] = await Promise.all([
+      getDocs(query(collection(fsdb,"comments"), where("newsId","==",id))),
+      getDocs(query(collection(fsdb,"likes"), where("newsId","==",id))),
+      getDoc(doc(fsdb,"views",id))
+    ]);
+    const list = cSnap.docs.map(d=>({id:d.id, ...d.data()})).filter(c=> c.newsId===id);
+    list.sort((a,b)=> new Date(a.date)-new Date(b.date));
+    NEWS_COMMENTS[id] = list;
+    const entry = {count:0, uids:new Set()};
+    lSnap.docs.forEach(d=>{ const l = d.data(); if(l.newsId!==id) return; entry.count++; entry.uids.add(l.uid); });
+    NEWS_LIKES[id] = entry;
+    const v = vSnap && vSnap.exists() ? safeCount(vSnap.data().count) : 0;
+    NEWS_VIEWS[id] = Math.max(v, safeCount(NEWS_VIEWS[id]));
+  }catch(e){ console.error("loadPostSocial failed", e); return; }
+  collectEdits(); render();
 }
 function newsCommentCount(id){ return (NEWS_COMMENTS[id]||[]).length; }
+function safeCount(v){ const n = Number(v); return Number.isFinite(n) && n > 0 ? Math.floor(n) : 0; }
 function newsLikeCount(id){
   const n = DB.news.find(x=>x.id===id);
-  const base = n ? (n.likes||0) : 0;
-  return base + ((NEWS_LIKES[id]||{}).count||0);
+  const base = n ? safeCount(n.likes) : 0;
+  return base + safeCount((NEWS_LIKES[id]||{}).count);
 }
 function newsLikedByMe(id){
   const entry = NEWS_LIKES[id];
@@ -1701,11 +1974,11 @@ function newsLikedByMe(id){
 }
 function newsViewCount(id){
   const n = DB.news.find(x=>x.id===id);
-  const base = n ? (n.views||0) : 0;
-  return base + (NEWS_VIEWS[id]||0);
+  const base = n ? safeCount(n.views) : 0;
+  return base + safeCount(NEWS_VIEWS[id]);
 }
 async function recordNewsView(id){
-  try{ await setDoc(doc(fsdb,"views",id), {count:increment(1)}, {merge:true}); NEWS_VIEWS[id] = (NEWS_VIEWS[id]||0)+1; }
+  try{ await setDoc(doc(fsdb,"views",id), {count:increment(1)}, {merge:true}); NEWS_VIEWS[id] = safeCount(NEWS_VIEWS[id])+1; }
   catch(e){ console.error("recordNewsView failed", e); }
 }
 
@@ -1736,7 +2009,7 @@ async function ensureGuestSession(){
 function esc(s){ return (s==null?"":String(s)).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c])); }
 /* ===================== ADDED: rich-text sanitizer (used for admin-formatted paragraphs) ===================== */
 const RICH_ALLOWED_TAGS = new Set(["B","STRONG","I","EM","U","S","STRIKE","SPAN","BR","P","DIV","A","MARK","UL","OL","LI"]);
-const RICH_ALLOWED_ATTRS = {A:["href","target","rel"], SPAN:["style"], P:["style"], DIV:["style"], MARK:["style"]};
+const RICH_ALLOWED_ATTRS = {A:["href","target","rel","class"], SPAN:["style"], P:["style"], DIV:["style"], MARK:["style"]};
 /* Content pasted from Word/Google Docs commonly carries an inline background-color:white (or
    near-white) on paragraphs/spans, which shows up as a stray white box against this site's cream
    background. Strip ONLY white/near-white background-colors; a genuine highlight color chosen via
@@ -1760,24 +2033,31 @@ function isNearWhiteColor(val){
   return false;
 }
 function sanitizeRichHTML(html){
-  const tmp = document.createElement("div");
-  tmp.innerHTML = html==null ? "" : String(html);
+  /* parsed in a separate, inert document: nothing in it can load or run while it is being cleaned */
+  const body = new DOMParser().parseFromString("<!doctype html><body>" + (html==null ? "" : String(html)), "text/html").body;
   (function walk(node){
-    Array.from(node.childNodes).forEach(child=>{
+    let child = node.firstChild;
+    while(child){
+      const next = child.nextSibling;
       if(child.nodeType===1){
         const tag = child.tagName;
         if(!RICH_ALLOWED_TAGS.has(tag)){
+          /* unwrap the tag and check what was inside it too */
+          const first = child.firstChild;
           while(child.firstChild) node.insertBefore(child.firstChild, child);
           node.removeChild(child);
-          return;
+          child = first || next;
+          continue;
         }
         const allowed = RICH_ALLOWED_ATTRS[tag]||[];
         Array.from(child.attributes).forEach(attr=>{ if(!allowed.includes(attr.name)) child.removeAttribute(attr.name); });
         if(tag==="A"){
-          let href = child.getAttribute("href")||"";
-          if(!/^https?:\/\//i.test(href) && !href.startsWith("#") && !href.startsWith("/")) href = "#";
+          let href = (child.getAttribute("href")||"").trim();
+          if(!/^(https?:\/\/|mailto:|tel:)/i.test(href) && !href.startsWith("#") && !/^\/(?![\/\\])/.test(href)) href = "#";
           child.setAttribute("href", href);
           child.setAttribute("rel","noopener");
+          /* the only class kept on links is the gold button style ("+ Button" in the toolbar) */
+          if(child.getAttribute("class") === "gold-btn") child.setAttribute("class","gold-btn"); else child.removeAttribute("class");
         }
         if(tag==="SPAN"||tag==="P"||tag==="DIV"||tag==="MARK"){
           const style = child.getAttribute("style")||"";
@@ -1790,17 +2070,79 @@ function sanitizeRichHTML(html){
           if(safe) child.setAttribute("style", safe); else child.removeAttribute("style");
         }
         walk(child);
-      } else if(child.nodeType===8){ node.removeChild(child); }
-    });
-  })(tmp);
-  return tmp.innerHTML;
+      } else if(child.nodeType!==3){ node.removeChild(child); }
+      child = next;
+    }
+  })(body);
+  return body.innerHTML;
 }
+/* links set by the admin: https/http, mailto:, tel:, "#..." or a path on this site — anything else becomes "#" */
+function safeUrl(u){
+  const v = String(u==null ? "" : u).trim();
+  if(/^(https?:\/\/|mailto:|tel:)/i.test(v) || v.startsWith("#") || /^\/(?![\/\\])/.test(v)) return v;
+  return "#";
+}
+function telHref(p){ return "tel:" + String(p||"").replace(/[^\d+]/g,""); }
 function richOut(v){ return sanitizeRichHTML(v==null?"":String(v)); }
-function initials(name){ return (name||"?").split(" ").map(w=>w[0]).slice(0,2).join("").toUpperCase(); }
-function fmtDate(d){ try{ return new Date(d).toLocaleDateString("en-US",{year:"numeric",month:"short",day:"numeric"}); }catch(e){ return d; } }
+function starCount(r){ const n = Math.round(Number(r)); return Number.isFinite(n) ? Math.max(0, Math.min(5, n)) : 0; }
+function initials(name){ return esc(String(name||"?").split(" ").filter(Boolean).map(w=>w[0]).slice(0,2).join("").toUpperCase() || "?"); }
+function fmtDate(d){
+  if(!d) return "";
+  const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(String(d));
+  const dt = m ? new Date(+m[1], +m[2]-1, +m[3]) : new Date(d);
+  return isNaN(dt) ? String(d) : dt.toLocaleDateString("en-US",{year:"numeric",month:"short",day:"numeric"});
+}
 function slugFind(arr,id){ return arr.find(x=>x.id===id); }
+/* ---------- News URL names (slugs) and short descriptions ---------- */
+const NEWS_SLUG_RE = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
+/* a news post by its id, its URL name, or an earlier URL name */
+function findNews(key){
+  return DB.news.find(n=>n.id===key) || DB.news.find(n=>n.slug===key) || DB.news.find(n=>Array.isArray(n.slugHistory) && n.slugHistory.includes(key));
+}
+function newsPath(n){ return "/news/" + encodeURIComponent((n && (n.slug || n.id)) || ""); }
+/* "Free Dental Check-up Camp!" → "free-dental-check-up-camp" ("" if the title has no Latin letters) */
+function slugifyTitle(t){
+  let v = String(t||"").normalize("NFKD").replace(/[\u0300-\u036f]/g,"").toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-+|-+$/g,"");
+  if(v.length > 70) v = v.slice(0,70).replace(/-[^-]*$/,"");
+  return v.length >= 3 ? v : "";
+}
+/* why a URL name cannot be used ("" = it is fine) */
+function newsSlugProblem(slug, forId){
+  if(!slug) return "";
+  if(slug.length < 3 || slug.length > 80 || !NEWS_SLUG_RE.test(slug)) return "Use 3–80 small English letters, numbers and dashes only (e.g. free-dental-camp).";
+  if(slug === "cat") return "This name is reserved. Please choose another.";
+  const other = DB.news.find(n=> n.id!==forId && (n.id===slug || n.slug===slug || (Array.isArray(n.slugHistory) && n.slugHistory.includes(slug))));
+  if(other) return "Another post already uses this name. Please choose another.";
+  return "";
+}
+function plainTextOf(html){
+  /* a space before block tags, so "<h2>Title</h2><p>Text" becomes "Title Text" */
+  const spaced = String(html||"").replace(/<(\/?(?:p|div|h[1-6]|li|ul|ol|br|blockquote|tr|td)\b)/gi, " <$1");
+  const d = new DOMParser().parseFromString("<!doctype html><body>" + spaced, "text/html");
+  return (d.body.textContent||"").replace(/\s+/g," ").trim();
+}
+/* the card/Google description: the admin's own text, otherwise the start of the article */
+function newsExcerpt(n){
+  const own = String((n && n.excerpt) || "").trim();
+  if(own && own !== "Short excerpt...") return own;
+  const t = plainTextOf(n && n.content);
+  if(t.length <= 160) return t;
+  return t.slice(0,157).replace(/\s+\S*$/,"") + "…";
+}
+/* new posts with an English/Roman title get a URL name automatically (Nepali titles: the admin types one) */
+function autoSlugNews(){
+  DB.news.forEach(n=>{
+    if(n.slug || !n.title || n.title === "New Post Title") return;
+    const base = slugifyTitle(n.title);
+    if(!base) return;
+    let cand = base, i = 2;
+    while(newsSlugProblem(cand, n.id)) cand = base + "-" + (i++);
+    n.slug = cand;
+  });
+}
 function showToast(msg, isErr){
-  if(__pdbToastShown){ __pdbToastShown = false; return; }
+  if(__pdbToastAt && Date.now() - __pdbToastAt < 1500){ __pdbToastAt = 0; return; }
+  __pdbToastAt = 0;
   let t = document.getElementById("toastEl");
   if(!t){ t = document.createElement("div"); t.id="toastEl"; t.className="toast"; document.body.appendChild(t); }
   t.className = "toast" + (isErr?" err":"");
@@ -1808,6 +2150,11 @@ function showToast(msg, isErr){
   requestAnimationFrame(()=>t.classList.add("show"));
   clearTimeout(toastTimer);
   toastTimer = setTimeout(()=>t.classList.remove("show"), 3600);
+}
+/* "+977 98-1234 5678", "977981234567 8", "9812345678" → "9812345678" ("" if not a valid Nepal mobile) */
+function normPhone(v){
+  const d = String(v||"").replace(/[\s-]+/g,"").replace(/^\+?977/,"");
+  return /^9[678]\d{8}$/.test(d) ? d : "";
 }
 function validNepalPhone(v){ return /^(?:\+?977[-\s]?)?(9[678]\d{8})$/.test((v||"").replace(/\s+/g,"")); }
 function validEmail(v){ return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v||""); }
@@ -1817,14 +2164,21 @@ function openMobileNav(){
   const d = document.getElementById("mobileDrawer"), b = document.getElementById("mobileNavBackdrop");
   if(d) d.classList.add("open");
   if(b) b.classList.add("open");
+  document.querySelectorAll(".burger").forEach(x=> x.setAttribute("aria-expanded","true"));
+  const c = d && d.querySelector(".mobile-drawer-close");
+  if(c) setTimeout(()=>{ try{ c.focus({preventScroll:true}); }catch(e){} }, 50);
 }
 function closeMobileNav(){
   const d = document.getElementById("mobileDrawer"), b = document.getElementById("mobileNavBackdrop");
+  const wasOpen = !!(d && d.classList.contains("open"));
   if(d) d.classList.remove("open");
   if(b) b.classList.remove("open");
+  document.querySelectorAll(".burger").forEach(x=> x.setAttribute("aria-expanded","false"));
+  /* keyboard users go back to the menu button (only if focus was inside the menu) */
+  if(wasOpen && d.contains(document.activeElement)){ const bg = document.querySelector(".burger"); if(bg) try{ bg.focus({preventScroll:true}); }catch(e){} }
 }
 function navLink(href,label){
-  const active = ROUTE===href || (href!=="/" && ROUTE.startsWith(href));
+  const active = ROUTE===href || (href!=="/" && ROUTE.startsWith(href)) || (href==="/services" && ROUTE.startsWith("/service/"));
   return `<a href="${href}" class="${active?'active':''}">${label}</a>`;
 }
 function renderHeader(){
@@ -1846,20 +2200,20 @@ function renderHeader(){
         ${u ? navLink("/dashboard", u.role==="admin"?"Admin Panel":"My Account") : navLink("/login","Sign In")}
       </nav>
       <div class="head-actions">
-        <a class="icon-btn call-btn" href="tel:${s.phone1.replace(/\s+/g,'')}" title="Call">${icon('phone')}</a>
+        <a class="icon-btn call-btn" href="${esc(telHref(s.phone1))}" title="Call" aria-label="Call the clinic">${icon('phone')}</a>
         <a class="gold-btn" href="/book" style="padding:10px 20px;font-size:.82rem;">Book Appointment</a>
-        <button class="icon-btn burger" data-action="open-mobile-nav">${icon('menu')}</button>
+        <button type="button" class="icon-btn burger" data-action="open-mobile-nav" aria-label="Open menu" aria-controls="mobileDrawer" aria-expanded="false">${icon('menu')}</button>
       </div>
     </div>
   </header>
   <div class="mobile-drawer-backdrop" id="mobileNavBackdrop" data-action="close-mobile-nav"></div>
-  <aside class="mobile-drawer" id="mobileDrawer">
+  <aside class="mobile-drawer" id="mobileDrawer" aria-label="Menu">
     <div class="mobile-drawer-top">
-      <button class="mobile-drawer-close" data-action="close-mobile-nav">${icon('close')}</button>
+      <button type="button" class="mobile-drawer-close" data-action="close-mobile-nav" aria-label="Close menu">${icon('close')}</button>
     </div>
     <div class="mobile-drawer-body">
       <div class="mobile-search">
-        <input type="text" id="mobileNavSearch" placeholder="Search" autocomplete="off">
+        <input type="text" id="mobileNavSearch" placeholder="Search" aria-label="Search the menu" autocomplete="off">
       </div>
       <nav class="mobile-drawer-links" id="mobileDrawerLinks">
         <a href="/" data-label="home">Home</a>
@@ -1874,8 +2228,8 @@ function renderHeader(){
             : `<a href="/login" data-label="sign in">Sign In / Login</a>`}
       </nav>
       <div class="mobile-drawer-contact">
-        <a href="tel:${s.phone1.replace(/\s+/g,'')}">${icon('phone')} ${s.phone1}</a>
-        <a href="mailto:${s.email}"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16v16H4z" opacity="0"/><path d="M3 6l9 7 9-7"/><rect x="3" y="5" width="18" height="14" rx="2"/></svg> ${s.email}</a>
+        <a href="${esc(telHref(s.phone1))}">${icon('phone')} ${esc(s.phone1)}</a>
+        <a href="mailto:${esc(s.email)}"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16v16H4z" opacity="0"/><path d="M3 6l9 7 9-7"/><rect x="3" y="5" width="18" height="14" rx="2"/></svg> ${s.email}</a>
       </div>
     </div>
     <div class="mobile-drawer-cta">
@@ -1918,11 +2272,11 @@ function renderFooter(ed){
         </div>
         <p style="opacity:.85;font-size:.88rem;line-height:1.6;max-width:280px;" ${ed?'data-bind="siteInfo.address" contenteditable="true"':''}>${esc(s.address)}</p>
         <div class="social-row">
-          <a href="${s.facebook}" target="_blank" title="Facebook">${icon('fb')}</a>${linkEdit('Facebook','facebook')}
-          <a href="${s.instagram}" target="_blank" title="Instagram">${icon('ig')}</a>${linkEdit('Instagram','instagram')}
-          <a href="${s.linkedin}" target="_blank" title="LinkedIn">${icon('li')}</a>${linkEdit('LinkedIn','linkedin')}
-          <a href="${s.tiktok}" target="_blank" title="TikTok">${icon('tt')}</a>${linkEdit('TikTok','tiktok')}
-          <a href="${s.youtube}" target="_blank" title="YouTube">${icon('yt')}</a>${linkEdit('YouTube','youtube')}
+          <a href="${esc(safeUrl(s.facebook))}" target="_blank" rel="noopener" title="Facebook">${icon('fb')}</a>${linkEdit('Facebook','facebook')}
+          <a href="${esc(safeUrl(s.instagram))}" target="_blank" rel="noopener" title="Instagram">${icon('ig')}</a>${linkEdit('Instagram','instagram')}
+          <a href="${esc(safeUrl(s.linkedin))}" target="_blank" rel="noopener" title="LinkedIn">${icon('li')}</a>${linkEdit('LinkedIn','linkedin')}
+          <a href="${esc(safeUrl(s.tiktok))}" target="_blank" rel="noopener" title="TikTok">${icon('tt')}</a>${linkEdit('TikTok','tiktok')}
+          <a href="${esc(safeUrl(s.youtube))}" target="_blank" rel="noopener" title="YouTube">${icon('yt')}</a>${linkEdit('YouTube','youtube')}
         </div>
       </div>
       <div>
@@ -1935,15 +2289,15 @@ function renderFooter(ed){
       </div>
       <div>
         <h5>Contact</h5>
-        <a href="tel:${s.phone1.replace(/\s+/g,'')}"><span ${ed?'data-bind="siteInfo.phone1" contenteditable="true"':''}>${esc(s.phone1)}</span></a>
-        <a href="tel:${s.phone2.replace(/\s+/g,'')}"><span ${ed?'data-bind="siteInfo.phone2" contenteditable="true"':''}>${esc(s.phone2)}</span></a>
-        <a href="mailto:${s.email}"><span ${ed?'data-bind="siteInfo.email" contenteditable="true"':''}>${esc(s.email)}</span></a>
+        <a href="${esc(telHref(s.phone1))}"><span ${ed?'data-bind="siteInfo.phone1" contenteditable="true"':''}>${esc(s.phone1)}</span></a>
+        <a href="${esc(telHref(s.phone2))}"><span ${ed?'data-bind="siteInfo.phone2" contenteditable="true"':''}>${esc(s.phone2)}</span></a>
+        <a href="mailto:${esc(s.email)}"><span ${ed?'data-bind="siteInfo.email" contenteditable="true"':''}>${esc(s.email)}</span></a>
         <a href="/book">Book an Appointment →</a>
       </div>
       <div>
         <h5>Find Us</h5>
         <div class="map-embed"><iframe src="${s.mapsEmbed}" loading="lazy"></iframe></div>
-        <a href="${s.mapsUrl}" target="_blank" style="margin-top:10px;">Get Directions →</a>${linkEdit('Google Maps','mapsUrl')}
+        <a href="${esc(safeUrl(s.mapsUrl))}" target="_blank" rel="noopener" style="margin-top:10px;">Get Directions →</a>${linkEdit('Google Maps','mapsUrl')}
       </div>
     </div>
     <div class="wrap foot-bottom">
@@ -1985,6 +2339,7 @@ function initScrollFx(){
           if(!drawerOpen){
             if(y > window.__lastScrollY && y > 60){ h.classList.add("nav-hidden"); }
             else if(y < window.__lastScrollY - 2 || y<=60){ h.classList.remove("nav-hidden"); }
+            document.body.classList.toggle("nav-is-hidden", h.classList.contains("nav-hidden"));
           }
           window.__lastScrollY = y;
         }
@@ -2057,7 +2412,7 @@ function withSiteName(t, siteName){
   if(!t) return siteName;
   return t.toLowerCase().includes("neupane") ? t : `${t} | ${siteName}`;
 }
-/* Phase 4: Worker (Cloudflare) sanga ekai niyam — SITE_ORIGIN, photo ko kram, base64 → /og/... */
+/* Same rules as the Cloudflare Worker — SITE_ORIGIN, photo priority, base64 → /og/... */
 const SITE_ORIGIN = "https://www.neupanedental.com.np";
 function seoHashStr(s){ let h = 0x811c9dc5; const step = Math.max(1, Math.floor(s.length/4096)); for(let i=0;i<s.length;i+=step){ h ^= s.charCodeAt(i); h = Math.imul(h, 0x01000193); } h ^= s.length; return (h>>>0).toString(36); }
 function seoResolveImage(img, ogPath){
@@ -2071,7 +2426,7 @@ function seoResolveImage(img, ogPath){
   if(img.startsWith("/")) return SITE_ORIGIN + img;
   return "";
 }
-/* Worker ko isKnownRouteShape() jastai — chinne URL ko akar */
+/* Same as the Worker's isKnownRouteShape() — URL shapes the site knows */
 function seoKnownRouteShape(parts){
   if(parts.length===0) return true;
   const p0 = parts[0];
@@ -2095,24 +2450,25 @@ function applySEO(){
   let ldType = "website";
   let article = null;
   let notFound = !seoKnownRouteShape(parts);
+  let newsCanonical = "";
 
   if(parts[0]==="service" && parts[1]){
     const sv = DB.services.find(x=>x.id===parts[1]);
     if(!sv) notFound = true;
     else { const s = sv.seo||{}; rawTitle = s.title || sv.name || rawTitle; desc = s.description || sv.short || desc; if(s.image || sv.img){ image = s.image || sv.img; imageOgPath = "/og/service/"+sv.id; } if(s.keywords && s.keywords.length) keywords = s.keywords.join(", "); }
   } else if(parts[0]==="news" && parts[1] && parts[1]!=="cat"){
-    const n = DB.news.find(x=>x.id===parts[1]);
+    const n = findNews(parts[1]);
     if(!n) notFound = true;
-    else { const s = n.seo||{}; rawTitle = s.title || n.title || rawTitle; desc = s.description || n.excerpt || desc; if(s.image || n.img){ image = s.image || n.img; imageOgPath = "/og/news/"+n.id; } if(s.keywords && s.keywords.length) keywords = s.keywords.join(", "); ldType="article"; article = n; }
+    else { newsCanonical = newsPath(n); const s = n.seo||{}; rawTitle = s.title || n.title || rawTitle; desc = s.description || newsExcerpt(n) || desc; if(s.image || n.img){ image = s.image || n.img; imageOgPath = "/og/news/"+n.id; } if(s.keywords && s.keywords.length) keywords = s.keywords.join(", "); ldType="article"; article = n; }
   }
-  // Photo: page/service/news ko aaphnai → Social Share Photo URL → upload gareko Social Share Photo → og-image.jpg
+  // Photo: the page/service/news's own → Social Share Photo URL → uploaded Social Share Photo → og-image.jpg
   let ogImage = seoResolveImage(image, imageOgPath);
   if(!ogImage && seo.ogImageUrl) ogImage = seo.ogImageUrl;
   if(!ogImage && seo.ogImage) ogImage = seoResolveImage(seo.ogImage, "/og/site");
   if(!ogImage) ogImage = SITE_ORIGIN + "/og-image.jpg";
-  // Title khali bhaye admin ko Default Site Title (Decision A)
+  // Empty title → the admin's Default Site Title
   const fullTitle = rawTitle ? withSiteName(rawTitle, siteName) : (seo.defaultTitle || siteName);
-  const canonical = SITE_ORIGIN + (parts.length ? "/" + parts.map(encodeURIComponent).join("/") : "/");
+  const canonical = SITE_ORIGIN + (newsCanonical || (parts.length ? "/" + parts.map(encodeURIComponent).join("/") : "/"));
   const isPrivate = ["login","signup","dashboard"].includes(parts[0]);
   document.title = fullTitle;
   setMetaName("description", desc || seo.defaultDescription || "");
@@ -2190,6 +2546,8 @@ function wrapSection(id, ed, inner){
   return `<div class="admin-section" data-sec-id="${esc(id)}">
     <div class="sec-toolbar">
       <span class="sec-drag" draggable="true" title="Drag to reorder">⠿</span>
+      <button type="button" class="admin-mini-btn sec-move" data-action="move-section" data-sec="${esc(id)}" data-dir="-1" title="Move up" aria-label="Move section up">▲</button>
+      <button type="button" class="admin-mini-btn sec-move" data-action="move-section" data-sec="${esc(id)}" data-dir="1" title="Move down" aria-label="Move section down">▼</button>
       ${canStyle?`<button type="button" class="admin-mini-btn" data-action="open-sec-settings" data-sec="${esc(id)}">⚙ Style</button>`:''}
       ${isCustom?`<button type="button" class="admin-mini-btn danger" data-action="del-custom-block" data-sec="${esc(id)}">✕ Remove</button>`:''}
     </div>
@@ -2284,7 +2642,7 @@ function missionSectionHTML(ed, s){
     <div class="wrap">
       <div class="grid cols-2" style="align-items:center;gap:50px;">
         <div class="reveal" style="border-radius:26px;overflow:hidden;box-shadow:var(--shadow);position:relative;">
-          ${fimg(s.missionImages[0], "main", {style:"width:100%;height:420px;object-fit:cover;display:block;"})}
+          ${fimg(s.missionImages[0], "main", {alt:"Dental care at Neupane Dental Clinic", style:"width:100%;height:420px;object-fit:cover;display:block;"})}
           ${ed?`<div class="mission-tools" style="opacity:1;background:linear-gradient(0deg,rgba(15,12,8,.55),transparent 60%);align-items:flex-end;justify-content:flex-end;padding:14px;">
             <button type="button" class="admin-mini-btn" data-action="adjust-img" data-path="siteInfo.missionImages.0" title="Adjust photo">✂ Adjust</button>
             <button class="admin-mini-btn" data-action="edit-img" data-path="siteInfo.missionImages.0">${icon('upload')} Replace Photo</button>
@@ -2299,7 +2657,7 @@ function missionSectionHTML(ed, s){
       <div class="grid cols-4 reveal stagger" style="margin-top:44px;">
         ${s.missionImages.slice(1).map((g,gi)=>`
           <div class="mission-tile">
-            ${fimg(g, "tile")}
+            ${fimg(g, "tile", {alt:`Neupane Dental Clinic photo ${gi+2}`})}
             ${ed?`<div class="mission-tools">
               <button type="button" class="admin-mini-btn" data-action="adjust-img" data-path="siteInfo.missionImages.${gi+1}" title="Adjust photo">✂</button>
               <button class="admin-mini-btn" data-action="edit-img" data-path="siteInfo.missionImages.${gi+1}" title="Replace">${icon('upload')}</button>
@@ -2356,10 +2714,10 @@ function reviewsSectionHTML(){
       </div>
       <div class="review-track-wrap reveal">
         <div class="review-track">
-          ${[...DB.reviews,...DB.reviews].map(r=>reviewChip(r)).join('')}
+          ${(()=>{ ensurePublicVoicesLoaded(); const all = [...DB.reviews, ...PUBLIC_VOICES]; return [...all, ...all].map(r=>reviewChip(r)).join(''); })()}
         </div>
       </div>
-      <div style="text-align:center;margin-top:30px;"><a href="${DB.siteInfo.mapsUrl}" target="_blank" class="ghost-btn light">See all Google Reviews →</a></div>
+      <div style="text-align:center;margin-top:30px;"><a href="${esc(safeUrl(DB.siteInfo.mapsUrl))}" target="_blank" rel="noopener" class="ghost-btn light">See all Google Reviews →</a></div>
     </div>
   </section>`;
 }
@@ -2391,7 +2749,7 @@ function renderCustomBlock(block, idx, ed){
   const cls = "cb-section" + (block.theme ? " cb-theme-"+block.theme : "");
   if(block.type==="cta"){
     const btnInner = ed ? `<span data-bind="${base}.btnText" contenteditable="true">${esc(block.btnText)}</span>` : esc(block.btnText);
-    const btnHref = ed ? 'href="javascript:void(0)"' : `href="${esc(block.href||'#')}"`;
+    const btnHref = ed ? 'href="javascript:void(0)"' : `href="${esc(safeUrl(block.href||'#'))}"`;
     return `
     <section class="${cls}">
       <div class="wrap" style="text-align:center;max-width:760px;">
@@ -2406,7 +2764,7 @@ function renderCustomBlock(block, idx, ed){
   }
   if(block.type==="text-image"){
     const imgHTML = `<div class="${revealClassFor(block.imgAnim)}" style="position:relative;border-radius:22px;overflow:hidden;box-shadow:var(--shadow);">
-        ${fimg(block.img, "block", {style:"width:100%;height:340px;object-fit:cover;display:block;"})}
+        ${fimg(block.img, "block", {alt:(plainTextOf(block.title||"").slice(0,120) || "Neupane Dental Clinic"), style:"width:100%;height:340px;object-fit:cover;display:block;"})}
         ${ed?`<div class="mission-tools" style="opacity:1;background:linear-gradient(0deg,rgba(15,12,8,.55),transparent 60%);align-items:flex-end;justify-content:flex-end;padding:14px;">
           <button type="button" class="admin-mini-btn" data-action="adjust-img" data-path="${base}.img" title="Adjust photo">✂ Adjust</button>
           <button class="admin-mini-btn" data-action="edit-img" data-path="${base}.img">${icon('upload')} Replace Photo</button>
@@ -2448,7 +2806,7 @@ function renderCustomBlock(block, idx, ed){
           ${imgs.map((im,i)=>{
             const rc = revealClassFor((block.imagesAnim&&block.imagesAnim[i])||'up');
             return `<div class="${rc}" style="position:relative;border-radius:18px;overflow:hidden;box-shadow:var(--shadow);">
-              ${fimg(im, "brow", {style:"width:100%;height:220px;object-fit:cover;display:block;"})}
+              ${fimg(im, "brow", {alt:`Neupane Dental Clinic gallery photo ${i+1}`, style:"width:100%;height:220px;object-fit:cover;display:block;"})}
               ${ed?`<div class="mission-tools">
                 <button type="button" class="admin-mini-btn" data-action="adjust-img" data-path="${base}.images.${i}" title="Adjust photo">✂</button>
                 <button class="admin-mini-btn" data-action="edit-img" data-path="${base}.images.${i}" title="Replace">${icon('upload')}</button>
@@ -2558,7 +2916,7 @@ function branchCard(b,i,ed){
     <h4 ${ed?`data-bind="siteInfo.branches.${i}.name" contenteditable="true"`:''} style="margin-bottom:10px;">${esc(b.name)}</h4>
     <p style="color:var(--charcoal-soft);font-size:.9rem;line-height:1.6;margin-bottom:10px;" ${ed?`data-bind="siteInfo.branches.${i}.address" contenteditable="true"`:''}>${esc(b.address)}</p>
     <p style="color:var(--gold-deep);font-weight:600;font-size:.88rem;margin-bottom:4px;" ${ed?`data-bind="siteInfo.branches.${i}.phone" contenteditable="true"`:''}>${esc(b.phone)}</p>
-    ${b.mapsUrl?`<span style="display:inline-flex;align-items:center;margin-top:8px;"><a href="${b.mapsUrl}" target="_blank" class="link-more">Get Directions →</a>${ed?linkEditRaw('siteInfo.branches.'+i+'.mapsUrl'):''}</span>`:(ed?`<button type="button" class="admin-mini-btn" data-action="edit-link" data-key="siteInfo.branches.${i}.mapsUrl" style="margin-top:6px;">+ Add Maps Link</button>`:'')}
+    ${b.mapsUrl?`<span style="display:inline-flex;align-items:center;margin-top:8px;"><a href="${esc(safeUrl(b.mapsUrl))}" target="_blank" rel="noopener" class="link-more">Get Directions →</a>${ed?linkEditRaw('siteInfo.branches.'+i+'.mapsUrl'):''}</span>`:(ed?`<button type="button" class="admin-mini-btn" data-action="edit-link" data-key="siteInfo.branches.${i}.mapsUrl" style="margin-top:6px;">+ Add Maps Link</button>`:'')}
     ${ed?`<div class="admin-row-tools"><button type="button" class="admin-mini-btn danger" data-action="del-branch" data-idx="${i}">Remove Branch</button></div>`:''}
   </div>`;
 }
@@ -2575,19 +2933,19 @@ function teamCard(t,i,ed){
 }
 function serviceCard(sv,i,ed){
   return `<div class="service-card reveal">
-    <div class="ico"><img src="${esc(imgSrc(sv.img))}" alt="" loading="lazy" decoding="async"></div>
+    <div class="ico"><img src="${esc(imgSrc(sv.img))}" alt="${esc(sv.name||"")}" loading="lazy" decoding="async"></div>
     <h3 ${ed?`data-bind="services.${i}.name" contenteditable="true"`:''}>${esc(sv.name)}</h3>
     <p ${ed?`data-bind="services.${i}.short" contenteditable="true"`:''}>${esc(sv.short)}</p>
     <span class="price-tag">From <span ${ed?`data-bind="services.${i}.price" contenteditable="true"`:''}>${esc(sv.price)}</span></span>
-    <a href="/service/${sv.id}" class="link-more">Learn More →</a>
-    ${ed?`<div class="admin-row-tools"><button class="admin-mini-btn" data-action="edit-img" data-path="services.${i}.img">Change Image</button><button type="button" class="admin-mini-btn" data-action="adjust-img" data-path="services.${i}.img" title="Adjust photo">✂ Adjust Image</button><button class="admin-mini-btn seo-btn" data-action="open-seo" data-kind="service" data-id="${sv.id}">${icon('search')} SEO</button><button class="admin-mini-btn danger" data-action="del-service" data-idx="${i}">Remove</button></div>`:''}
+    <a href="/service/${esc(sv.id)}" class="link-more">Learn More →</a>
+    ${ed?`<div class="admin-row-tools"><button class="admin-mini-btn" data-action="edit-img" data-path="services.${i}.img">Change Image</button><button type="button" class="admin-mini-btn" data-action="adjust-img" data-path="services.${i}.img" title="Adjust photo">✂ Adjust Image</button><button class="admin-mini-btn seo-btn" data-action="open-seo" data-kind="service" data-id="${esc(sv.id)}">${icon('search')} SEO</button><button class="admin-mini-btn danger" data-action="del-service" data-idx="${i}">Remove</button></div>`:''}
   </div>`;
 }
 function reviewChip(r){
   return `<div class="review-chip">
-    <div class="stars">${'★'.repeat(r.rating)}${'☆'.repeat(5-r.rating)}</div>
+    <div class="stars">${'★'.repeat(starCount(r.rating))}${'☆'.repeat(5-starCount(r.rating))}</div>
     <p>"${esc(r.text)}"</p>
-    <div class="who"><div class="av">${initials(r.name)}</div><div><b>${esc(r.name)}</b><br><small>${fmtDate(r.date)} · Google</small></div></div>
+    <div class="who"><div class="av">${initials(r.name)}</div><div><b>${esc(r.name)}</b><br><small>${esc(fmtDate(r.date))} · ${r.source==="patient" ? "Patient" : "Google"}</small></div></div>
   </div>`;
 }
 
@@ -2647,7 +3005,7 @@ function pageServiceDetail(id){
           <a href="/book?service=${encodeURIComponent(sv.name)}" class="gold-btn" style="margin-top:22px;">Book This Treatment</a>
         </div>
       </div>
-      ${ed?`<div class="admin-row-tools" style="margin:0 0 30px;"><button class="admin-mini-btn seo-btn" data-action="open-seo" data-kind="service" data-id="${sv.id}">${icon('search')} SEO Settings for this Service</button></div>`:''}
+      ${ed?`<div class="admin-row-tools" style="margin:0 0 30px;"><button class="admin-mini-btn seo-btn" data-action="open-seo" data-kind="service" data-id="${esc(sv.id)}">${icon('search')} SEO Settings for this Service</button></div>`:''}
       <div style="max-width:800px;margin:50px auto;">${faqBlock(sv.faqs, false, "")}</div>
     </div>
   </section>`;
@@ -2673,12 +3031,12 @@ function pagePricing(){
           <div class="price-card">
             <div class="thumb">${fimg(sv.img, "price")}${ed?`<div class="img-tools"><button type="button" class="admin-mini-btn main" data-action="adjust-img" data-path="services.${i}.img" title="Adjust photo">✂ Adjust</button><button type="button" class="admin-mini-btn" data-action="edit-img" data-path="services.${i}.img">🔄 Change</button></div>`:''}</div>
             <div class="body">
-              <h4><a href="/service/${sv.id}" ${ed?`data-bind="services.${i}.name" contenteditable="true"`:''}>${esc(sv.name)}</a></h4>
+              <h4><a href="/service/${esc(sv.id)}" ${ed?`data-bind="services.${i}.name" contenteditable="true"`:''}>${esc(sv.name)}</a></h4>
               <ul>
                 ${sv.priceList.map((p,pi)=>`<li><span ${ed?`data-bind="services.${i}.priceList.${pi}.label" contenteditable="true"`:''} style="flex:1;">${esc(p.label)}</span><span style="display:flex;align-items:center;gap:6px;"><b ${ed?`data-bind="services.${i}.priceList.${pi}.price" contenteditable="true"`:''}>${esc(p.price)}</b>${ed?`<button type="button" class="admin-mini-btn" data-action="del-price" data-svc="${i}" data-idx="${pi}" title="Remove this price row" style="padding:1px 6px;color:#b93b26;border-color:rgba(185,59,38,.45);">${icon('close')}</button>`:''}</span></li>`).join('')}
               </ul>
               ${ed?`<button type="button" class="admin-mini-btn" data-action="add-price" data-svc="${i}" style="margin-top:8px;">+ Add Row</button>`:''}
-              <a href="/service/${sv.id}" class="link-more" style="margin-top:14px;display:inline-flex;">Details →</a>
+              <a href="/service/${esc(sv.id)}" class="link-more" style="margin-top:14px;display:inline-flex;">Details →</a>
               ${ed?`<div class="admin-row-tools"><button type="button" class="admin-mini-btn danger" data-action="del-service" data-idx="${i}">${icon('trash')} Remove Treatment</button></div>`:''}
             </div>
           </div>`).join('')}
@@ -2714,7 +3072,7 @@ function pageAbout(){
         <div class="reveal grid cols-2">
           ${s.galleryImages.slice(2).map((g,gi)=>`
             <div class="mission-tile" style="height:220px;${gi===1?'margin-top:26px;':''}">
-              ${fimg(g, "about")}
+              ${fimg(g, "about", {alt:`Neupane Dental Clinic photo ${gi+3}`})}
               ${ed?`<div class="mission-tools">
                 <button type="button" class="admin-mini-btn" data-action="adjust-img" data-path="siteInfo.galleryImages.${gi+2}" title="Adjust photo">✂</button>
                 <button class="admin-mini-btn" data-action="edit-img" data-path="siteInfo.galleryImages.${gi+2}" title="Replace">${icon('upload')}</button>
@@ -2731,13 +3089,13 @@ function pageAbout(){
       <div class="reveal">
         <h3 style="margin-bottom:16px;">Our Services</h3>
         <ul style="list-style:none;padding:0;">
-          ${s.aboutServicesList.map((x,i)=>`<li style="padding:8px 0;border-bottom:1px dashed rgba(180,135,74,.3);" ${ed?`data-bind="siteInfo.aboutServicesList.${i}" contenteditable="true"`:''}>✅ ${esc(x)}</li>`).join('')}
+          ${s.aboutServicesList.map((x,i)=>`<li style="padding:8px 0;border-bottom:1px dashed rgba(180,135,74,.3);" >✅ <span ${ed?`data-bind="siteInfo.aboutServicesList.${i}" contenteditable="true"`:''}>${esc(x)}</span></li>`).join('')}
         </ul>
       </div>
       <div class="reveal">
         <h3 style="margin-bottom:16px;">Why Choose Us?</h3>
         <ul style="list-style:none;padding:0;">
-          ${s.whyChooseUs.map((x,i)=>`<li style="padding:8px 0;border-bottom:1px dashed rgba(180,135,74,.3);" ${ed?`data-bind="siteInfo.whyChooseUs.${i}" contenteditable="true"`:''}>✔ ${esc(x)}</li>`).join('')}
+          ${s.whyChooseUs.map((x,i)=>`<li style="padding:8px 0;border-bottom:1px dashed rgba(180,135,74,.3);" >✔ <span ${ed?`data-bind="siteInfo.whyChooseUs.${i}" contenteditable="true"`:''}>${esc(x)}</span></li>`).join('')}
         </ul>
       </div>
     </div>
@@ -2780,37 +3138,40 @@ function pageNews(filter){
   </section>`;
 }
 function newsCard(n,ed){
-  return `<a href="/news/${n.id}" style="display:block;position:relative;">
+  return `<a href="${esc(newsPath(n))}" style="display:block;position:relative;">
     <div class="news-card">
       <div class="thumb">${fimg(n.img, "card")}</div>
       <div class="body">
         <span class="tag">${n.cat==='success'?'Success Story':'News'}</span>
         <h3>${esc(n.title)}</h3>
-        <p>${esc(n.excerpt)}</p>
+        <p>${esc(newsExcerpt(n))}</p>
         <div class="news-meta">
           <span>${fmtDate(n.date)}</span>
           <span>${icon('eye')} ${newsViewCount(n.id)}</span>
           <span>${icon('comment')} ${newsCommentCount(n.id)}</span>
           <span>${icon('heart')} ${newsLikeCount(n.id)}</span>
         </div>
-        ${ed?`<div class="admin-row-tools"><button class="admin-mini-btn seo-btn" data-action="open-seo" data-kind="news" data-id="${n.id}">${icon('search')} SEO</button><button class="admin-mini-btn" data-action="del-news" data-id="${n.id}" style="color:#b93b26;border-color:rgba(185,59,38,.45);">${icon('trash')} Delete</button></div>`:''}
+        ${ed?`<div class="admin-row-tools"><button class="admin-mini-btn seo-btn" data-action="open-seo" data-kind="news" data-id="${esc(n.id)}">${icon('search')} SEO</button><button class="admin-mini-btn" data-action="del-news" data-id="${esc(n.id)}" style="color:#b93b26;border-color:rgba(185,59,38,.45);">${icon('trash')} Delete</button></div>`:''}
       </div>
     </div>
   </a>`;
 }
 
-function pageNewsDetail(id){
-  ensureCommentsLikesLoaded();
+function pageNewsDetail(key){
   const ed = isAdmin() && editMode;
-  const idx = DB.news.findIndex(n=>n.id===id);
-  const n = DB.news[idx];
+  const n = findNews(key);
+  if(n) ensurePostSocialLoaded(n.id);
+  const idx = n ? DB.news.indexOf(n) : -1;
+  const id = n ? n.id : key;
+  /* an old link (/news/<id> or an earlier URL name) moves to the current URL name */
+  if(n && key !== (n.slug || n.id)) setTimeout(()=> navigate(newsPath(n), {replace:true}), 0);
   if(!n) return `<section class="wrap" style="padding:100px 0;text-align:center;"><h2>Article not found</h2><a href="/news" class="ghost-btn">Back</a></section>`;
   if(!window.__viewed) window.__viewed = {};
   if(!window.__viewed[id]){ window.__viewed[id]=true; recordNewsView(id); }
   const u = guestOrUser();
   const liked = newsLikedByMe(id);
   const comments = NEWS_COMMENTS[id] || [];
-  const shareUrl = location.href;
+  const shareUrl = SITE_ORIGIN + newsPath(n);
   return `
   <section class="detail-hero">
     <div class="wrap">
@@ -2826,12 +3187,20 @@ function pageNewsDetail(id){
   <section style="padding-top:0;">
     <div class="wrap">
       <div class="detail-cover">${fimg(n.img, "cover", {eager:true})}${ed?`<div class="img-tools"><button type="button" class="admin-mini-btn main" data-action="adjust-img" data-path="news.${idx}.img" title="Adjust photo">✂ Adjust</button><button type="button" class="admin-mini-btn" data-action="edit-img" data-path="news.${idx}.img">🔄 Change</button></div>`:''}</div>
+      ${ed?`<div class="card-panel news-meta-edit" style="max-width:800px;margin:0 auto 24px;padding:22px;">
+        <h4 style="margin:0 0 10px;">Link and short description</h4>
+        <div class="field"><label>URL name <span style="font-weight:400;color:var(--charcoal-soft);">(small English letters, numbers and dashes)</span></label>
+          <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;"><span class="form-note" style="margin:0;">neupanedental.com.np/news/</span><input id="newsSlugInput" maxlength="80" value="${esc(n.slug||"")}" placeholder="e.g. free-dental-camp" style="flex:1;min-width:180px;"></div></div>
+        <div class="field"><label>Short description <span style="font-weight:400;color:var(--charcoal-soft);">(news card and Google; empty = start of the article)</span></label>
+          <textarea id="newsExcerptInput" rows="2" maxlength="300" placeholder="${esc(newsExcerpt(Object.assign({}, n, {excerpt:""})))}">${esc(n.excerpt && n.excerpt!=="Short excerpt..." ? n.excerpt : "")}</textarea></div>
+        <button type="button" class="gold-btn" data-action="save-news-meta" data-id="${esc(n.id)}"><span>Save link and description</span></button>
+      </div>`:''}
       <div class="content-block reveal">
         <div ${ed?`data-bind="news.${idx}.content" data-rich="1" contenteditable="true"`:''}>${richOut(n.content)}</div>
       </div>
-      ${ed?`<div class="admin-row-tools" style="max-width:800px;margin:0 auto 30px;"><button class="admin-mini-btn seo-btn" data-action="open-seo" data-kind="news" data-id="${n.id}">${icon('search')} SEO Settings for this Post</button><button class="admin-mini-btn" data-action="del-news" data-id="${n.id}" style="color:#b93b26;border-color:rgba(185,59,38,.45);">${icon('trash')} Delete Post</button></div>`:''}
+      ${ed?`<div class="admin-row-tools" style="max-width:800px;margin:0 auto 30px;"><button class="admin-mini-btn seo-btn" data-action="open-seo" data-kind="news" data-id="${esc(n.id)}">${icon('search')} SEO Settings for this Post</button><button class="admin-mini-btn" data-action="del-news" data-id="${esc(n.id)}" style="color:#b93b26;border-color:rgba(185,59,38,.45);">${icon('trash')} Delete Post</button></div>`:''}
       <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px;max-width:800px;margin:26px auto;">
-        <button class="heart-btn ${liked?'liked':''}" data-action="like-news" data-id="${n.id}">${icon('heart')} <span>${newsLikeCount(id)} Likes</span></button>
+        <button class="heart-btn ${liked?'liked':''}" data-action="like-news" data-id="${esc(n.id)}">${icon('heart')} <span>${newsLikeCount(id)} Likes</span></button>
         <div class="share-row">
           <a href="https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}" target="_blank" title="Share on Facebook">${icon('fb')}</a>
           <a href="https://api.whatsapp.com/send?text=${encodeURIComponent(n.title+' - '+shareUrl)}" target="_blank" title="Share on WhatsApp">${icon('phone')}</a>
@@ -2844,11 +3213,11 @@ function pageNewsDetail(id){
           <div class="comment">
             <div class="av">${initials(c.name)}</div>
             <div style="flex:1;">
-              <div style="display:flex;align-items:center;gap:8px;"><b>${esc(c.name)}</b><small>${fmtDate(c.date)}</small>${isAdmin()?`<button class="del" data-action="del-comment" data-cid="${c.id}">Delete</button>`:''}</div>
+              <div style="display:flex;align-items:center;gap:8px;"><b>${esc(c.name)}</b><small>${fmtDate(c.date)}</small>${isAdmin()?`<button class="del" data-action="del-comment" data-cid="${esc(c.id)}">Delete</button>`:''}</div>
               <p>${esc(c.text)}</p>
             </div>
           </div>`).join('') || `<p style="color:var(--charcoal-soft);font-size:.9rem;">No comments yet — be the first to share your thoughts.</p>`}
-        <form data-form="comment" data-nid="${n.id}" style="margin-top:22px;">
+        <form data-form="comment" data-nid="${esc(n.id)}" style="margin-top:22px;">
           ${(!u || u.isAnonymous)?`<div class="field"><label>Your Name</label><input name="guestName" placeholder="e.g. Sita Sharma" required></div>`:''}
           <div class="field"><textarea name="text" rows="3" placeholder="Write a comment..." required></textarea></div>
           <button class="gold-btn" type="submit">Post Comment</button>
@@ -2944,14 +3313,14 @@ function appointmentForm(opts){
       </div>
     </div>
     <div class="form-row-2">
-      <div class="field"><label>Appointment Date *</label><input type="date" name="apptDate" required></div>
+      <div class="field"><label>Appointment Date *</label><input type="date" name="apptDate" required min="${todayLocal()}"></div>
       <div class="field"><label>Time *</label><input type="time" name="apptTime" required></div>
     </div>
     <div class="field"><label>Message</label><textarea name="message" rows="3" placeholder="Anything else you'd like us to know? (optional)"></textarea></div>
     <button class="gold-btn" type="submit" style="width:100%;justify-content:center;">
       <span class="btn-label">Submit Appointment</span>
     </button>
-    ${opts.dpen?'':`<p class="form-note">On submit, your request is saved and an email is sent automatically to <b>${DB.siteInfo.email}</b> — no need to open your own email app.</p>`}
+    ${opts.dpen?'':`<p class="form-note">On submit, your request is saved and an email is sent automatically to <b>${esc(DB.siteInfo.email)}</b> — no need to open your own email app.</p>`}
   </form>`;
 }
 
@@ -3004,10 +3373,10 @@ function pageDashboard(){
     <div class="wrap grid cols-2" style="align-items:start;">
       <div class="card-panel reveal">
         <h3 style="margin-bottom:16px;">Your Appointments</h3>
-        ${mine.length? mine.map(a=>`
+        ${mine.length? mine.slice().sort((x,y)=> String(y.date||"").localeCompare(String(x.date||""))).map(a=>`
           <div style="border-bottom:1px solid rgba(180,135,74,.25);padding:12px 0;">
             <b>${esc(a.service)}</b> with ${esc(a.dentist)}<br>
-            <small style="color:var(--charcoal-soft);">${new Date(a.time).toLocaleString()}</small>
+            <small style="color:var(--charcoal-soft);">${esc(fmtDate(a.date))}${a.time?` · ${esc(a.time)}`:""}</small>
           </div>`).join('') : `<p class="form-note">No appointments yet. <a href="/book" style="color:var(--gold-deep);font-weight:600;">Book one now →</a></p>`}
       </div>
       <div class="card-panel reveal">
@@ -3019,7 +3388,7 @@ function pageDashboard(){
           <div class="field"><label>Your experience</label><textarea name="text" rows="3" required placeholder="Tell others about your visit..."></textarea></div>
           <button class="gold-btn" type="submit">Submit Review</button>
         </form>
-        ${myVoice.length?`<div style="margin-top:18px;">${myVoice.map(v=>`<div class="review-chip" style="width:auto;margin-bottom:10px;"><div class="stars">${'★'.repeat(v.rating)}</div><p>${esc(v.text)}</p><small>${v.approved?'Published':'Pending admin review'}</small></div>`).join('')}</div>`:''}
+        ${myVoice.length?`<div style="margin-top:18px;">${myVoice.map(v=>`<div class="review-chip" style="width:auto;margin-bottom:10px;"><div class="stars">${'★'.repeat(starCount(v.rating))}</div><p>${esc(v.text)}</p><small>${v.approved?'Published':'Pending admin review'}</small></div>`).join('')}</div>`:''}
       </div>
     </div>
     <div class="wrap" style="margin-top:10px;">
@@ -3139,7 +3508,7 @@ function pageAdmin(){
             <td style="padding:10px 14px;font-size:.85rem;">${esc(a.date||(a.time&&a.time.includes('T')?a.time.split('T')[0]:''))}</td>
             <td style="padding:10px 14px;font-size:.85rem;">${esc(a.time||'')}</td>
             <td style="padding:10px 14px;font-size:.85rem;max-width:180px;">${esc(a.message||'—')}</td>
-            <td style="padding:10px 14px;"><button class="admin-mini-btn danger" data-action="del-appt" data-id="${a.id}">Delete</button></td>
+            <td style="padding:10px 14px;"><button class="admin-mini-btn danger" data-action="del-appt" data-id="${esc(a.id)}">Delete</button></td>
           </tr>`).join('') || `<tr><td style="padding:14px;">No appointments yet.</td></tr>`}
         </tbody>
       </table>
@@ -3152,7 +3521,7 @@ function pageAdmin(){
       <div class="grid cols-3">
         ${DB.reviews.map((r,i)=>`
           <div class="review-chip">
-            <div class="stars">${'★'.repeat(r.rating)}</div>
+            <div class="stars">${'★'.repeat(starCount(r.rating))}</div>
             <p contenteditable="true" data-bind="reviews.${i}.text">${esc(r.text)}</p>
             <div class="who"><div class="av">${initials(r.name)}</div><div><b contenteditable="true" data-bind="reviews.${i}.name">${esc(r.name)}</b></div></div>
             <div class="admin-row-tools"><button class="admin-mini-btn danger" data-action="del-review" data-idx="${i}">Remove</button></div>
@@ -3166,12 +3535,12 @@ function pageAdmin(){
       <h3 style="margin-bottom:16px;">Patient Voices — pending approval (${pendingVoices.length})</h3>
       ${PATIENT_VOICES.length? PATIENT_VOICES.map(v=>`
         <div class="card-panel" style="margin-bottom:14px;padding:20px;">
-          <div class="stars">${'★'.repeat(v.rating)}</div>
+          <div class="stars">${'★'.repeat(starCount(v.rating))}</div>
           <p style="margin:8px 0;">${esc(v.text)}</p>
           <small style="color:var(--charcoal-soft);">${esc(v.name)} · ${v.approved?'Published':'Pending'}</small>
           <div class="admin-row-tools">
-            ${!v.approved?`<button class="admin-mini-btn" data-action="approve-voice" data-id="${v.id}">Approve</button>`:''}
-            <button class="admin-mini-btn danger" data-action="del-voice" data-id="${v.id}">Delete</button>
+            ${!v.approved?`<button class="admin-mini-btn" data-action="approve-voice" data-id="${esc(v.id)}">Approve</button>`:''}
+            <button class="admin-mini-btn danger" data-action="del-voice" data-id="${esc(v.id)}">Delete</button>
           </div>
         </div>`).join('') : `<p class="form-note">No patient voice submissions yet.</p>`}
     </div>
@@ -3188,11 +3557,11 @@ function legacyHashToPath(h){
   const p = String(h||"").replace(/^#/,"");
   return p.startsWith("/") ? p : "/"+p;
 }
-/* Page khulda URL ma purano "#/..." chha bhane turuntai sahi path ma replace garne */
+/* On load, if the URL still has an old "#/...", replace it with the right path immediately */
 function redirectLegacyHash(){
   if(location.hash.startsWith("#/")) history.replaceState(null, "", legacyHashToPath(location.hash));
 }
-/* Pahila ko "location.hash = ..." ko satta. Hashchange jastai render pachhi (async) hunchha. */
+/* Replaces the old "location.hash = ...". Like hashchange, rendering happens afterwards (async). */
 function navigate(href, opts){
   opts = opts || {};
   let target = String(href||"/");
@@ -3204,11 +3573,13 @@ function navigate(href, opts){
     target = (u.hash.startsWith("#/") && u.pathname==="/") ? legacyHashToPath(u.hash) : (u.pathname + u.search);
   }
   if(target === location.pathname + location.search && !location.hash) return;
+  collectEdits();
+  if(!opts.replace){ try{ history.replaceState(Object.assign({}, history.state, {scrollY: window.scrollY}), ""); }catch(e){} }
   if(opts.replace) history.replaceState(null, "", target);
   else history.pushState(null, "", target);
   setTimeout(()=>{ ROUTE = location.pathname || "/"; render(); window.scrollTo({top:0,behavior:"smooth"}); }, 0);
 }
-/* Site bhitra ko <a> click: reload nagari navigate(). Bahira ko link, naya tab, file (.xml, .jpg ...) ra "#section" jasta link chhoina. */
+/* Internal <a> clicks: navigate() without a reload. External links, new tabs, files (.xml, .jpg ...) and "#section" links are left alone. */
 function handleInternalLinkClick(e){
   if(e.defaultPrevented || e.button!==0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
   const a = e.target.closest && e.target.closest("a[href]");
@@ -3232,7 +3603,7 @@ function pageContent(){
   if(parts[0]==="pricing") return pagePricing();
   if(parts[0]==="about") return pageAbout();
   if(parts[0]==="news" && parts.length===1) return pageNews("all");
-  if(parts[0]==="news" && parts[1]==="cat") return pageNews(parts[2]);
+  if(parts[0]==="news" && parts[1]==="cat") return pageNews(["news","success"].includes(parts[2]) ? parts[2] : "all");
   if(parts[0]==="news" && parts[1]) return pageNewsDetail(parts[1]);
   if(parts[0]==="book") return pageBook();
   if(parts[0]==="privacy") return pagePrivacy();
@@ -3243,8 +3614,29 @@ function pageContent(){
   return `<section class="wrap" style="padding:120px 0;text-align:center;"><h2>Page not found</h2><a href="/" class="ghost-btn">Go Home</a></section>`;
 }
 
+/* ---------- Edit mode: typed text is collected into the data before anything re-draws the page ---------- */
+let __editDirty = false;      // something was typed since the last collect
+let __unsavedEdits = false;   // collected text not saved to Firestore yet
+document.addEventListener("input", (e)=>{ if(e.target && e.target.closest && e.target.closest("#app [data-bind]")) __editDirty = true; });
+window.addEventListener("beforeunload", (e)=>{ if(isAdmin() && editMode && (__editDirty || __unsavedEdits)){ e.preventDefault(); e.returnValue = ""; } });
+/* the text exactly as typed: CSS such as text-transform:uppercase does not change what is saved */
+function readBindValue(node){
+  if(node.hasAttribute("data-rich")) return sanitizeRichHTML(node.innerHTML);
+  const prev = node.style.textTransform;
+  node.style.textTransform = "none";
+  const t = node.innerText;
+  node.style.textTransform = prev;
+  return t.trim();
+}
+function collectEdits(){
+  if(!(isAdmin() && editMode) || !__editDirty) return;
+  document.querySelectorAll("#app [data-bind]").forEach(node=> setPath(DB, node.getAttribute("data-bind"), readBindValue(node)));
+  __editDirty = false;
+  __unsavedEdits = true;
+}
 function render(){
   const app = document.getElementById("app");
+  document.body.dataset.page = (location.pathname === "/" || location.pathname === "") ? "home" : "page";
   const ed = isAdmin() && editMode;
   document.body.classList.toggle("admin-edit-mode", ed);
   if(!ed) hideRteToolbar();
@@ -3265,8 +3657,8 @@ function initFaqState(){
   document.querySelectorAll(".faq-item").forEach(el=>{ /* nothing persisted, css handles open state via class */ });
 }
 /* ===================== DPEN AI CHAT (website) =====================
-   Tala/dayan ko button, chat window, chat bhitra booking form. Jawaf Cloudflare Worker ko /__chat bata
-   (Gemini). Chat log Firestore "chatLogs" ma 30 din (expireAt — TTL). Booking form ko naam/phone AI ma jaadaina. */
+   Corner button, chat window and an in-chat booking form. Replies come from the Cloudflare Worker's /__chat
+   (Gemini). Chat logs are kept in Firestore "chatLogs" for 30 days. Booking names/phones are never sent to the AI. */
 const DPEN_LOG_DAYS = 30;
 const dpen = { mounted:false, open:false, busy:false, msgs:[], el:null,
   sid: "s" + Date.now().toString(36) + Math.random().toString(36).slice(2,8) };
@@ -3276,7 +3668,7 @@ function dpenPhone(){ return String((DB && DB.siteInfo && DB.siteInfo.phone1) ||
 function dpenWa(){ const c = dpenCfg(); return String(c.whatsapp || (DB && DB.siteInfo && DB.siteInfo.phone1) || "").replace(/\D/g,""); }
 function dpenIsMobile(){ return window.matchMedia("(max-width:560px)").matches; }
 
-/* render() pachhi har pali — On/Off, thau, admin edit mode */
+/* After every render() — on/off, position, admin edit mode */
 function dpenSync(){
   if(!DB) return;
   const c = dpenCfg();
@@ -3304,7 +3696,7 @@ function dpenMount(){
     <div class="dpen-win" hidden role="dialog" aria-label="Dpen chat">
       <div class="dpen-hd">${DPEN_AV}<div><b>Dpen</b><small>Neupane Dental · AI</small></div><button type="button" class="dpen-x" data-dpen="close" aria-label="Close">✕</button></div>
       <div class="dpen-body" id="dpenBody" aria-live="polite"></div>
-      <form class="dpen-ft" id="dpenForm" autocomplete="off"><textarea id="dpenInput" rows="1" maxlength="1000" placeholder="Yaha lekhnus… (नेपाली / Roman / English)"></textarea><button type="submit" class="dpen-send" aria-label="Send">➤</button></form>
+      <form class="dpen-ft" id="dpenForm" autocomplete="off"><textarea id="dpenInput" rows="1" maxlength="1000" placeholder="Type here… (English / नेपाली / Roman)"></textarea><button type="submit" class="dpen-send" aria-label="Send">➤</button></form>
     </div>`;
   document.body.appendChild(root);
   dpen.el = root; dpen.mounted = true;
@@ -3351,7 +3743,7 @@ function dpenClose(){
 }
 function dpenScroll(){ const b = document.getElementById("dpenBody"); if(b) b.scrollTop = b.scrollHeight; }
 
-/* Jawaf ko text: HTML escape, **bold**, "- " bullet, aaphnai site ko link */
+/* Reply text: HTML escape, **bold**, "- " bullets, links to this site */
 function dpenMd(text){
   const linkify = (s)=> s.replace(/(https?:\/\/[^\s<]+[^\s<.,;:!?)])/g, (u)=>{
     const raw = u.replace(/&amp;/g,"&");
@@ -3375,10 +3767,10 @@ function dpenMd(text){
 function dpenChipsHtml(){
   const c = dpenCfg(), parts = [];
   if(c.showBooking){
-    parts.push(`<button type="button" class="dpen-chip gold" data-dpen="book">📅 Booking garnus</button>`);
+    parts.push(`<button type="button" class="dpen-chip gold" data-dpen="book">📅 Book appointment</button>`);
     parts.push(`<button type="button" class="dpen-chip" data-dpen="bookpage">Booking page</button>`);
   }
-  if(c.showPhone && dpenPhone()) parts.push(`<a class="dpen-chip" href="tel:${esc(dpenPhone())}">📞 Phone garnus</a>`);
+  if(c.showPhone && dpenPhone()) parts.push(`<a class="dpen-chip" href="tel:${esc(dpenPhone())}">📞 Call us</a>`);
   if(c.showWhatsapp && dpenWa()) parts.push(`<a class="dpen-chip" href="https://wa.me/${esc(dpenWa())}" target="_blank" rel="noopener">💬 WhatsApp</a>`);
   return parts.length ? `<div class="dpen-chips">${parts.join("")}</div>` : "";
 }
@@ -3411,9 +3803,9 @@ function dpenLog(d){
     const rec = Object.assign({ sid:dpen.sid, t:new Date().toISOString(),
       expireAt: Timestamp.fromDate(new Date(Date.now() + DPEN_LOG_DAYS*864e5)), lang: dpenLang(d.q||"") }, d);
     addDoc(collection(fsdb,"chatLogs"), rec).catch(err=>console.warn("chat log failed", err && err.code));
-  }catch(e){ /* log nabhaye pani chat chalirahos */ }
+  }catch(e){ /* chat keeps working even if logging fails */ }
 }
-/* Gemini lai pathaune history: welcome ra error message bahek, lagatar user message jodne */
+/* History sent to Gemini: skips the welcome and error messages, merges consecutive same-role messages */
 function dpenHistory(list){
   const out = [];
   list.forEach(m=>{
@@ -3422,13 +3814,15 @@ function dpenHistory(list){
     const last = out[out.length-1];
     if(last && last.role===role) last.text += "\n" + m.text; else out.push({role, text:m.text});
   });
-  return out;
+  /* only the recent part of a long chat is sent (the Worker uses the last 12 messages anyway),
+     and long earlier replies are shortened, so the request stays small */
+  return out.slice(-24).map(m=> m.role==="model" ? {role:m.role, text:String(m.text).slice(0,1500)} : m);
 }
 const DPEN_ERR = {
-  limit:"Aaja ko lagi dherai prashna bhaisakyo. Thap jankari ko lagi clinic ma phone garnus ya appointment book garnus.",
-  disabled:"Dpen ahile uplabdha chhaina. Kripaya clinic ma phone garnus ya appointment book garnus.",
-  blocked:"Maaf garnus, yo prashna ko jawaf dina sakina. Arko tarika le sodhnus ya clinic ma phone garnus.",
-  busy:"Maaf garnus, ahile jawaf dina sakina. Ek chhin pachhi feri sodhnus, ya clinic ma phone garnus."
+  limit:"You've asked a lot of questions today. For more information, please call the clinic or book an appointment.",
+  disabled:"Dpen is not available right now. Please call the clinic or book an appointment.",
+  blocked:"Sorry, I can't answer that. Please try asking another way, or call the clinic.",
+  busy:"Sorry, I can't reply right now. Please try again in a moment, or call the clinic."
 };
 async function dpenAsk(messages, extra){
   try{
@@ -3462,7 +3856,7 @@ async function dpenSend(){
   }
   if(!dpenIsMobile()) inp.focus();
 }
-/* Chat bhitra website kai booking form (source: dpen) */
+/* The site's own booking form inside the chat (source: dpen) */
 function dpenShowBooking(){
   const body = document.getElementById("dpenBody");
   const open = body.querySelector(".dpen-book:not(.done)");
@@ -3473,7 +3867,7 @@ function dpenShowBooking(){
 }
 function dpenOnBooked(form){
   const card = form && form.closest(".dpen-book");
-  if(card){ card.classList.add("done"); card.innerHTML = `<h5>✅ Appointment request pathaiyo</h5><p class="form-note" style="display:block;margin:0;">Dhanyabad! Clinic bata chhittai phone/SMS ma confirmation aaunechha.</p>`; }
+  if(card){ card.classList.add("done"); card.innerHTML = `<h5>✅ Appointment request sent</h5><p class="form-note" style="display:block;margin:0;">Thank you! The clinic will confirm by phone/SMS shortly.</p>`; }
   dpenLog({type:"booking"});
 }
 
@@ -3486,60 +3880,60 @@ function dpenAdminSection(){
   const svcCount = (DB.services||[]).length, teamCount = (DB.team||[]).length, faqCount = (DB.faqsGlobal||[]).length;
   setTimeout(dpenAdminAfterRender, 0);
   const chk = (name, on, label)=>`<label class="dpen-check"><input type="checkbox" name="${name}" ${on?"checked":""}> ${label}</label>`;
-  const sideSel = (name, v)=>`<select name="${name}"><option value="right" ${v!=="left"?"selected":""}>Dayan (right)</option><option value="left" ${v==="left"?"selected":""}>Baya (left)</option></select>`;
+  const sideSel = (name, v)=>`<select name="${name}"><option value="right" ${v!=="left"?"selected":""}>Right</option><option value="left" ${v==="left"?"selected":""}>Left</option></select>`;
   return `
   <section class="alt-bg" id="dpenAdmin">
     <div class="wrap">
       <div class="card-panel dpen-adm">
         <h3 style="margin-bottom:6px;">Dpen AI Chat</h3>
-        <p class="form-note" style="margin:0 0 6px;">Website ko AI chat lai yahi bata control garnus. Save garda turuntai website ma lagu hunchha.</p>
+        <p class="form-note" style="margin:0 0 6px;">Control the website's AI chat from here. Changes apply to the site as soon as you Save.</p>
         <div class="dpen-stats" id="dpenStats">${dpenStatsHtml()}</div>
         <form data-form="dpen-settings">
           <h4><span class="dpen-num">1</span>On / Off</h4>
-          ${chk("enabled", c.enabled, "Website ma Dpen dekhaune")}
-          <h4><span class="dpen-num">2</span>Button ko thau</h4>
-          <p class="form-note" style="margin:0 0 6px;">Preview ma button tanera (drag) pani milauna milchha. Number = tala bata kati px mathi.</p>
+          ${chk("enabled", c.enabled, "Show Dpen on the website")}
+          <h4><span class="dpen-num">2</span>Button position</h4>
+          <p class="form-note" style="margin:0 0 6px;">You can also drag the button in the preview. Number = distance from the bottom in px.</p>
           <div class="settings-grid">
             <div class="field"><label>Desktop: side</label>${sideSel("deskSide", c.deskSide)}</div>
-            <div class="field"><label>Desktop: tala bata (px)</label><input type="number" name="deskBottom" min="0" max="400" value="${esc(c.deskBottom)}"></div>
+            <div class="field"><label>Desktop: from bottom (px)</label><input type="number" name="deskBottom" min="0" max="400" value="${esc(c.deskBottom)}"></div>
             <div class="field"><label>Mobile: side</label>${sideSel("mobSide", c.mobSide)}</div>
-            <div class="field"><label>Mobile: tala bata (px)</label><input type="number" name="mobBottom" min="0" max="400" value="${esc(c.mobBottom)}"></div>
+            <div class="field"><label>Mobile: from bottom (px)</label><input type="number" name="mobBottom" min="0" max="400" value="${esc(c.mobBottom)}"></div>
           </div>
           <div class="dpen-pvs">
             <div class="dpen-pv" data-dev="desk"><small>Desktop preview</small><span class="dpen-pv-chip">● Dpen</span></div>
             <div class="dpen-pv" data-dev="mob"><small>Mobile preview</small><span class="dpen-pv-chip">● Dpen</span></div>
           </div>
-          <h4><span class="dpen-num">3</span>Swagat ra Bubble</h4>
-          ${chk("bubbleEnabled", c.bubbleEnabled, "Bubble message dekhaune")}
+          <h4><span class="dpen-num">3</span>Welcome and bubble</h4>
+          ${chk("bubbleEnabled", c.bubbleEnabled, "Show bubble message")}
           <div class="settings-grid">
             <div class="field"><label>Bubble message</label><input name="bubbleText" maxlength="200" value="${esc(c.bubbleText)}"></div>
-            <div class="field"><label>Bubble kati second pachhi aaune</label><input type="number" name="bubbleDelay" min="0" max="60" value="${esc(c.bubbleDelay)}"></div>
+            <div class="field"><label>Show bubble after (seconds)</label><input type="number" name="bubbleDelay" min="0" max="60" value="${esc(c.bubbleDelay)}"></div>
           </div>
-          <div class="field"><label>Chat khulda swagat message</label><textarea name="welcome" rows="3" maxlength="600">${esc(c.welcome)}</textarea></div>
-          <h4><span class="dpen-num">4</span>Dpen le jaane jankari</h4>
-          <p class="form-note" style="margin:0 0 8px;">Website ko yi kura Dpen le <b>aafai</b> padhchha: <span class="pill">${svcCount} services ra price</span> <span class="pill">Address, phone, email</span> <span class="pill">${teamCount} team</span> <span class="pill">${faqCount} FAQ</span> <span class="pill">Branch</span></p>
-          <div class="field"><label>Thap jankari (website ma nabhayeko kura: clinic samaya, bida, parking...)</label><textarea name="extraInfo" rows="4" maxlength="4000">${esc(c.extraInfo)}</textarea></div>
-          <h4><span class="dpen-num">5</span>Dpen ko thap nirdesan</h4>
-          <p class="form-note" style="margin:0 0 8px;">Dpen kasari bolne. Mukhya surakshya niyam (medicine prescribe nagarne, pakka diagnosis nadine, emergency ma clinic pathaune) sadhai lagu hunchhan, yaha bata hatauna mildaina.</p>
+          <div class="field"><label>Welcome message when chat opens</label><textarea name="welcome" rows="3" maxlength="600">${esc(c.welcome)}</textarea></div>
+          <h4><span class="dpen-num">4</span>What Dpen knows</h4>
+          <p class="form-note" style="margin:0 0 8px;">Dpen reads these from the website <b>automatically</b>: <span class="pill">${svcCount} services and prices</span> <span class="pill">Address, phone, email</span> <span class="pill">${teamCount} team</span> <span class="pill">${faqCount} FAQ</span> <span class="pill">Branch</span></p>
+          <div class="field"><label>Extra information (things not on the website: opening hours, holidays, parking...)</label><textarea name="extraInfo" rows="4" maxlength="4000">${esc(c.extraInfo)}</textarea></div>
+          <h4><span class="dpen-num">5</span>Extra instructions for Dpen</h4>
+          <p class="form-note" style="margin:0 0 8px;">How Dpen should talk. The core safety rules (no prescriptions, no definite diagnosis, send emergencies to the clinic) always apply and cannot be removed here.</p>
           <div class="field"><textarea name="extraRules" rows="4" maxlength="3000">${esc(c.extraRules)}</textarea></div>
-          <h4><span class="dpen-num">6</span>Button ra limit</h4>
+          <h4><span class="dpen-num">6</span>Buttons and limit</h4>
           ${chk("showBooking", c.showBooking, "Booking")}${chk("showPhone", c.showPhone, "Phone")}${chk("showWhatsapp", c.showWhatsapp, "WhatsApp")}
           <div class="settings-grid">
-            <div class="field"><label>WhatsApp number (khali bhaye Phone 1)</label><input name="whatsapp" maxlength="30" value="${esc(c.whatsapp)}" placeholder="${esc(DB.siteInfo.phone1||"")}"></div>
-            <div class="field"><label>Prati visitor din ko message limit</label><input type="number" name="dailyLimit" min="1" max="500" value="${esc(c.dailyLimit)}"></div>
+            <div class="field"><label>WhatsApp number (empty = Phone 1)</label><input name="whatsapp" maxlength="30" value="${esc(c.whatsapp)}" placeholder="${esc(DB.siteInfo.phone1||"")}"></div>
+            <div class="field"><label>Daily message limit per visitor</label><input type="number" name="dailyLimit" min="1" max="500" value="${esc(c.dailyLimit)}"></div>
           </div>
           <div class="dpen-row" style="justify-content:flex-end;margin-top:14px;">
-            <button type="button" class="ghost-btn" data-dpen-admin="reset">Default ma farkaune</button>
+            <button type="button" class="ghost-btn" data-dpen-admin="reset">Reset to defaults</button>
             <button class="gold-btn" type="submit">Save Dpen Settings</button>
           </div>
         </form>
-        <h4><span class="dpen-num">7</span>Test garnus</h4>
-        <p class="form-note" style="margin:0 0 8px;">Mathi ko thap jankari ra nirdesan (Save nagareko bhaye pani) sanga Dpen lai sodhera hernus. Yo chat history ra limit ma ganindaina.</p>
+        <h4><span class="dpen-num">7</span>Test</h4>
+        <p class="form-note" style="margin:0 0 8px;">Ask Dpen a question using the extra information and instructions above (even before saving). Tests are not counted in chat history or the limit.</p>
         <div class="dpen-test-log" id="dpenTestLog"></div>
-        <div class="dpen-row"><input type="text" id="dpenTestInput" maxlength="1000" placeholder="Test message lekhnus…"><button type="button" class="gold-btn" data-dpen-admin="test">Pathaunus</button><button type="button" class="ghost-btn" data-dpen-admin="test-clear">Clear</button></div>
-        <h4><span class="dpen-num">8</span>Chat history (pachhillo ${DPEN_LOG_DAYS} din)</h4>
-        <p class="form-note" style="margin:0 0 8px;">${DPEN_LOG_DAYS} din bhanda purano chat aafai delete hunchha.</p>
-        <div class="dpen-row"><input type="date" id="dpenDay" value="${esc(dpenAdm.day||dpenToday())}" max="${dpenToday()}"><input type="text" id="dpenSearch" placeholder="🔍 Khojnus…" value="${esc(dpenAdm.search)}"><button type="button" class="ghost-btn" data-dpen-admin="load">Load</button><button type="button" class="admin-mini-btn" data-dpen-admin="del-day">Yo din ka sabai delete</button></div>
+        <div class="dpen-row"><input type="text" id="dpenTestInput" maxlength="1000" placeholder="Type a test message…"><button type="button" class="gold-btn" data-dpen-admin="test">Send</button><button type="button" class="ghost-btn" data-dpen-admin="test-clear">Clear</button></div>
+        <h4><span class="dpen-num">8</span>Chat history (last ${DPEN_LOG_DAYS} days)</h4>
+        <p class="form-note" style="margin:0 0 8px;">Chats older than ${DPEN_LOG_DAYS} days are deleted automatically.</p>
+        <div class="dpen-row"><input type="date" id="dpenDay" value="${esc(dpenAdm.day||dpenToday())}" max="${dpenToday()}"><input type="text" id="dpenSearch" placeholder="🔍 Search…" value="${esc(dpenAdm.search)}"><button type="button" class="ghost-btn" data-dpen-admin="load">Load</button><button type="button" class="admin-mini-btn" data-dpen-admin="del-day">Delete all for this day</button></div>
         <div id="dpenHistory">${dpenHistoryHtml()}</div>
       </div>
     </div>
@@ -3550,10 +3944,10 @@ function dpenStatsHtml(){
   const msgs = L ? L.filter(x=>x.type==="msg") : [];
   const chats = L ? new Set(msgs.map(x=>x.sid)).size : "…";
   const books = L ? L.filter(x=>x.type==="booking").length : "…";
-  return `<div class="dpen-stat"><b>${chats}</b><span>Aaja ka chat</span></div>
-    <div class="dpen-stat"><b>${L?msgs.length:"…"}</b><span>Aaja ka message</span></div>
-    <div class="dpen-stat"><b>${books}</b><span>Dpen bata booking (aaja)</span></div>
-    <div class="dpen-stat"><b>${L?msgs.length:"…"} / 1000</b><span>Aaja ko AI jawaf (free limit)</span></div>`;
+  return `<div class="dpen-stat"><b>${chats}</b><span>Chats today</span></div>
+    <div class="dpen-stat"><b>${L?msgs.length:"…"}</b><span>Messages today</span></div>
+    <div class="dpen-stat"><b>${books}</b><span>Bookings via Dpen (today)</span></div>
+    <div class="dpen-stat"><b>${L?msgs.length:"…"} / 1000</b><span>AI replies today (approx., free limit)</span></div>`;
 }
 function dpenGroup(logs){
   const by = {};
@@ -3566,15 +3960,15 @@ function dpenGroup(logs){
   }).sort((a,b)=>a.t<b.t?1:-1);
 }
 function dpenHistoryHtml(){
-  if(dpenAdm.loading) return `<p class="form-note">Load hudai chha…</p>`;
+  if(dpenAdm.loading) return `<p class="form-note">Loading…</p>`;
   if(!dpenAdm.day) return "";
   const q = dpenAdm.search.trim().toLowerCase();
   let convs = dpenGroup(dpenAdm.logs);
   if(q) convs = convs.filter(c=>c.items.some(x=>((x.q||"")+" "+(x.a||"")).toLowerCase().includes(q)));
-  if(!convs.length) return `<p class="form-note">Yo din kunai chat chhaina.</p>`;
-  return `<table><tr><th>Samaya</th><th>Pahilo prashna</th><th>Message</th><th>Bhasha</th><th>Booking</th><th></th></tr>
+  if(!convs.length) return `<p class="form-note">No chats on this day.</p>`;
+  return `<table><tr><th>Time</th><th>First question</th><th>Messages</th><th>Language</th><th>Booking</th><th></th></tr>
     ${convs.map(cv=>`<tr><td>${esc(new Date(cv.t).toLocaleTimeString([], {hour:"2-digit",minute:"2-digit"}))}</td>
-      <td>${esc((cv.first||"—").slice(0,90))}${cv.sid===dpenAdm.openSid?`<div class="dpen-conv">${cv.items.map(x=>x.type==="msg"?`<p><b>Visitor:</b> ${esc(x.q)}</p><p><b>Dpen:</b> ${esc(x.a)}</p>`:`<p><i>${x.type==="booking"?"✓ Chat bata booking pathayo":"Booking page link thichyo"}</i></p>`).join("")}</div>`:""}</td>
+      <td>${esc((cv.first||"—").slice(0,90))}${cv.sid===dpenAdm.openSid?`<div class="dpen-conv">${cv.items.map(x=>x.type==="msg"?`<p><b>Visitor:</b> ${esc(x.q)}</p><p><b>Dpen:</b> ${esc(x.a)}</p>`:`<p><i>${x.type==="booking"?"✓ Booked from the chat":"Clicked the booking page link"}</i></p>`).join("")}</div>`:""}</td>
       <td>${cv.count}</td><td>${esc(cv.lang)}</td>
       <td>${cv.booked?'<span class="dpen-pill-ok">✓ Booked</span>':cv.link?'<span class="dpen-pill-g">Link thichyo</span>':"—"}</td>
       <td style="white-space:nowrap;"><button type="button" class="admin-mini-btn" data-dpen-admin="view" data-sid="${esc(cv.sid)}">${cv.sid===dpenAdm.openSid?"Banda":"Herne"}</button>
@@ -3582,7 +3976,7 @@ function dpenHistoryHtml(){
   </table>`;
 }
 function dpenTestHtml(){
-  if(!dpenAdm.test.length) return `<p class="form-note" style="margin:0;">Yaha test ko jawaf dekhinchha.</p>`;
+  if(!dpenAdm.test.length) return `<p class="form-note" style="margin:0;">Test replies appear here.</p>`;
   return dpenAdm.test.map(m=> m.role==="user" ? `<div class="dpen-msg me">${esc(m.text)}</div>` : `<div class="dpen-msg bot">${dpenMd(m.text)}</div>`).join("") + (dpenAdm.testBusy?`<div class="dpen-typing"><i></i><i></i><i></i></div>`:"");
 }
 function dpenAdmPaint(){
@@ -3607,16 +4001,16 @@ async function dpenLoadDay(day){
     dpenAdm.logs = await dpenFetchDay(day);
     if(day===dpenToday()) dpenAdm.todayLogs = dpenAdm.logs;
     else if(!dpenAdm.todayLogs) dpenAdm.todayLogs = await dpenFetchDay(dpenToday());
-  }catch(e){ console.error("chat history load failed", e); dpenAdm.logs = []; showToast("Chat history load garna sakiyena (Firestore Rules check garnus).", true); }
+  }catch(e){ console.error("chat history load failed", e); dpenAdm.logs = []; showToast("Could not load chat history (check the Firestore Rules).", true); }
   dpenAdm.loading = false; dpenAdmPaint();
 }
-/* TTL ko backup: 30 din bhanda purano log (ek choti ma 300 samma) delete */
+/* Cleanup: delete logs older than 30 days (up to 300 at a time) */
 async function dpenCleanupOld(){
   try{
     const cutoff = new Date(Date.now() - DPEN_LOG_DAYS*864e5).toISOString();
     const snap = await getDocs(query(collection(fsdb,"chatLogs"), where("t","<",cutoff), fsLimit(300)));
     await Promise.all(snap.docs.map(d=>deleteDoc(d.ref).catch(()=>{})));
-  }catch(e){ /* rules/TTL nabhaye pani admin panel chalos */ }
+  }catch(e){ /* admin panel keeps working even without the rules/TTL */ }
 }
 async function dpenDeleteLogs(list){
   await Promise.all(list.map(x=>deleteDoc(doc(fsdb,"chatLogs",x.id)).catch(()=>{})));
@@ -3639,11 +4033,11 @@ async function dpenAdminTest(){
     res = await dpenAsk(dpenHistory(dpenAdm.test), {headers:{"Authorization":"Bearer "+token}, body:{test:true, draft}});
   }catch(e){ res = {error:"busy"}; }
   dpenAdm.testBusy = false;
-  if(res.reply){ const {book, text:clean} = dpenSplitBook(res.reply); dpenAdm.test.push({role:"model", text: clean + (book ? "\n\n(Yaha Booking / Phone / WhatsApp button dekhinchha)" : "")}); }
+  if(res.reply){ const {book, text:clean} = dpenSplitBook(res.reply); dpenAdm.test.push({role:"model", text: clean + (book ? "\n\n(Booking / Phone / WhatsApp buttons appear here)" : "")}); }
   else dpenAdm.test.push({role:"model", text:"⚠️ " + (DPEN_ERR[res.error] || DPEN_ERR.busy) + " (" + res.error + ")", local:true});
   dpenAdmPaint();
 }
-/* Preview ma button ko thau */
+/* Button position in the preview */
 function dpenPvUpdate(){
   const form = document.querySelector('form[data-form="dpen-settings"]');
   if(!form) return;
@@ -3687,19 +4081,20 @@ document.addEventListener("click", async (e)=>{
   else if(a==="test-clear"){ dpenAdm.test = []; dpenAdmPaint(); }
   else if(a==="load"){ const d = document.getElementById("dpenDay"); dpenLoadDay((d && d.value) || dpenToday()); }
   else if(a==="view"){ dpenAdm.openSid = dpenAdm.openSid===b.dataset.sid ? null : b.dataset.sid; dpenAdmPaint(); }
-  else if(a==="del-conv"){ if(!confirm("Yo chat delete garne?")) return; dpenDeleteLogs(dpenAdm.logs.filter(x=>x.sid===b.dataset.sid)); }
-  else if(a==="del-day"){ if(!dpenAdm.logs.length || !confirm("Yo din ka sabai chat delete garne?")) return; dpenDeleteLogs(dpenAdm.logs.slice()); }
+  else if(a==="del-conv"){ if(!confirm("Delete this chat?")) return; dpenDeleteLogs(dpenAdm.logs.filter(x=>x.sid===b.dataset.sid)); }
+  else if(a==="del-day"){ if(!dpenAdm.logs.length || !confirm("Delete all chats for this day?")) return; dpenDeleteLogs(dpenAdm.logs.slice()); }
   else if(a==="reset"){
     const form = document.querySelector('form[data-form="dpen-settings"]'); if(!form) return;
     const d = DEFAULT_DB.siteInfo.dpen;
     Object.keys(d).forEach(k=>{ const el = form.elements[k]; if(!el) return; if(el.type==="checkbox") el.checked = !!d[k]; else el.value = d[k]; });
-    dpenPvUpdate(); showToast("Default value rakhiyo — Save thichepachhi lagu hunchha.");
+    dpenPvUpdate(); showToast("Defaults restored — they apply after you Save.");
   }
 });
 
 /* ===================== ADDED: drag-and-drop section reordering (admin edit mode) ===================== */
 let __dragSecId = null;
 document.addEventListener("dragstart",(e)=>{
+  collectEdits();
   const handle = e.target.closest(".sec-drag");
   const sec = handle ? handle.closest(".admin-section") : null;
   if(!sec) return;
@@ -3744,6 +4139,23 @@ document.addEventListener("drop", async (e)=>{
   order.splice(to,0,dragId);
   DB.siteInfo.homeSectionOrder = order;
   const ok = await persistDB(); render();
+  showToast(ok?"Section order updated.":"Could not save — check your connection, admin sign-in, or try a smaller/fewer photo.", !ok);
+});
+/* ▲ ▼ : move a Home section one place up or down (for phones, where dragging does not work) */
+document.addEventListener("click", async (e)=>{
+  const btn = e.target.closest('[data-action="move-section"]');
+  if(!btn || !isAdmin() || !editMode || btn.disabled) return;
+  collectEdits();
+  const id = btn.dataset.sec, dir = +btn.dataset.dir;
+  const order = (DB.siteInfo.homeSectionOrder||[]).slice();
+  const from = order.indexOf(id), to = from + dir;
+  if(from < 0 || to < 0 || to >= order.length) return;
+  order.splice(from, 1); order.splice(to, 0, id);
+  DB.siteInfo.homeSectionOrder = order;
+  btn.disabled = true;
+  const ok = await persistDB(); render();
+  const moved = document.querySelector(`.admin-section[data-sec-id="${CSS.escape(id)}"]`);
+  if(moved) moved.scrollIntoView({block:"start", behavior:"smooth"});
   showToast(ok?"Section order updated.":"Could not save — check your connection, admin sign-in, or try a smaller/fewer photo.", !ok);
 });
 /* ===================== ADDED: rich-text floating toolbar (bold/italic/highlight/font/align/link/button) ===================== */
@@ -3796,10 +4208,12 @@ function ensureRteToolbar(){
     const btn = e.target.closest("button[data-cmd]");
     if(btn){ document.execCommand(btn.dataset.cmd, false, null); }
   });
-  t.querySelector("#rteFont").addEventListener("change",(e)=>{ if(e.target.value) document.execCommand("fontName", false, e.target.value); });
-  t.querySelector("#rteSize").addEventListener("change",(e)=>{ if(e.target.value) document.execCommand("fontSize", false, e.target.value); });
-  t.querySelector("#rteColor").addEventListener("input",(e)=>{ document.execCommand("foreColor", false, e.target.value); });
-  t.querySelector("#rteHi").addEventListener("input",(e)=>{ document.execCommand("hiliteColor", false, e.target.value); });
+  /* styleWithCSS: the browser writes <span style="..."> (kept when saving) instead of <font> (removed when saving) */
+  const css = ()=>{ try{ document.execCommand("styleWithCSS", false, true); }catch(e){} };
+  t.querySelector("#rteFont").addEventListener("change",(e)=>{ if(e.target.value){ css(); document.execCommand("fontName", false, e.target.value); } });
+  t.querySelector("#rteSize").addEventListener("change",(e)=>{ if(e.target.value){ css(); document.execCommand("fontSize", false, e.target.value); } });
+  t.querySelector("#rteColor").addEventListener("input",(e)=>{ css(); document.execCommand("foreColor", false, e.target.value); });
+  t.querySelector("#rteHi").addEventListener("input",(e)=>{ css(); document.execCommand("hiliteColor", false, e.target.value); });
   return t;
 }
 let __rteActiveField = null;
@@ -3846,6 +4260,7 @@ document.addEventListener("click", async (e)=>{
   if(!el) return;
   const action = el.dataset.action;
   if(el.tagName==="BUTTON" && el.closest("a")){ e.preventDefault(); e.stopPropagation(); }
+  collectEdits();
 
   const CONFIRM_ACTIONS = {
     "logout":{title:"Sign out?",message:"You'll be signed out of your account on this device.",confirmText:"Yes, sign out",cancelText:"Stay signed in",danger:false},
@@ -3871,7 +4286,12 @@ document.addEventListener("click", async (e)=>{
   if(action==="close-mobile-nav"){ closeMobileNav(); return; }
   if(action==="nav"){ navigate(el.dataset.href); return; }
   if(action==="toggle-faq"){
-    const item = el.closest(".faq-item"); item.classList.toggle("open"); return;
+    if(editMode && e.target.closest('[contenteditable="true"]')) return;
+    const item = el.closest(".faq-item"); const open = item.classList.toggle("open");
+    /* long answers: open to their full height (the CSS 400px is only a fallback) */
+    const ans = item.querySelector(".faq-a");
+    if(ans) ans.style.maxHeight = open ? (ans.scrollHeight + 24) + "px" : "";
+    return;
   }
   if(action==="logout"){ signOut(fbAuth).catch(()=>{}); navigate("/"); showToast("Signed out."); return; }
   if(action==="google-signin"){
@@ -3883,13 +4303,18 @@ document.addEventListener("click", async (e)=>{
           result = await linkWithPopup(fbAuth.currentUser, googleProvider);
         }catch(linkErr){
           if(linkErr.code==="auth/credential-already-in-use" || linkErr.code==="auth/email-already-in-use"){
-            result = await signInWithPopup(fbAuth, googleProvider);
+            /* this Google account already exists: sign in with the credential from the first popup
+               (a second popup would be blocked by the browser) */
+            const cred = GoogleAuthProvider.credentialFromError(linkErr);
+            result = cred ? await signInWithCredential(fbAuth, cred) : await signInWithPopup(fbAuth, googleProvider);
           } else { throw linkErr; }
         }
       } else {
         result = await signInWithPopup(fbAuth, googleProvider);
       }
       const gu = result.user;
+      /* linking a guest keeps the same account id, so the sign-in listener may not run again: refresh the session here */
+      SESSION = {uid:gu.uid, email:gu.email, isAnonymous:false};
       try{
         const snap = await getDoc(doc(fsdb,"users",gu.uid));
         if(!snap.exists()){
@@ -3911,12 +4336,23 @@ document.addEventListener("click", async (e)=>{
     return;
   }
 
-  if(action==="toggle-edit"){ editMode = !editMode; render(); return; }
+  if(action==="toggle-edit"){
+    if(!editMode && !(await ensureAdminFreshData())){
+      showToast("Could not check the latest website data. Please check your internet and try again.", true);
+      return;
+    }
+    if(editMode && __unsavedEdits){
+      const save = await confirmModal("Unsaved changes", "You have changes that are not saved yet. Save them before leaving edit mode?", {confirmText:"Save and exit", cancelText:"Keep editing", danger:false});
+      if(!save) return;
+      const ok = await persistDB();
+      showToast(ok?"Changes saved.":"Could not save — check your connection, admin sign-in, or try a smaller/fewer photo.", !ok);
+      if(!ok){ render(); return; }
+    }
+    editMode = !editMode; render(); return;
+  }
   if(action==="save-edits"){
-    document.querySelectorAll("[data-bind]").forEach(node=>{
-      const val = node.hasAttribute("data-rich") ? sanitizeRichHTML(node.innerHTML) : node.innerText.trim();
-      setPath(DB, node.getAttribute("data-bind"), val);
-    });
+    __editDirty = true; collectEdits();
+    autoSlugNews();
     const ok = await persistDB();
     showToast(ok?"Changes saved.":"Could not save — check your connection, admin sign-in, or try a smaller/fewer photo.", !ok);
     render();
@@ -3927,6 +4363,7 @@ document.addEventListener("click", async (e)=>{
   if(action==="img-migrate"){ migrateOldImages(); return; }
   if(action==="backup-site"){ backupSiteContent(); return; }
   if(action==="backup-patient"){ backupPatientData(); return; }
+  if(action==="cleanup-legacy"){ cleanupLegacyData(); return; }
   /* ===================== ADDED: drag-drop section builder actions ===================== */
   if(action==="open-block-library"){ openBlockLibrary(el.dataset.after||""); return; }
   if(action==="close-block-library"){ closeBlockLibrary(); return; }
@@ -3959,7 +4396,7 @@ document.addEventListener("click", async (e)=>{
     DB.customBlocks = DB.customBlocks.filter(b=>b.id!==bid);
     DB.siteInfo.homeSectionOrder = (DB.siteInfo.homeSectionOrder||[]).filter(x=>x!==key);
     const ok = await persistDB(); render();
-    deleteItemDoc("customblock-", bid);
+    if(ok) deleteItemDoc("customblock-", bid);
     showToast(ok?"Section removed.":"Could not save — check your connection, admin sign-in, or try a smaller/fewer photo.", !ok);
     return;
   }
@@ -4021,7 +4458,7 @@ document.addEventListener("click", async (e)=>{
   if(action==="apply-img-editor"){ applyImgEditor(); return; }
   if(action==="close-img-editor"){ closeImageEditor(); return; }
   if(action==="rte-insert-btn"){
-    document.execCommand("insertHTML", false, ' <a href="#" class="gold-btn" style="display:inline-flex;">Click Here</a> ');
+    document.execCommand("insertHTML", false, ' <a href="#" class="gold-btn">Click Here</a> ');
     return;
   }
   if(action==="rte-set-link"){
@@ -4032,10 +4469,14 @@ document.addEventListener("click", async (e)=>{
       anchorEl = n ? n.closest("a") : null;
     }
     const cur = anchorEl ? (anchorEl.getAttribute("href")||"") : "";
-    const url = prompt("Link URL (e.g. https://... or /book):", cur||"https://");
+    let url = prompt("Link URL (e.g. https://..., /book, tel:98..., mailto:...):", cur||"https://");
     if(url==null) return;
-    if(anchorEl){ anchorEl.setAttribute("href", url.trim()); }
-    else if(sel && !sel.isCollapsed){ document.execCommand("createLink", false, url.trim()); }
+    url = url.trim();
+    /* "www.facebook.com/..." or "facebook.com/..." → "https://..." */
+    if(/^(www\.)?[a-z0-9-]+(\.[a-z0-9-]+)+(\/|$)/i.test(url)) url = "https://" + url;
+    if(safeUrl(url) !== url){ showToast("Please enter a full link starting with https:// (or /page, tel:, mailto:).", true); return; }
+    if(anchorEl){ anchorEl.setAttribute("href", url); }
+    else if(sel && !sel.isCollapsed){ document.execCommand("createLink", false, url); }
     else { showToast("Select some text first, then add the link.", true); }
     return;
   }
@@ -4058,7 +4499,9 @@ document.addEventListener("click", async (e)=>{
     const cur = getPath(DB, key) || "";
     const url = prompt("Update link URL:", cur);
     if(url!=null){
-      setPath(DB, key, url.trim());
+      const v = url.trim();
+      if(v && safeUrl(v) !== v){ showToast("Please enter a full link starting with https:// (or tel: / mailto:).", true); return; }
+      setPath(DB, key, v);
       const ok = await persistDB(); render();
       showToast(ok?"Link updated.":"Could not save — check your connection, admin sign-in, or try a smaller/fewer photo.", !ok);
     }
@@ -4093,7 +4536,7 @@ document.addEventListener("click", async (e)=>{
     const removedId = (DB.services[+el.dataset.idx]||{}).id;
     DB.services.splice(+el.dataset.idx,1);
     const ok = await persistDB(); render();
-    deleteItemDoc("service-", removedId);
+    if(ok) deleteItemDoc("service-", removedId);
     if(!ok) showToast("Could not save — check your connection, admin sign-in, or try a smaller/fewer photo.", true);
     return;
   }
@@ -4124,12 +4567,26 @@ document.addEventListener("click", async (e)=>{
     const removedId = (DB.team[+el.dataset.idx]||{}).id;
     DB.team.splice(+el.dataset.idx,1);
     const ok = await persistDB(); render();
-    deleteItemDoc("team-", removedId);
+    if(ok) deleteItemDoc("team-", removedId);
     if(!ok) showToast("Could not save — check your connection, admin sign-in, or try a smaller/fewer photo.", true);
     return;
   }
+  if(action==="save-news-meta"){
+    const n = DB.news.find(x=>x.id===el.dataset.id); if(!n) return;
+    const slugEl = document.getElementById("newsSlugInput"), exEl = document.getElementById("newsExcerptInput");
+    const slug = String((slugEl && slugEl.value) || "").trim().toLowerCase();
+    const problem = newsSlugProblem(slug, n.id);
+    if(problem){ showToast(problem, true); return; }
+    if(n.slug && n.slug !== slug){ n.slugHistory = Array.from(new Set([...(n.slugHistory||[]), n.slug])).filter(x=>x!==slug).slice(-10); }
+    if(slug) n.slug = slug; else delete n.slug;
+    n.excerpt = String((exEl && exEl.value) || "").trim().slice(0,300);
+    const ok = await persistDB();
+    showToast(ok ? "Link and description saved." : "Could not save — check your connection, admin sign-in, or try a smaller/fewer photo.", !ok);
+    if(ok && location.pathname !== newsPath(n)) navigate(newsPath(n), {replace:true}); else render();
+    return;
+  }
   if(action==="add-news"){
-    DB.news.unshift({id:String(Date.now()),cat:"news",title:"New Post Title",excerpt:"Short excerpt...",content:"Full content goes here...",img:"https://images.unsplash.com/photo-1629909613654-28e377c37b09?w=900&q=80",date:new Date().toISOString().slice(0,10),likes:0,views:0,seo:{title:"",description:"",keywords:[],image:""}});
+    DB.news.unshift({id:String(Date.now()),cat:"news",title:"New Post Title",excerpt:"",content:"Full content goes here...",img:"https://images.unsplash.com/photo-1629909613654-28e377c37b09?w=900&q=80",date:new Date().toISOString().slice(0,10),likes:0,views:0,seo:{title:"",description:"",keywords:[],image:""}});
     const ok = await persistDB(); render(); if(!ok) showToast("Could not save — check your connection, admin sign-in, or try a smaller/fewer photo.", true); return;
   }
   if(action==="del-news"){
@@ -4137,7 +4594,7 @@ document.addEventListener("click", async (e)=>{
     if(idx>-1) DB.news.splice(idx,1);
     const ok = await persistDB();
     navigate("/news"); render();
-    deleteItemDoc("news-", el.dataset.id);
+    if(ok) deleteItemDoc("news-", el.dataset.id);
     showToast(ok?"Post deleted.":"Could not save — check your connection, admin sign-in, or try a smaller/fewer photo.", !ok);
     return;
   }
@@ -4165,36 +4622,47 @@ document.addEventListener("click", async (e)=>{
     return;
   }
   if(action==="del-comment"){
-    try{ await deleteDoc(doc(fsdb,"comments",el.dataset.cid)); ensureCommentsLikesLoaded(true); }
+    try{
+      await deleteDoc(doc(fsdb,"comments",el.dataset.cid));
+      const nid = Object.keys(NEWS_COMMENTS).find(k=> (NEWS_COMMENTS[k]||[]).some(c=> c.id===el.dataset.cid));
+      if(nid) ensurePostSocialLoaded(nid, true); else ensureCommentsLikesLoaded(true);
+    }
     catch(e){ showToast("Could not delete comment — check your connection or Firestore rules.", true); }
     return;
   }
   if(action==="like-news"){
-    let u = guestOrUser();
-    if(!u) u = await ensureGuestSession();
-    if(!u){ showToast("Could not connect — please try again in a moment.", true); return; }
-    const nid = el.dataset.id;
-    const likeId = nid+"_"+u.uid;
-    const already = newsLikedByMe(nid);
-    try{
-      if(already){
-        await deleteDoc(doc(fsdb,"likes",likeId));
-        if(NEWS_LIKES[nid]){ NEWS_LIKES[nid].count = Math.max(0,NEWS_LIKES[nid].count-1); NEWS_LIKES[nid].uids.delete(u.uid); }
-      } else {
-        await setDoc(doc(fsdb,"likes",likeId), {newsId:nid, uid:u.uid, date:new Date().toISOString()});
-        if(!NEWS_LIKES[nid]) NEWS_LIKES[nid] = {count:0, uids:new Set()};
-        NEWS_LIKES[nid].count++; NEWS_LIKES[nid].uids.add(u.uid);
-        el.classList.add("pulse");
-      }
-      el.classList.toggle("liked", !already);
-      el.querySelector("span").textContent = newsLikeCount(nid)+" Likes";
-    }catch(e){ showToast("Could not save your like — check your connection or Firestore rules.", true); }
+    if(el.dataset.busy) return;
+    el.dataset.busy = "1";
+    try{ await likeNews(el); }finally{ delete el.dataset.busy; }
     return;
   }
 });
 
+/* like / unlike a news post (the button is kept busy until it finishes, so a double click is ignored) */
+async function likeNews(el){
+  let u = guestOrUser();
+  if(!u) u = await ensureGuestSession();
+  if(!u){ showToast("Could not connect — please try again in a moment.", true); return; }
+  const nid = el.dataset.id;
+  const likeId = nid+"_"+u.uid;
+  const already = newsLikedByMe(nid);
+  try{
+    if(already){
+      await deleteDoc(doc(fsdb,"likes",likeId));
+      if(NEWS_LIKES[nid]){ NEWS_LIKES[nid].count = Math.max(0,NEWS_LIKES[nid].count-1); NEWS_LIKES[nid].uids.delete(u.uid); }
+    } else {
+      await setDoc(doc(fsdb,"likes",likeId), {newsId:nid, uid:u.uid, date:new Date().toISOString()});
+      if(!NEWS_LIKES[nid]) NEWS_LIKES[nid] = {count:0, uids:new Set()};
+      NEWS_LIKES[nid].count++; NEWS_LIKES[nid].uids.add(u.uid);
+      el.classList.add("pulse");
+    }
+    el.classList.toggle("liked", !already);
+    el.querySelector("span").textContent = newsLikeCount(nid)+" Likes";
+  }catch(e){ showToast("Could not save your like — check your connection or Firestore rules.", true); }
+}
+
 /* ===================== LOCAL IMAGE UPLOAD (no URLs — pick from device) ===================== */
-/* NAYA: frames = photo website ma dekhine thau haru (framesForPath bata aafai pani aauchha) */
+/* frames = the places the photo appears on the site (derived from framesForPath when not given) */
 function pickAndSetImage(path, onDone, forceAllowAnim, frames){
   let input = document.getElementById("hiddenFileInput");
   if(!input){
@@ -4230,10 +4698,10 @@ function pickAndSetImage(path, onDone, forceAllowAnim, frames){
   };
   input.click();
 }
-/* NAYA: photo feri upload nagari har thau (frame) ko lagi milaune */
+/* Adjust a photo for each place (frame) without uploading it again */
 function adjustImage(path){
   const u = getPath(DB, path);
-  if(!u){ showToast("Yaha photo chhaina — pahila photo halnus.", true); return; }
+  if(!u){ showToast("There is no photo here yet — please add one first.", true); return; }
   const bind = imageAnimBinding(path);
   openImageEditor({
     mode:"adjust", src:imgSrc(u), origUrl:u,
@@ -4242,7 +4710,7 @@ function adjustImage(path){
       if(url !== u) setPath(DB, path, url);
       if(bind) bind.set(anim);
       const ok = await persistDB(); render();
-      showToast(ok?"Photo milayo ✓":"Could not save — check your connection, admin sign-in, or try a smaller/fewer photo.", !ok);
+      showToast(ok?"Photo adjusted ✓":"Could not save — check your connection, admin sign-in, or try a smaller/fewer photo.", !ok);
     }
   });
 }
@@ -4258,7 +4726,7 @@ function imageAnimBinding(path){
 }
 function pngLikeType(t){ return t==="image/png" || t==="image/webp" || t==="image/gif" || t==="image/svg+xml"; }
 
-/* ===================== NAYA: Adjust Photo editor — frame anusar focus/zoom, ghumaune, quality, live preview ===================== */
+/* ===================== Adjust Photo editor — per-frame focus/zoom, rotate, quality, live preview ===================== */
 let __imgEd = null;
 function loadEditorImage(src){
   return new Promise((resolve)=>{
@@ -4275,9 +4743,9 @@ function loadEditorImage(src){
 }
 async function openImageEditor(opts){
   const loaded = await loadEditorImage(opts.src);
-  if(!loaded){ showToast("Photo khulna sakena — feri try garnus.", true); return; }
+  if(!loaded){ showToast("Could not open the photo — please try again.", true); return; }
   const {im, canEncode} = loaded;
-  /* kaam garne canvas (dherai thulo camera photo lai 3200px samma ma) */
+  /* working canvas (very large camera photos are capped at 3200px) */
   const cap = 3200, sc = Math.min(1, cap / Math.max(im.naturalWidth, im.naturalHeight));
   const cv = document.createElement("canvas");
   cv.width = Math.max(1, Math.round(im.naturalWidth*sc)); cv.height = Math.max(1, Math.round(im.naturalHeight*sc));
@@ -4317,13 +4785,13 @@ function renderImgEditorHTML(){
         ${opt("up","Fade Up (default)")}${opt("zoom","Zoom In")}${opt("left","Slide From Left")}${opt("right","Slide From Right")}${opt("none","None")}
       </select>
     </div>` : "";
-  const qOpts = (ed.mode==="adjust" ? `<option value="keep" selected>Ahile kai (nabadalne)</option>` : "") +
+  const qOpts = (ed.mode==="adjust" ? `<option value="keep" selected>Keep current</option>` : "") +
     Object.keys(IMG_QUALITY).map(k=> `<option value="${k}" ${ed.quality===k?"selected":""}>${IMG_QUALITY[k].label}${k==="auto"?" (default)":""} — ${IMG_QUALITY[k].note}</option>`).join("");
   const tabs = ed.frames.length > 1 ? `<div class="ie-tabs">${ed.frames.map(k=> `<button type="button" class="ie-tab" data-ie-tab="${k}">${esc(FRAME_DEFS[k].label)} <small>${FRAME_DEFS[k].a}:1</small></button>`).join("")}</div>` : "";
-  const sub = !ed.frames.length ? "Photo ghumauna ra quality chhanna milchha."
-    : ed.cropMode ? "Sunaulo baakas bhitra ko bhag matra save hunchha (Facebook/WhatsApp share ko aakar)."
-    : ed.frames.length > 1 ? `Yo photo website ma ${ed.frames.length} thau ma dekhinchha. Har thau ko lagi chhuttai milaunus — original photo kaatidaina.`
-    : "Website ma dekhine bhag milaunus — original photo kaatidaina.";
+  const sub = !ed.frames.length ? "You can rotate the photo and choose its quality."
+    : ed.cropMode ? "Only the part inside the gold box is saved (Facebook/WhatsApp share size)."
+    : ed.frames.length > 1 ? `This photo appears in ${ed.frames.length} places on the site. Adjust each one separately — the original photo is never cropped.`
+    : "Adjust the visible part — the original photo is never cropped.";
   return `
   <div class="modal-box ie-box">
     <h3 style="margin-bottom:4px;">Adjust Photo</h3>
@@ -4333,12 +4801,12 @@ function renderImgEditorHTML(){
         ${tabs}
         <div class="ie-stage" id="ieStage">
           <img id="ieImg" alt="" draggable="false">
-          ${ed.frames.length ? `<div class="ie-win" id="ieWin"><span class="ie-lbl" id="ieLbl"></span></div><div class="ie-hint">✋ Sunaulo baakas taanera thau milaunus</div>` : ""}
+          ${ed.frames.length ? `<div class="ie-win" id="ieWin"><span class="ie-lbl" id="ieLbl"></span></div><div class="ie-hint">✋ Drag the gold box to adjust</div>` : ""}
         </div>
         <div class="ie-ctrl">
           ${ed.frames.length ? `<label>🔍 Zoom</label><input type="range" id="ieZoom" min="1" max="3" step="0.05" value="1"><span id="ieZoomV" class="ie-zv">1.0×</span>` : ""}
-          <button type="button" class="ie-btn" data-ie="rotl" title="Baya ghumaune">⟲ 90°</button>
-          <button type="button" class="ie-btn" data-ie="rotr" title="Dayan ghumaune">⟳ 90°</button>
+          <button type="button" class="ie-btn" data-ie="rotl" title="Rotate left">⟲ 90°</button>
+          <button type="button" class="ie-btn" data-ie="rotr" title="Rotate right">⟳ 90°</button>
           ${ed.frames.length ? `<button type="button" class="ie-btn" data-ie="reset">↺ Reset</button>` : ""}
         </div>
         <div class="ie-ctrl">
@@ -4348,7 +4816,7 @@ function renderImgEditorHTML(){
         ${animSel}
         <div class="ie-info" id="ieInfo"></div>
       </div>
-      ${ed.frames.length ? `<div class="ie-side"><h4>Live preview — website ma yastai dekhinchha</h4><div id="iePv"></div></div>` : ""}
+      ${ed.frames.length ? `<div class="ie-side"><h4>Live preview — how it looks on the site</h4><div id="iePv"></div></div>` : ""}
     </div>
     <div class="ie-btns">
       <button type="button" class="ghost-btn" data-action="close-img-editor">Cancel</button>
@@ -4356,7 +4824,7 @@ function renderImgEditorHTML(){
     </div>
   </div>`;
 }
-/* frame ko aakar, zoom ra focus anusar photo ko kun bhag dekhinchha (0..1 fraction) */
+/* which part of the photo is visible for a frame's shape, zoom and focus (0..1 fractions) */
 function ieWinRect(k){
   const ed = __imgEd, A = FRAME_DEFS[k].a, I = ed.w / ed.h, f = ed.focus[k];
   const ww0 = I > A ? A / I : 1, wh0 = I > A ? 1 : I / A;
@@ -4374,7 +4842,7 @@ function ieRefresh(){
     win.style.left = (r.l*100)+"%"; win.style.top = (r.t*100)+"%";
     win.style.width = (r.w*100)+"%"; win.style.height = (r.h*100)+"%";
     win.classList.toggle("round", !!FRAME_DEFS[ed.cur].round);
-    const lbl = document.getElementById("ieLbl"); if(lbl) lbl.textContent = FRAME_DEFS[ed.cur].label + " ma yati dekhinchha";
+    const lbl = document.getElementById("ieLbl"); if(lbl) lbl.textContent = "Visible in: " + FRAME_DEFS[ed.cur].label;
     const z = document.getElementById("ieZoom"); if(z && +z.value !== ed.focus[ed.cur].z) z.value = ed.focus[ed.cur].z;
     const zv = document.getElementById("ieZoomV"); if(zv) zv.textContent = ed.focus[ed.cur].z.toFixed(1)+"×";
   }
@@ -4385,15 +4853,15 @@ function ieRefresh(){
       const st = d.crop ? "" : (focusIsDefault(f) ? "" : `--fx:${f.x}%;--fy:${f.y}%;--fz:${f.z};`);
       const w = d.round ? 110 : Math.round(Math.min(360, 104*d.a));
       return `<div class="ie-pv${k===ed.cur?" sel":""}" data-ie-tab="${k}">
-        <div class="ie-cap"><b>${esc(d.label)}</b>${k===ed.cur?"<span>milaudai…</span>":""}</div>
+        <div class="ie-cap"><b>${esc(d.label)}</b>${k===ed.cur?"<span>editing…</span>":""}</div>
         <div class="ie-fr${d.round?" round":""}" style="width:min(100%,${w}px);aspect-ratio:${d.a};">${d.crop
           ? `<div class="ie-cropv" style="${ieCropPreviewStyle(k)}"></div>`
           : `<img class="fimg" src="${esc(ed.viewUrl)}" alt="" style="${st}">`}</div>
       </div>`;
     });
-    /* service/news ko photo Facebook ma share garda — Facebook le aafai beech bata katchha */
+    /* service/news photos shared on Facebook — Facebook crops the centre automatically */
     const pathShare = ed.frames.some(k=> k==="coverD") ;
-    if(pathShare) items.push(`<div class="ie-pv ro"><div class="ie-cap"><b>Facebook/WhatsApp share</b><span>aafai beech bata</span></div>
+    if(pathShare) items.push(`<div class="ie-pv ro"><div class="ie-cap"><b>Facebook/WhatsApp share</b><span>auto, centre</span></div>
       <div class="ie-fr" style="width:min(100%,280px);aspect-ratio:1.91;"><img src="${esc(ed.viewUrl)}" alt="" style="width:100%;height:100%;object-fit:cover;"></div></div>`);
     pv.innerHTML = items.join("");
   }
@@ -4402,11 +4870,11 @@ function ieRefresh(){
     const q = ed.quality==="keep" ? null : IMG_QUALITY[ed.quality];
     const kb = ed.mode==="adjust" && ed.origUrl.startsWith("data:") ? ` · ~${Math.round(ed.origUrl.length*0.75/1024)} KB` : "";
     info.innerHTML = `📷 Photo: <b>${ed.srcW} × ${ed.srcH} px</b>${kb}` +
-      (q ? ` · Save hune: <b>${q.label}</b> (${q.note} samma)` : ` · Quality nabadalne`) +
-      (ed.canEncode ? "" : `<br><span style="color:#b93b26;">Yo photo bahira ko link ho — ghumauna/quality badalna mildaina, position ra zoom matra milchha.</span>`);
+      (q ? ` · Will save as: <b>${q.label}</b> (up to ${q.note})` : ` · Quality unchanged`) +
+      (ed.canEncode ? "" : `<br><span style="color:#b93b26;">This photo is an external link — it cannot be rotated or re-saved; only position and zoom can be changed.</span>`);
   }
 }
-/* share crop preview: window bhitra ko bhag matra background ma */
+/* share crop preview: only the part inside the window, as a background */
 function ieCropPreviewStyle(k){
   const r = ieWinRect(k);
   const bw = 100 / r.w, bh = 100 / r.h;
@@ -4447,7 +4915,7 @@ function wireImgEditor(m){
     const box = stage.getBoundingClientRect();
     const r = ieWinRect(ed.cur);
     if(!e.target.closest("#ieWin")){
-      /* baakas bahira thichda baakas tyahi sarchha */
+      /* clicking outside the box moves the box there */
       setFromLeftTop((e.clientX - box.left)/box.width - r.w/2, (e.clientY - box.top)/box.height - r.h/2);
     }
     const r2 = ieWinRect(ed.cur);
@@ -4464,7 +4932,7 @@ function wireImgEditor(m){
 }
 function ieRotate(deg){
   const ed = __imgEd;
-  if(!ed.canEncode){ showToast("Yo photo ghumauna mildaina (bahira ko link). Naya photo upload garnus.", true); return; }
+  if(!ed.canEncode){ showToast("This photo cannot be rotated (external link). Please upload a new photo.", true); return; }
   const src = ed.canvas, cv = document.createElement("canvas");
   cv.width = src.height; cv.height = src.width;
   const ctx = cv.getContext("2d");
@@ -4490,7 +4958,7 @@ function canvasHasAlpha(cv){
   }catch(e){}
   return false;
 }
-/* quality anusar saano banaune: JPEG (pardarshi photo bhaye WebP/PNG), Firestore doc bhitra atne gari */
+/* shrink to the chosen quality: JPEG (WebP/PNG for transparent photos), small enough for one Firestore doc */
 function encodeEditorImage(region, preset){
   const ed = __imgEd, P = IMG_QUALITY[preset] || IMG_QUALITY.auto;
   const alpha = pngLikeType(ed.fileType) && canvasHasAlpha(ed.canvas);
@@ -4524,7 +4992,7 @@ async function applyImgEditor(){
   const setBusy = (on, txt)=>{ ed.busy = on; if(btn){ btn.disabled = on; btn.innerHTML = `<span>${txt}</span>`; } };
   let url = ed.origUrl;
   if(needEncode){
-    if(!ed.canEncode){ showToast("Yo photo ghumauna/quality badalna mildaina (bahira ko link). Naya photo upload garnus.", true); return; }
+    if(!ed.canEncode){ showToast("This photo cannot be rotated or re-saved (external link). Please upload a new photo.", true); return; }
     setBusy(true, "Saving…");
     try{
       let region = {sx:0, sy:0, sw:ed.w, sh:ed.h};
@@ -4537,11 +5005,11 @@ async function applyImgEditor(){
     }catch(e){
       console.error("image upload failed", e);
       setBusy(false, ed.mode==="adjust"?"Save":"Use This Photo");
-      showToast(e && e.code==="permission-denied" ? "Photo save hun sakena — admin login feri garnus." : "Photo save hun sakena — internet check garera feri try garnus.", true);
+      showToast(e && e.code==="permission-denied" ? "Could not save the photo — please sign in as admin again." : "Could not save the photo — check your internet connection and try again.", true);
       return;
     }
   }
-  /* har frame ko focus/zoom (crop mode ma photo nai katiyo, focus chahidaina) */
+  /* per-frame focus/zoom (not needed in crop mode, where the photo itself is cropped) */
   if(!ed.cropMode && ed.frames.length){
     const meta = imgMetaMap(), key = imgKey(url);
     const f = {};
@@ -4623,16 +5091,17 @@ function seoPageMeta(kind,id){
   const site = "neupanedental.com.np";
   if(kind==="page"){
     const p = SEO_PAGE_META[id] || {title:"Neupane Dental Clinic",path:"/"};
-    const pool = [DB.siteInfo.missionImages[0], ...(DB.siteInfo.galleryImages||[]), ...DB.services.map(s=>s.img)].filter(Boolean);
+    /* photos that are actually shown on the site: mission photos, About page photos (gallery from the 3rd), services */
+    const pool = Array.from(new Set([...(DB.siteInfo.missionImages||[]), ...(DB.siteInfo.galleryImages||[]).slice(2), ...DB.services.map(s=>s.img)].filter(Boolean)));
     return {fallbackTitle:p.title, fallbackDesc:DB.siteInfo.seo.defaultDescription||"", url:site+p.path, images:pool.slice(0,10), current:DB.seoPages[id]};
   }
   if(kind==="service"){
     const sv = slugFind(DB.services,id);
-    return {fallbackTitle:sv.name+" | Neupane Dental Clinic", fallbackDesc:sv.short, url:site+"/service/"+sv.id, images:[sv.img,...(DB.siteInfo.galleryImages||[])].filter(Boolean).slice(0,10), current:sv.seo};
+    return {fallbackTitle:sv.name+" | Neupane Dental Clinic", fallbackDesc:sv.short, url:site+"/service/"+sv.id, images:Array.from(new Set([sv.img,...(DB.siteInfo.galleryImages||[]).slice(2)].filter(Boolean))).slice(0,10), current:sv.seo};
   }
   if(kind==="news"){
     const n = slugFind(DB.news,id);
-    return {fallbackTitle:n.title+" | Neupane Dental Clinic", fallbackDesc:n.excerpt, url:site+"/news/"+n.id, images:[n.img,...(DB.siteInfo.galleryImages||[])].filter(Boolean).slice(0,10), current:n.seo};
+    return {fallbackTitle:n.title+" | Neupane Dental Clinic", fallbackDesc:newsExcerpt(n), url:site+newsPath(n), images:Array.from(new Set([n.img,...(DB.siteInfo.galleryImages||[]).slice(2)].filter(Boolean))).slice(0,10), current:n.seo};
   }
 }
 function suggestSeoKeywords(baseText){
@@ -4697,7 +5166,7 @@ function renderSeoPreview(meta){
   <div class="spv-row">
     <div style="flex:1;min-width:0;">
       <div style="display:flex;align-items:center;gap:8px;">
-        <div class="spv-icon"><img class="logo-img" alt=""></div>
+        <div class="spv-icon"><img class="logo-img" src="${esc(window.LOGO||"/logo.webp")}" alt=""></div>
         <div style="min-width:0;">
           <div class="spv-name">Neupane Dental Clinic</div>
           <div class="spv-url">${esc(meta.url)}</div>
@@ -4728,7 +5197,7 @@ function renderSeoModalHTML(meta){
         <div class="field">
           <label>Cover Image</label>
           <div class="seo-img-grid" id="seoImgGrid">
-            ${meta.images.map(im=>`<img src="${esc(imgSrc(im))}" class="${d.image===im?'selected':''}" data-action="seo-pick-img" data-src="${esc(im)}">`).join('')}
+            ${meta.images.map(im=>`<img src="${esc(imgSrc(im))}" onerror="this.style.display='none'" alt="" class="${d.image===im?'selected':''}" data-action="seo-pick-img" data-src="${esc(im)}">`).join('')}
             <div class="seo-upload-tile" data-action="seo-upload-img">${icon('upload')}</div>
           </div>
         </div>
@@ -4810,7 +5279,9 @@ document.addEventListener("submit", async (e)=>{
     let ok = true;
     toggleFieldError(form,"phone", !validNepalPhone(phone)); if(!validNepalPhone(phone)) ok=false;
     toggleFieldError(form,"email", !validEmail(email)); if(!validEmail(email)) ok=false;
-    if(!ok){ showToast("Please fix the highlighted fields.", true); return; }
+    const need = {name:!!name, subject:!!subject, service:!!service, apptDate:!!apptDate && apptDate >= todayLocal(), apptTime:!!apptTime};
+    Object.keys(need).forEach(k=>{ toggleFieldError(form, k, !need[k]); if(!need[k]) ok=false; });
+    if(!ok){ showToast(apptDate && apptDate < todayLocal() ? "Please choose today or a later date." : "Please fill in the highlighted fields.", true); return; }
 
     const submitBtn = form.querySelector('button[type="submit"]');
     const label = submitBtn.querySelector(".btn-label");
@@ -4819,7 +5290,7 @@ document.addEventListener("submit", async (e)=>{
     const me = currentUser();
     const appt = {name,phone,email,subject,service,dentist,date:apptDate,time:apptTime,message,createdAt:new Date().toISOString()};
     if(me) appt.uid = me.uid;
-    if(fd.get("source")==="dpen") appt.source = "dpen"; // Dpen chat bhitra ko form bata
+    if(fd.get("source")==="dpen") appt.source = "dpen"; // booked from the form inside the Dpen chat
     try{
       await addDoc(collection(fsdb,"appointments"), appt);
     }catch(e){
@@ -4841,7 +5312,7 @@ document.addEventListener("submit", async (e)=>{
       }catch(err){
         showToast("Saved, but the automatic email could not be sent (check EmailJS settings in Admin Panel).", true);
       }
-    } else {
+    } else if(isAdmin()){
       showToast("Appointment saved. (Admin: add EmailJS Service ID/Template ID/Public Key in the Admin Panel to auto-send emails.)", true);
     }
 
@@ -4922,15 +5393,18 @@ document.addEventListener("submit", async (e)=>{
   if(type==="login"){
     const id = fd.get("id").trim(), pw = fd.get("password");
     let email = id;
-    if(!validEmail(id)){
-      try{
-        const snap = await getDoc(doc(fsdb,"phoneIndex",id));
-        if(!snap.exists()){ showToast("Invalid credentials.", true); return; }
-        email = snap.data().email;
-      }catch(e){ showToast("Invalid credentials.", true); return; }
-    }
     const submitBtn = form.querySelector('button[type="submit"]');
     if(submitBtn) submitBtn.disabled = true;
+    if(!validEmail(id)){
+      /* phone login: the new 10-digit format first, then the number exactly as typed (older accounts) */
+      try{
+        const keys = [normPhone(id), id].filter((k,i,a)=> k && !k.includes("/") && a.indexOf(k)===i);
+        let found = null;
+        for(const k of keys){ const snap = await getDoc(doc(fsdb,"phoneIndex",k)); if(snap.exists()){ found = snap.data(); break; } }
+        if(!found || !found.email){ showToast("Invalid credentials.", true); if(submitBtn) submitBtn.disabled = false; return; }
+        email = found.email;
+      }catch(e){ showToast("Invalid credentials.", true); if(submitBtn) submitBtn.disabled = false; return; }
+    }
     try{
       await signInWithEmailAndPassword(fbAuth, email, pw);
       showToast("Welcome back!");
@@ -4943,17 +5417,29 @@ document.addEventListener("submit", async (e)=>{
     return;
   }
   if(type==="signup"){
-    const name = fd.get("name").trim(), email = fd.get("email").trim(), phone = fd.get("phone").trim(), password = fd.get("password");
-    toggleFieldError(form,"phone", !validNepalPhone(phone));
-    if(!validNepalPhone(phone)){ showToast("Please enter a valid Nepal phone number.", true); return; }
+    const name = fd.get("name").trim(), email = fd.get("email").trim(), rawPhone = fd.get("phone").trim(), password = fd.get("password");
+    const phone = normPhone(rawPhone);
+    toggleFieldError(form,"phone", !phone);
+    if(!phone){ showToast("Please enter a valid Nepal phone number.", true); return; }
     const submitBtn = form.querySelector('button[type="submit"]');
     if(submitBtn) submitBtn.disabled = true;
+    /* one account per phone number: stop before creating the account if the number is already registered */
+    try{
+      const taken = await getDoc(doc(fsdb,"phoneIndex",phone));
+      if(taken.exists()){
+        toggleFieldError(form,"phone", true);
+        showToast("This phone number is already registered. Please sign in instead.", true);
+        if(submitBtn) submitBtn.disabled = false;
+        return;
+      }
+    }catch(e){ /* lookup failed: continue; the database rules still block a duplicate */ }
     try{
       const cred = await createUserWithEmailAndPassword(fbAuth, email, password);
       try{ await updateProfile(cred.user, {displayName:name}); }catch(e){}
-      const profileSaved = await persistOwnProfile(cred.user.uid, {name, email, phone});
-      try{ await setDoc(doc(fsdb,"phoneIndex",phone), {email}); }catch(e){}
-      MY_PROFILE = {name, email, phone};
+      const authEmail = cred.user.email || email;
+      const profileSaved = await persistOwnProfile(cred.user.uid, {name, email:authEmail, phone});
+      try{ await setDoc(doc(fsdb,"phoneIndex",phone), {email:authEmail}); }catch(e){}
+      MY_PROFILE = {name, email:authEmail, phone};
       showToast(profileSaved ? ("Account created — welcome, "+name+"!") : "Account created, but your profile details could not be saved — check Firestore rules.", !profileSaved);
       navigate("/dashboard");
     }catch(err){
@@ -4972,27 +5458,35 @@ document.addEventListener("submit", async (e)=>{
     const displayName = u.isAnonymous ? (guestName || "Guest") : u.name;
     const text = fd.get("text").trim();
     if(!text) return;
+    const cBtn = form.querySelector('button[type="submit"]');
+    if(cBtn){ if(cBtn.disabled) return; cBtn.disabled = true; }
     try{
       await addDoc(collection(fsdb,"comments"), {newsId:nid, uid:u.uid, name:displayName, text, date:new Date().toISOString(), guest:!!u.isAnonymous});
       showToast("Comment posted.");
       form.reset();
-      ensureCommentsLikesLoaded(true);
+      ensurePostSocialLoaded(nid, true);
     }catch(e){ showToast("Comment could not be saved — check your connection or Firestore rules.", true); }
+    finally{ if(cBtn) cBtn.disabled = false; }
     return;
   }
   if(type==="patientvoice"){
     const u = currentUser(); if(!u) return;
     const text = fd.get("text").trim();
     if(!text) return;
+    const vBtn = form.querySelector('button[type="submit"]');
+    if(vBtn){ if(vBtn.disabled) return; vBtn.disabled = true; }
     try{
-      await addDoc(collection(fsdb,"patientVoices"), {uid:u.uid, name:u.name, rating:+fd.get("rating"), text, approved:false, date:new Date().toISOString()});
+      await addDoc(collection(fsdb,"patientVoices"), {uid:u.uid, name:u.name||"", rating:+fd.get("rating"), text, approved:false, date:new Date().toISOString()});
       showToast("Thanks! Your review is pending admin approval.");
       form.reset();
       MY_VOICES.uid = null; // force refresh next time the dashboard is viewed
     }catch(e){ showToast("Your review could not be saved — check your connection or Firestore rules.", true); }
+    finally{ if(vBtn) vBtn.disabled = false; }
     return;
   }
 });
+/* today's date on this device, "YYYY-MM-DD" */
+function todayLocal(){ const d = new Date(), p = n=> String(n).padStart(2,"0"); return `${d.getFullYear()}-${p(d.getMonth()+1)}-${p(d.getDate())}`; }
 function toggleFieldError(form, name, isErr){
   const input = form.querySelector(`[name="${name}"]`);
   if(!input) return;
